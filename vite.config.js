@@ -5,5 +5,5 @@ import react from '@vitejs/plugin-react'
 // e.g. if your repo is github.com/yourname/my-wedding → base: '/my-wedding/'
 export default defineConfig({
   plugins: [react()],
-  base: '/wedding-rsvp/',
+  base: '/isuri-and-sulochana/',
 })
