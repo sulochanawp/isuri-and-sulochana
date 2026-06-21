@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: #F5F2EA;
+    color: #1C2710;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+  }
+}
+
+@layer components {
+
+  /* ── Lotus section divider ─────────────────────────── */
+  .lotus-divider {
+    @apply flex items-center justify-center gap-3 my-2;
+  }
+  .lotus-divider .line {
+    @apply flex-1 border-t border-line;
+  }
+
+  /* ── Buttons ───────────────────────────────────────── */
+  .btn-primary {
+    @apply bg-olive-700 hover:bg-olive-800 text-pearl-50
+           font-sans font-medium px-8 py-3
+           tracking-widest text-xs uppercase
+           transition-all duration-300 active:scale-95 inline-block;
+  }
+
+  .btn-secondary {
+    @apply border border-olive-600 text-olive-700
+           hover:bg-olive-700 hover:text-pearl-50
+           font-sans font-medium px-8 py-3
+           tracking-widest text-xs uppercase
+           transition-all duration-300 inline-block;
+  }
+
+  /* ── Cards ─────────────────────────────────────────── */
+  .card {
+    @apply bg-pearl-50 border border-line p-6 md:p-8;
+  }
+
+  /* ── Inputs ─────────────────────────────────────────── */
+  .input-field {
+    @apply w-full border border-line bg-white px-4 py-3
+           font-sans text-ink text-sm placeholder-muted
+           focus:outline-none focus:border-olive-500
+           transition-colors duration-200;
+  }
+
+  /* ── Section headings ──────────────────────────────── */
+  .section-heading {
+    @apply font-serif text-4xl md:text-5xl text-ink text-center font-light tracking-wide;
+  }
+
+  /* ── Corner ornament on card ───────────────────────── */
+  .corner-ornament {
+    @apply relative overflow-hidden;
+  }
+  .corner-ornament::before,
+  .corner-ornament::after {
+    content: '';
+    @apply absolute w-6 h-6 border-olive-300;
+  }
+  .corner-ornament::before {
+    @apply top-2 left-2 border-t border-l;
+  }
+  .corner-ornament::after {
+    @apply bottom-2 right-2 border-b border-r;
+  }
+}
+
+/* ── Scrollbar ──────────────────────────────────────── */
+::-webkit-scrollbar        { width: 4px; }
+::-webkit-scrollbar-track  { background: #F5F2EA; }
+::-webkit-scrollbar-thumb  { background: #C8D3AC; border-radius: 2px; }
