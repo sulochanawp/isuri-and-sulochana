@@ -4,23 +4,23 @@
 // ============================================================
 
 // STEP 1: Replace with your Google Sheet ID (from the sheet URL)
-// URL format: https://docs.google.com/spreadsheets/d/SPREADSHEET_ID/edit
 var SPREADSHEET_ID = 'YOUR_SPREADSHEET_ID_HERE';
 
-// Sheet names — must match exactly (case-sensitive)
 var GUESTS_SHEET = 'Guests';
 
 // ── Google Sheets column layout (1-indexed) ─────────────────
-// A(1)  Code          — unique invite code, e.g. "ABC001"
-// B(2)  Name          — guest display name
-// C(3)  Email         — guest email (optional, for reference)
-// D(4)  AllowedGuests — max number of seats on this invitation (default 1)
-// E(5)  Attending     — PENDING | YES | NO
-// F(6)  AttendingCount — actual number confirmed
-// G(7)  Dietary       — dietary requirements
-// H(8)  Table         — table number/name assigned by organiser
-// I(9)  Message       — message to couple
-// J(10) SubmittedAt   — ISO timestamp of submission
+// A(1)  Code
+// B(2)  Name
+// C(3)  Email            ← optional, leave blank if none
+// D(4)  Mobile1          ← primary WhatsApp / mobile number
+// E(5)  Mobile2          ← secondary number (optional)
+// F(6)  AllowedGuests    ← max seats on this invitation
+// G(7)  Attending        ← PENDING | YES | NO
+// H(8)  AttendingCount   ← actual confirmed count
+// I(9)  Dietary          ← dietary requirements
+// J(10) Table            ← table number/name assigned by organiser
+// K(11) Message          ← message to couple
+// L(12) SubmittedAt      ← ISO timestamp
 
 // ── Entry points ────────────────────────────────────────────
 
@@ -35,7 +35,6 @@ function doGet(e) {
   }
 }
 
-// doPost is included for future use; frontend currently uses GET only
 function doPost(e) {
   try {
     var data = JSON.parse(e.postData.contents);
@@ -59,20 +58,22 @@ function handleGetGuest(code) {
   for (var i = 1; i < data.length; i++) {
     var row = data[i];
     if (String(row[0]).toUpperCase().trim() === code.toUpperCase().trim()) {
-      var attending = String(row[4]).toUpperCase().trim();
+      var attending = String(row[6]).toUpperCase().trim();
       return respond({
         success: true,
         guest: {
           code:            row[0],
           name:            row[1],
-          email:           row[2],
-          allowedGuests:   row[3] || 1,
+          email:           row[2] || '',
+          mobile1:         row[3] || '',
+          mobile2:         row[4] || '',
+          allowedGuests:   row[5] || 1,
           attending:       attending || 'PENDING',
-          attendingCount:  row[5] || 0,
-          dietary:         row[6] || '',
-          table:           row[7] || '',
-          message:         row[8] || '',
-          submittedAt:     row[9] || '',
+          attendingCount:  row[7] || 0,
+          dietary:         row[8] || '',
+          table:           row[9] || '',
+          message:         row[10] || '',
+          submittedAt:     row[11] || '',
           alreadySubmitted: attending === 'YES' || attending === 'NO',
         }
       });
@@ -84,7 +85,7 @@ function handleGetGuest(code) {
 
 function handleSubmitRSVP(params) {
   var code      = params.code;
-  var attending = params.attending;   // 'YES' or 'NO'
+  var attending = params.attending;
   var count     = params.count;
   var dietary   = params.dietary  || '';
   var message   = params.message  || '';
@@ -98,21 +99,21 @@ function handleSubmitRSVP(params) {
 
   for (var i = 1; i < data.length; i++) {
     if (String(data[i][0]).toUpperCase().trim() === code.toUpperCase().trim()) {
-      var rowNum = i + 1; // Sheets rows are 1-indexed
+      var rowNum = i + 1;
       var isAttending = attending === 'YES';
 
-      sheet.getRange(rowNum, 5).setValue(isAttending ? 'YES' : 'NO');
-      sheet.getRange(rowNum, 6).setValue(isAttending ? (parseInt(count) || 1) : 0);
-      sheet.getRange(rowNum, 7).setValue(dietary);
-      sheet.getRange(rowNum, 9).setValue(message);
-      sheet.getRange(rowNum, 10).setValue(new Date().toISOString());
+      sheet.getRange(rowNum, 7).setValue(isAttending ? 'YES' : 'NO');   // G — Attending
+      sheet.getRange(rowNum, 8).setValue(isAttending ? (parseInt(count) || 1) : 0); // H — AttendingCount
+      sheet.getRange(rowNum, 9).setValue(dietary);                       // I — Dietary
+      sheet.getRange(rowNum, 11).setValue(message);                      // K — Message
+      sheet.getRange(rowNum, 12).setValue(new Date().toISOString());     // L — SubmittedAt
 
       SpreadsheetApp.flush();
 
       return respond({
         success:   true,
         name:      data[i][1],
-        table:     data[i][7] || '',
+        table:     data[i][9] || '',   // J — Table
         attending: isAttending ? 'YES' : 'NO',
       });
     }

@@ -28,6 +28,9 @@ export const WEDDING = {
     mapsEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3957.90570863385!2d80.34763939999999!3d7.2515717!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae317381f4d3c17%3A0xcc3334b5c40daa6e!2sThe%20Grand%20Walawwa!5e0!3m2!1sen!2slk!4v1782069139673!5m2!1sen!2slk",
   },
 
+  // WhatsApp contact number for guests to reach you (include country code, no + or spaces)
+  whatsappNumber: "94771234567",   // ← replace with your real number
+
   // Paste your deployed Google Apps Script URL here
   // Format: https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec
   appsScriptUrl: "YOUR_APPS_SCRIPT_URL_HERE",
