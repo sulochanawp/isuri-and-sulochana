@@ -7,7 +7,6 @@ function useIsRevealed(revealTime) {
 
   useEffect(() => {
     if (revealed) return
-    // Poll every 30 s — auto-reveals if guest already has the page open
     const id = setInterval(() => {
       if (Date.now() >= revealTime.getTime()) {
         setRevealed(true)
@@ -20,42 +19,29 @@ function useIsRevealed(revealTime) {
   return revealed
 }
 
-/* ── Large decorative lotus for the card centre ── */
-function CardLotus() {
+/* ── Small lotus for the "not yet" holding page ── */
+function SmallLotus() {
   return (
-    <svg viewBox="0 0 160 80" width="160" height="80" fill="none" className="text-olive-500">
-      {/* Centre petal */}
-      <path d="M80 68 Q56 50 56 20 Q68 36 80 46 Q92 36 104 20 Q104 50 80 68Z"
+    <svg viewBox="0 0 120 60" width="120" height="60" fill="none" className="text-olive-400">
+      <path d="M60 50 Q42 36 42 16 Q51 26 60 34 Q69 26 78 16 Q78 36 60 50Z"
         stroke="currentColor" strokeWidth="0.9" fill="currentColor" fillOpacity="0.12"/>
-      {/* Inner side petals */}
-      <path d="M80 62 Q48 52 34 24 Q54 32 72 46" stroke="currentColor" strokeWidth="0.9" fill="currentColor" fillOpacity="0.08"/>
-      <path d="M80 62 Q112 52 126 24 Q106 32 88 46" stroke="currentColor" strokeWidth="0.9" fill="currentColor" fillOpacity="0.08"/>
-      {/* Outer side petals */}
-      <path d="M80 58 Q32 54 10 28 Q38 32 68 48" stroke="currentColor" strokeWidth="0.7" fill="currentColor" fillOpacity="0.05"/>
-      <path d="M80 58 Q128 54 150 28 Q122 32 92 48" stroke="currentColor" strokeWidth="0.7" fill="currentColor" fillOpacity="0.05"/>
-      {/* Stem */}
-      <line x1="80" y1="68" x2="80" y2="80" stroke="currentColor" strokeWidth="0.9"/>
-      {/* Small leaf pair */}
-      <path d="M80 74 Q68 70 64 62 Q74 66 80 72" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="0.5"/>
-      <path d="M80 74 Q92 70 96 62 Q86 66 80 72" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="0.5"/>
-      {/* Stamen */}
-      <circle cx="80" cy="44" r="6"   fill="currentColor" fillOpacity="0.25"/>
-      <circle cx="80" cy="44" r="3"   fill="currentColor" fillOpacity="0.5"/>
-      <circle cx="80" cy="44" r="1.4" fill="currentColor"/>
+      <path d="M60 46 Q34 38 22 18 Q38 24 52 36" stroke="currentColor" strokeWidth="0.8" fill="currentColor" fillOpacity="0.08"/>
+      <path d="M60 46 Q86 38 98 18 Q82 24 68 36" stroke="currentColor" strokeWidth="0.8" fill="currentColor" fillOpacity="0.08"/>
+      <line x1="60" y1="50" x2="60" y2="60" stroke="currentColor" strokeWidth="0.9"/>
+      <circle cx="60" cy="32" r="4" fill="currentColor" fillOpacity="0.3"/>
+      <circle cx="60" cy="32" r="1.8" fill="currentColor"/>
     </svg>
   )
 }
 
-/* ── Standalone full-page wrapper (used when ?view=thankyou) ── */
+/* ── Standalone full-page (used when ?view=thankyou) ── */
 export function ThankYouPage() {
   const revealed = useIsRevealed(WEDDING.thankYouRevealTime)
 
   if (!revealed) {
     return (
       <div className="min-h-screen bg-pearl-100 flex flex-col items-center justify-center px-6 text-center">
-        <div className="text-olive-400 mb-6">
-          <CardLotus />
-        </div>
+        <div className="mb-6"><SmallLotus /></div>
         <p className="text-olive-500 text-xs tracking-[0.4em] uppercase font-sans mb-3">
           {WEDDING.date}
         </p>
@@ -74,95 +60,111 @@ export function ThankYouPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6 py-8 animate-fade-up">
-      <ThankYouCard />
-    </div>
-  )
-}
+    <div className="min-h-screen bg-white flex flex-col animate-fade-up">
 
-/* ── Card extracted so both views can share it ── */
-function ThankYouCard() {
-  return (
-    <div className="w-full max-w-2xl">
-      <FloralStripe className="mb-6" />
+      {/* ── Top: heading + photo frame ── */}
+      <div className="flex-1 flex flex-col items-center px-6 pt-10 pb-0">
+        <FloralStripe className="mb-6 w-full" />
 
-      <div className="text-center mb-10">
-        <p className="text-olive-500 text-xs tracking-[0.4em] uppercase font-sans mb-3">
-          {WEDDING.date}
-        </p>
-        <h2 className="section-heading">Thank You</h2>
-        <LotusDivider />
+        {/* Heading */}
+        <div className="text-center mb-8 w-full max-w-2xl">
+          <h2 className="section-heading">Thank You</h2>
+          <LotusDivider />
+          <p className="text-muted text-sm mt-4 leading-relaxed max-w-md mx-auto">
+            Thank you for being there to make our special day even more beautiful.
+            Your presence meant everything to us.
+          </p>
+        </div>
+
+        {/* Photo frame */}
+        <div className="relative w-full max-w-2xl mb-8">
+          {/* Floral corner ornaments */}
+          <FloralCorner className="absolute -top-3 -left-3 text-olive-500 w-12 h-12 z-10" />
+          <FloralCorner className="absolute -top-3 -right-3 text-olive-500 w-12 h-12 rotate-90 z-10" />
+          <FloralCorner className="absolute -bottom-3 -left-3 text-olive-500 w-12 h-12 -rotate-90 z-10" />
+          <FloralCorner className="absolute -bottom-3 -right-3 text-olive-500 w-12 h-12 rotate-180 z-10" />
+
+          {/* Outer frame */}
+          <div className="border-2 border-olive-200 p-2">
+            {/* Inner border */}
+            <div className="border border-olive-100">
+              {WEDDING.thankYouPhotoUrl && WEDDING.thankYouPhotoUrl !== 'YOUR_PHOTO_URL_HERE' ? (
+                <img
+                  src={WEDDING.thankYouPhotoUrl}
+                  alt="Isuri & Sulochana"
+                  className="w-full object-cover block"
+                  style={{ maxHeight: '520px' }}
+                />
+              ) : (
+                /* Placeholder shown until photo URL is added */
+                <div className="w-full flex items-center justify-center bg-pearl-50 text-olive-300" style={{ height: 400 }}>
+                  <div className="text-center">
+                    <SmallLotus />
+                    <p className="text-xs font-sans tracking-widest uppercase mt-3 text-olive-300">
+                      Photo coming soon
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Download button */}
+        {WEDDING.thankYouPhotoUrl && WEDDING.thankYouPhotoUrl !== 'YOUR_PHOTO_URL_HERE' && (
+          <a
+            href={WEDDING.thankYouPhotoUrl.replace('export=view', 'export=download')}
+            download
+            className="inline-flex items-center gap-2 border border-olive-300 bg-olive-700 text-pearl-100
+                       px-8 py-3 font-sans text-xs tracking-[0.25em] uppercase
+                       hover:bg-olive-800 transition-colors duration-200 mb-10"
+          >
+            <svg viewBox="0 0 20 20" width="14" height="14" fill="currentColor">
+              <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd"/>
+            </svg>
+            Download Thank You Card
+          </a>
+        )}
       </div>
 
-      <div className="relative border-2 border-olive-200 bg-pearl-50 px-8 md:px-14 py-12 text-center">
-        <FloralCorner className="absolute -top-3 -left-3 text-olive-500 w-12 h-12" />
-        <FloralCorner className="absolute -top-3 -right-3 text-olive-500 w-12 h-12 rotate-90" />
-        <FloralCorner className="absolute -bottom-3 -left-3 text-olive-500 w-12 h-12 -rotate-90" />
-        <FloralCorner className="absolute -bottom-3 -right-3 text-olive-500 w-12 h-12 rotate-180" />
+      {/* ── Footer: names, date, venue — matches main footer style ── */}
+      <div
+        className="bg-olive-800 text-pearl-100 py-14 px-6 text-center"
+        style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'40\' height=\'40\' viewBox=\'0 0 40 40\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' stroke=\'%23F5F2EA\' stroke-width=\'0.35\' opacity=\'0.06\'%3E%3Cpath d=\'M20 2 L38 20 L20 38 L2 20 Z\'/%3E%3Ccircle cx=\'20\' cy=\'20\' r=\'1.5\' fill=\'%23F5F2EA\'/%3E%3C/g%3E%3C/svg%3E")' }}
+      >
+        {/* Thin divider with diamond */}
+        <div className="flex items-center gap-4 mb-10 opacity-20 max-w-xs mx-auto">
+          <div className="flex-1 border-t border-pearl-100" />
+          <div className="w-1.5 h-1.5 rotate-45 bg-olive-300" />
+          <div className="flex-1 border-t border-pearl-100" />
+        </div>
 
-        <div className="border border-olive-100 px-6 md:px-10 py-10">
-          <div className="flex justify-center mb-6"><CardLotus /></div>
+        {/* Couple names */}
+        <h2 className="font-serif text-4xl md:text-5xl font-light text-pearl-100 tracking-wide mb-2">
+          {WEDDING.bride} & {WEDDING.groom}
+        </h2>
+        <p className="text-pearl-300/40 text-xs tracking-[0.4em] uppercase font-sans mb-8">
+          {WEDDING.date}
+        </p>
 
-          <p className="text-olive-400 text-xs tracking-[0.5em] uppercase font-sans mb-4">
-            With all our love & gratitude
-          </p>
-          <h3 className="font-serif text-4xl md:text-5xl text-ink font-light leading-snug mb-2">
-            From the bottom<br />
-            <span className="italic">of our hearts,</span>
-          </h3>
-
-          <div className="flex items-center justify-center gap-3 my-6">
-            <div className="flex-1 max-w-[60px] border-t border-olive-200" />
-            <div className="w-1.5 h-1.5 rotate-45 bg-olive-400" />
-            <div className="flex-1 max-w-[60px] border-t border-olive-200" />
-          </div>
-
-          <p className="text-muted text-sm md:text-base leading-relaxed max-w-md mx-auto">
-            Today we became one, and you made our day complete. Thank you
-            for your presence, your love, and the memories we will carry
-            with us forever. It truly means the world to have you here.
-          </p>
-
-          <div className="mt-8">
-            <p className="font-serif text-2xl md:text-3xl text-olive-700 italic font-light tracking-wide">
-              {WEDDING.bride} & {WEDDING.groom}
-            </p>
-            <p className="text-muted text-xs tracking-[0.3em] uppercase font-sans mt-2">
-              {WEDDING.date}
-            </p>
-          </div>
-
-          <div className="flex items-center justify-center gap-3 mt-8 text-olive-300">
-            <div className="flex-1 border-t border-current opacity-40" />
-            <svg viewBox="0 0 60 24" width="60" height="24" fill="none">
-              <path d="M30 20 Q18 14 18 4 Q24 10 30 14 Q36 10 42 4 Q42 14 30 20Z"
-                stroke="currentColor" strokeWidth="0.8" fill="currentColor" fillOpacity="0.15"/>
-              <circle cx="30" cy="13" r="2.5" fill="currentColor" fillOpacity="0.5"/>
-            </svg>
-            <div className="flex-1 border-t border-current opacity-40" />
+        {/* Venue */}
+        <div className="text-sm text-pearl-300/50">
+          <p className="text-pearl-300/25 text-xs tracking-[0.3em] uppercase font-sans mb-2">Venue</p>
+          <p className="font-serif text-xl text-pearl-200/70 font-light mb-1">{WEDDING.venue.name}</p>
+          <p className="text-xs mb-1">{WEDDING.venue.address}</p>
+          <div className="flex flex-wrap items-center justify-center gap-4 mt-3 text-xs tracking-widest uppercase">
+            <span>Ceremony · {WEDDING.venue.ceremonyTime}</span>
+            <span className="w-1 h-1 rotate-45 bg-olive-400 inline-block" />
+            <span>Reception · {WEDDING.venue.receptionTime}</span>
           </div>
         </div>
       </div>
 
-      <p className="text-center text-muted text-xs mt-6 tracking-wide">
-        Screenshot or save this page as a keepsake 🌿
-      </p>
-
-      <FloralStripe className="mt-6" />
     </div>
   )
 }
 
+/* ── Default export (unused on main page, kept for safety) ── */
 export default function ThankYouSection() {
-  const revealed = useIsRevealed(WEDDING.thankYouRevealTime)
-
-  if (!revealed) return null
-
-  return (
-    <section id="thankyou" className="py-24 px-6 bg-white animate-fade-up">
-      <div className="max-w-2xl mx-auto">
-        <ThankYouCard />
-      </div>
-    </section>
-  )
+  return null
 }

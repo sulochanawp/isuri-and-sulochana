@@ -31,6 +31,11 @@ export const WEDDING = {
   // WhatsApp contact number for guests to reach you (include country code, no + or spaces)
   whatsappNumber: "94771234567",   // ← replace with your real number
 
+  // Thank you card photo — paste your direct image URL here
+  // Google Drive: share the file publicly, then use:
+  //   https://drive.google.com/uc?id=YOUR_FILE_ID&export=view
+  thankYouPhotoUrl: "https://drive.google.com/file/d/193LzRASB-3pS_o_g5fyCapj0Oh1g9jSg/view?usp=sharing",
+
   // Paste your deployed Google Apps Script URL here
   // Format: https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec
   appsScriptUrl: "https://script.google.com/macros/s/AKfycbxXqQTa-M3sGzurc0Gny27JxhGFTrarEHvO3Qf0dphc1OkRjdOd1RZp-uddB__sRF_C/exec",
