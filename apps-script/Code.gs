@@ -2,7 +2,7 @@
 //  Wedding RSVP — Google Apps Script Backend
 // ============================================================
 
-var SPREADSHEET_ID = 'YOUR_SPREADSHEET_ID_HERE';
+var SPREADSHEET_ID = '1DdFnrl2yXZV8RTpEbNCYljYdiOnRc_nfMziKPDfwFhA';
 var GUESTS_SHEET   = 'Guests';
 
 // ── Column layout (1-indexed for getRange, 0-indexed for array) ─
@@ -26,8 +26,9 @@ var GUESTS_SHEET   = 'Guests';
 function doGet(e) {
   try {
     var action = e.parameter.action;
-    if (action === 'getGuest')   return handleGetGuest(e.parameter.code);
-    if (action === 'submitRSVP') return handleSubmitRSVP(e.parameter);
+    if (action === 'getGuest')        return handleGetGuest(e.parameter.code);
+    if (action === 'submitRSVP')      return handleSubmitRSVP(e.parameter);
+    if (action === 'getThankYouPhoto') return handleGetThankYouPhoto(e.parameter.folderId);
     return respond({ error: 'Unknown action' });
   } catch (err) {
     return respond({ error: err.message });
@@ -130,6 +131,25 @@ function handleSubmitRSVP(params) {
   }
 
   return respond({ error: 'Guest not found' });
+}
+
+function handleGetThankYouPhoto(folderId) {
+  if (!folderId) return respond({ error: 'No folder ID provided' });
+  var folder = DriveApp.getFolderById(folderId);
+  var files   = folder.getFiles();
+  while (files.hasNext()) {
+    var file = files.next();
+    var mime = file.getMimeType();
+    if (mime.indexOf('image/') === 0) {
+      file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+      return respond({
+        success: true,
+        fileId:  file.getId(),
+        url:     'https://lh3.googleusercontent.com/d/' + file.getId(),
+      });
+    }
+  }
+  return respond({ error: 'No image found in folder' });
 }
 
 // ── Helper ────────────────────────────────────────────────────

@@ -21,7 +21,7 @@ function FooterLotus() {
   )
 }
 
-export default function Footer() {
+export default function Footer({ showMap = true, showWhatsApp = true }) {
   return (
     <footer
       className="bg-olive-800 text-pearl-100 py-20 px-6"
@@ -68,7 +68,7 @@ export default function Footer() {
         </div>
 
         {/* Google Maps embed */}
-        {WEDDING.venue.mapsEmbed && (
+        {showMap && WEDDING.venue.mapsEmbed && (
           <div className="mb-10 w-full max-w-2xl mx-auto">
             <p className="text-pearl-300/25 text-xs tracking-[0.3em] uppercase font-sans mb-3">Find Us</p>
             <div className="relative w-full overflow-hidden" style={{ height: 240 }}>
@@ -100,7 +100,7 @@ export default function Footer() {
         )}
 
         {/* WhatsApp contact */}
-        {WEDDING.whatsappNumber && (
+        {showWhatsApp && WEDDING.whatsappNumber && (
           <div className="mb-10">
             <p className="text-pearl-300/25 text-xs tracking-[0.3em] uppercase font-sans mb-3">Questions?</p>
             <a

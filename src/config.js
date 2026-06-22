@@ -21,7 +21,7 @@ export const WEDDING = {
 
   venue: {
     name: "The Grand Walawwa",
-    address: "Colombo 03, Sri Lanka",
+    address: "No 190/8, Kandy Road, Kegalle, Sri Lanka",
     ceremonyTime: "4:00 PM",
     receptionTime: "6:30 PM",
     mapsUrl: "https://maps.google.com/?q=The+Grand+Walawwa",
@@ -31,14 +31,16 @@ export const WEDDING = {
   // WhatsApp contact number for guests to reach you (include country code, no + or spaces)
   whatsappNumber: "94771234567",   // ← replace with your real number
 
-  // Thank you card photo — paste your direct image URL here
-  // Google Drive: share the file publicly, then use:
-  //   https://drive.google.com/uc?id=YOUR_FILE_ID&export=view
-  thankYouPhotoUrl: "https://lh3.googleusercontent.com/d/193LzRASB-3pS_o_g5fyCapj0Oh1g9jSg",
+  // Google Drive folder ID for the thank you card photo.
+  // Create a folder in Drive, share it publicly (Anyone with link → Viewer),
+  // put ONE image inside it, and paste the folder ID here.
+  // Folder URL: https://drive.google.com/drive/folders/FOLDER_ID  ← this part
+  thankYouFolderId: "17djfjIh3qqe3Oe-u9oPH_1-lAJPlNG2o",
 
   // Paste your deployed Google Apps Script URL here
   // Format: https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec
   appsScriptUrl: "https://script.google.com/macros/s/AKfycbxXqQTa-M3sGzurc0Gny27JxhGFTrarEHvO3Qf0dphc1OkRjdOd1RZp-uddB__sRF_C/exec",
+  
 
   // Optional: a short message shown on the hero
   heroMessage: "Together with their families, invite you to celebrate their marriage",

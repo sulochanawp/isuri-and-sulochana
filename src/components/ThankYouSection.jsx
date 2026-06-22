@@ -1,25 +1,20 @@
 import { useState, useEffect } from 'react'
 import { WEDDING } from '../config'
 import { LotusDivider, FloralStripe, FloralCorner } from './Hero'
+import Footer from './Footer'
 
 function useIsRevealed(revealTime) {
   const [revealed, setRevealed] = useState(() => Date.now() >= revealTime.getTime())
-
   useEffect(() => {
     if (revealed) return
     const id = setInterval(() => {
-      if (Date.now() >= revealTime.getTime()) {
-        setRevealed(true)
-        clearInterval(id)
-      }
+      if (Date.now() >= revealTime.getTime()) { setRevealed(true); clearInterval(id) }
     }, 30_000)
     return () => clearInterval(id)
   }, [revealTime, revealed])
-
   return revealed
 }
 
-/* ── Small lotus for the "not yet" holding page ── */
 function SmallLotus() {
   return (
     <svg viewBox="0 0 120 60" width="120" height="60" fill="none" className="text-olive-400">
@@ -37,6 +32,27 @@ function SmallLotus() {
 /* ── Standalone full-page (used when ?view=thankyou) ── */
 export function ThankYouPage() {
   const revealed = useIsRevealed(WEDDING.thankYouRevealTime)
+  const [photoUrl, setPhotoUrl]   = useState(null)
+  const [photoFileId, setPhotoFileId] = useState(null)
+  const [photoError, setPhotoError] = useState(false)
+
+  // Fetch photo from Drive folder once revealed
+  useEffect(() => {
+    if (!revealed) return
+    if (!WEDDING.thankYouFolderId || WEDDING.thankYouFolderId === 'YOUR_FOLDER_ID_HERE') return
+    const url = `${WEDDING.appsScriptUrl}?action=getThankYouPhoto&folderId=${WEDDING.thankYouFolderId}`
+    fetch(url)
+      .then(r => r.json())
+      .then(data => {
+        if (data.success) {
+          setPhotoUrl(data.url)
+          setPhotoFileId(data.fileId)
+        } else {
+          setPhotoError(true)
+        }
+      })
+      .catch(() => setPhotoError(true))
+  }, [revealed])
 
   if (!revealed) {
     return (
@@ -63,7 +79,7 @@ export function ThankYouPage() {
     <div className="min-h-screen bg-white flex flex-col animate-fade-up">
 
       {/* ── Top: heading + photo frame ── */}
-      <div className="flex-1 flex flex-col items-center px-6 pt-10 pb-0">
+      <div className="flex flex-col items-center px-6 pt-10 pb-10">
         <FloralStripe className="mb-6 w-full" />
 
         {/* Heading */}
@@ -78,31 +94,29 @@ export function ThankYouPage() {
 
         {/* Photo frame */}
         <div className="relative w-full max-w-2xl mb-8">
-          {/* Floral corner ornaments */}
           <FloralCorner className="absolute -top-3 -left-3 text-olive-500 w-12 h-12 z-10" />
           <FloralCorner className="absolute -top-3 -right-3 text-olive-500 w-12 h-12 rotate-90 z-10" />
           <FloralCorner className="absolute -bottom-3 -left-3 text-olive-500 w-12 h-12 -rotate-90 z-10" />
           <FloralCorner className="absolute -bottom-3 -right-3 text-olive-500 w-12 h-12 rotate-180 z-10" />
 
-          {/* Outer frame */}
           <div className="border-2 border-olive-200 p-2">
-            {/* Inner border */}
             <div className="border border-olive-100">
-              {WEDDING.thankYouPhotoUrl && WEDDING.thankYouPhotoUrl !== 'YOUR_PHOTO_URL_HERE' ? (
+              {photoUrl ? (
                 <img
-                  src={WEDDING.thankYouPhotoUrl}
-                  alt="Isuri & Sulochana"
+                  src={photoUrl}
+                  alt={`${WEDDING.bride} & ${WEDDING.groom}`}
                   className="w-full object-cover block"
                   style={{ maxHeight: '520px' }}
                 />
-              ) : (
-                /* Placeholder shown until photo URL is added */
+              ) : photoError ? (
                 <div className="w-full flex items-center justify-center bg-pearl-50 text-olive-300" style={{ height: 400 }}>
-                  <div className="text-center">
+                  <p className="text-xs font-sans tracking-widest uppercase text-olive-300">Photo unavailable</p>
+                </div>
+              ) : (
+                <div className="w-full flex items-center justify-center bg-pearl-50" style={{ height: 400 }}>
+                  <div className="text-center text-olive-300">
                     <SmallLotus />
-                    <p className="text-xs font-sans tracking-widest uppercase mt-3 text-olive-300">
-                      Photo coming soon
-                    </p>
+                    <p className="text-xs font-sans tracking-widest uppercase mt-3">Loading…</p>
                   </div>
                 </div>
               )}
@@ -111,13 +125,13 @@ export function ThankYouPage() {
         </div>
 
         {/* Download button */}
-        {WEDDING.thankYouPhotoUrl && WEDDING.thankYouPhotoUrl !== 'YOUR_PHOTO_URL_HERE' && (
+        {photoFileId && (
           <a
-            href={`https://drive.google.com/uc?id=${WEDDING.thankYouPhotoUrl.split('/d/').pop()}&export=download`}
+            href={`https://drive.google.com/uc?id=${photoFileId}&export=download`}
             download
-            className="inline-flex items-center gap-2 border border-olive-300 bg-olive-700 text-pearl-100
+            className="inline-flex items-center gap-2 bg-olive-700 text-pearl-100
                        px-8 py-3 font-sans text-xs tracking-[0.25em] uppercase
-                       hover:bg-olive-800 transition-colors duration-200 mb-10"
+                       hover:bg-olive-800 transition-colors duration-200"
           >
             <svg viewBox="0 0 20 20" width="14" height="14" fill="currentColor">
               <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd"/>
@@ -125,46 +139,17 @@ export function ThankYouPage() {
             Download Thank You Card
           </a>
         )}
+
+        <FloralStripe className="mt-10 w-full" />
       </div>
 
-      {/* ── Footer: names, date, venue — matches main footer style ── */}
-      <div
-        className="bg-olive-800 text-pearl-100 py-14 px-6 text-center"
-        style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'40\' height=\'40\' viewBox=\'0 0 40 40\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' stroke=\'%23F5F2EA\' stroke-width=\'0.35\' opacity=\'0.06\'%3E%3Cpath d=\'M20 2 L38 20 L20 38 L2 20 Z\'/%3E%3Ccircle cx=\'20\' cy=\'20\' r=\'1.5\' fill=\'%23F5F2EA\'/%3E%3C/g%3E%3C/svg%3E")' }}
-      >
-        {/* Thin divider with diamond */}
-        <div className="flex items-center gap-4 mb-10 opacity-20 max-w-xs mx-auto">
-          <div className="flex-1 border-t border-pearl-100" />
-          <div className="w-1.5 h-1.5 rotate-45 bg-olive-300" />
-          <div className="flex-1 border-t border-pearl-100" />
-        </div>
-
-        {/* Couple names */}
-        <h2 className="font-serif text-4xl md:text-5xl font-light text-pearl-100 tracking-wide mb-2">
-          {WEDDING.bride} & {WEDDING.groom}
-        </h2>
-        <p className="text-pearl-300/40 text-xs tracking-[0.4em] uppercase font-sans mb-8">
-          {WEDDING.date}
-        </p>
-
-        {/* Venue */}
-        <div className="text-sm text-pearl-300/50">
-          <p className="text-pearl-300/25 text-xs tracking-[0.3em] uppercase font-sans mb-2">Venue</p>
-          <p className="font-serif text-xl text-pearl-200/70 font-light mb-1">{WEDDING.venue.name}</p>
-          <p className="text-xs mb-1">{WEDDING.venue.address}</p>
-          <div className="flex flex-wrap items-center justify-center gap-4 mt-3 text-xs tracking-widest uppercase">
-            <span>Ceremony · {WEDDING.venue.ceremonyTime}</span>
-            <span className="w-1 h-1 rotate-45 bg-olive-400 inline-block" />
-            <span>Reception · {WEDDING.venue.receptionTime}</span>
-          </div>
-        </div>
-      </div>
+      {/* ── Footer: reuse main Footer without the map ── */}
+      <Footer showMap={false} showWhatsApp={false} />
 
     </div>
   )
 }
 
-/* ── Default export (unused on main page, kept for safety) ── */
 export default function ThankYouSection() {
   return null
 }
