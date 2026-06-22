@@ -51,11 +51,17 @@ export default function Footer({ showMap = true, showWhatsApp = true }) {
         {/* RSVP jump button */}
         <a
           href="#rsvp"
-          className="inline-flex items-center gap-2 border border-pearl-300/30 px-8 py-3 mb-10
+          className="inline-flex items-center gap-4 border border-pearl-300/30 px-8 py-4 mb-10
                      text-pearl-200/70 hover:text-pearl-100 hover:border-pearl-300/60
-                     transition-all duration-200 font-sans text-xs tracking-[0.25em] uppercase"
+                     transition-all duration-200 group"
         >
-          Kindly RSVP before 1st November
+          <svg viewBox="0 0 20 20" width="14" height="14" fill="currentColor" className="text-olive-400 flex-shrink-0">
+            <path fillRule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clipRule="evenodd"/>
+          </svg>
+          <span className="flex flex-col items-start gap-0.5">
+            <span className="font-sans text-xs tracking-[0.3em] uppercase">Kindly RSVP before</span>
+            <span className="font-serif text-base font-light tracking-wide">{WEDDING.rsvpDeadline}</span>
+          </span>
         </a>
 
         {/* Thin olive rule */}

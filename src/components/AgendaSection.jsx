@@ -1,11 +1,19 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { AGENDA, WEDDING } from '../config'
 import { LotusDivider, FloralStripe } from './Hero'
 
 export default function AgendaSection() {
   const [expanded, setExpanded] = useState(false)
+  const expandBtnRef = useRef(null)
 
-  const visibleItems = expanded ? AGENDA : AGENDA.slice(0, 4)
+  const visibleItems = expanded ? AGENDA : AGENDA.slice(0, 3)
+
+  function collapse() {
+    setExpanded(false)
+    setTimeout(() => {
+      expandBtnRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }, 50)
+  }
 
   return (
     <section id="agenda" className="py-24 bg-white">
@@ -27,16 +35,18 @@ export default function AgendaSection() {
 
         {/* Timeline */}
         <div className="relative">
-          <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-px bg-olive-100 md:-translate-x-px" />
+          {/* Vertical line stops before the button area */}
+          <div className="absolute left-8 md:left-1/2 top-0 w-px bg-olive-100 md:-translate-x-px"
+            style={{ bottom: expanded ? '80px' : '160px' }} />
 
           <div className="space-y-6">
             {visibleItems.map((item, i) => {
-              const fading = !expanded && i === 3
+              const fading = !expanded && i === 2
               return (
                 <div
                   key={i}
                   className={`relative flex items-start gap-6 md:gap-0 transition-opacity duration-300 ${
-                    fading ? 'opacity-40' : 'opacity-100'
+                    fading ? 'opacity-35' : 'opacity-100'
                   } ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}
                 >
                   <div className={`ml-16 md:ml-0 md:w-5/12 ${i % 2 === 0 ? 'md:pr-10 md:text-right' : 'md:pl-10 md:text-left'}`}>
@@ -65,12 +75,13 @@ export default function AgendaSection() {
           {/* Fade gradient + expand button */}
           {!expanded ? (
             <div
-              className="relative -mt-28 pt-4 flex flex-col items-center"
-              style={{ background: 'linear-gradient(to bottom, transparent, white 55%)' }}
+              className="relative -mt-24 flex flex-col items-center pt-2 pb-4"
+              style={{ background: 'linear-gradient(to bottom, transparent, white 50%)' }}
             >
               <button
+                ref={expandBtnRef}
                 onClick={() => setExpanded(true)}
-                className="mt-16 border border-olive-300 bg-white px-8 py-3 font-sans text-xs tracking-[0.25em] uppercase text-olive-600 hover:bg-olive-50 hover:border-olive-400 transition-colors duration-200 flex items-center gap-3"
+                className="mt-14 relative z-10 border border-olive-300 bg-white px-8 py-3 font-sans text-xs tracking-[0.25em] uppercase text-olive-600 hover:bg-olive-50 hover:border-olive-400 transition-colors duration-200 flex items-center gap-3"
               >
                 <svg viewBox="0 0 20 20" width="14" height="14" fill="currentColor" className="text-olive-400">
                   <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd"/>
@@ -79,15 +90,16 @@ export default function AgendaSection() {
               </button>
             </div>
           ) : (
-            <div className="flex justify-center mt-8">
+            <div className="relative z-10 flex justify-center mt-10 pt-6"
+              style={{ background: 'linear-gradient(to top, white 70%, transparent)' }}>
               <button
-                onClick={() => setExpanded(false)}
+                onClick={collapse}
                 className="border border-olive-300 bg-white px-8 py-3 font-sans text-xs tracking-[0.25em] uppercase text-olive-600 hover:bg-olive-50 hover:border-olive-400 transition-colors duration-200 flex items-center gap-3"
               >
                 <svg viewBox="0 0 20 20" width="14" height="14" fill="currentColor" className="text-olive-400">
                   <path fillRule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clipRule="evenodd"/>
                 </svg>
-                Collapse the agenda
+                Hide the full agenda for the day
               </button>
             </div>
           )}

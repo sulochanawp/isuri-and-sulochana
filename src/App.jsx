@@ -109,6 +109,19 @@ function MainSite() {
       <AgendaSection />
       <MenuSection />
       <Footer />
+
+      {/* Floating scroll-to-top button */}
+      <button
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        aria-label="Scroll to top"
+        className="fixed bottom-6 right-6 z-50 w-11 h-11 flex items-center justify-center
+                   bg-olive-800 border border-olive-600 text-pearl-200
+                   hover:bg-olive-700 transition-colors duration-200 shadow-lg"
+      >
+        <svg viewBox="0 0 20 20" width="16" height="16" fill="currentColor">
+          <path fillRule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clipRule="evenodd"/>
+        </svg>
+      </button>
     </div>
   )
 }
