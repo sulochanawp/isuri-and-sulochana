@@ -3,15 +3,15 @@
 // ============================================================
 
 export const WEDDING = {
-  bride: "Sarah",
-  groom: "James",
+  bride: "Isuri",
+  groom: "Sulochana",
   // Used in hero headline: "Sarah & James"
-  coupleInitials: "S & J",
+  coupleInitials: "I & S",
 
   // Date shown to guests
-  date: "Saturday, 20th December 2025",
+  date: "Wednesday, 2nd December 2026",
   // JavaScript Date for the live countdown timer
-  weddingDate: new Date("2025-12-20T16:00:00"),
+  weddingDate: new Date("2026-12-02T16:00:00"),
 
   // Thank You section reveals at this moment (noon on the wedding day)
   thankYouRevealTime: new Date("2025-12-20T12:00:00"),
