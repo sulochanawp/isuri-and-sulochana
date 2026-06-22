@@ -47,12 +47,15 @@ function CodeEntry({ guestCode, setGuestCode, onLookup, loading }) {
 
 /* ── RSVP form ──────────────────────────────────────── */
 function RSVPForm({ guestData, onSubmit, submitting, rsvpError, onRetry }) {
-  const [attending, setAttending]     = useState(true)
-  const [adultCount, setAdultCount]   = useState(1)
-  const [childCount, setChildCount]   = useState(0)
-  const [dietary, setDietary]         = useState('')
-  const [message, setMessage]         = useState('')
-  const [formError, setFormError]     = useState('')
+  const isUpdate = guestData?.alreadySubmitted
+
+  // Always start blank — guest enters fresh numbers each time
+  const [attending, setAttending]   = useState(true)
+  const [adultCount, setAdultCount] = useState(1)
+  const [childCount, setChildCount] = useState(0)
+  const [dietary, setDietary]       = useState('')
+  const [message, setMessage]       = useState('')
+  const [formError, setFormError]   = useState('')
 
   const maxAdults   = guestData?.allowedAdults   || 1
   const maxChildren = guestData?.allowedChildren || 0
@@ -83,8 +86,14 @@ function RSVPForm({ guestData, onSubmit, submitting, rsvpError, onRetry }) {
   return (
     <div className="card corner-ornament max-w-2xl mx-auto">
       <div className="text-center mb-8">
-        <h3 className="font-serif text-3xl text-ink font-light">Welcome, {guestData?.name}</h3>
-        <p className="text-muted text-sm mt-2">Your invitation is confirmed — please let us know if you'll be joining us.</p>
+        <h3 className="font-serif text-3xl text-ink font-light">
+          {isUpdate ? 'Update Your RSVP' : `Welcome, ${guestData?.name}`}
+        </h3>
+        <p className="text-muted text-sm mt-2">
+          {isUpdate
+            ? 'Change your details below and resubmit — your previous response will be replaced.'
+            : "Your invitation is confirmed — please let us know if you'll be joining us."}
+        </p>
         {inviteSummary && (
           <p className="text-olive-600 text-xs mt-2 tracking-wide">{inviteSummary}</p>
         )}
@@ -216,7 +225,7 @@ function RSVPForm({ guestData, onSubmit, submitting, rsvpError, onRetry }) {
             disabled={submitting}
             className="btn-primary flex-1 text-center disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            {submitting ? 'Submitting…' : 'Submit RSVP'}
+            {submitting ? 'Submitting…' : isUpdate ? 'Update RSVP' : 'Submit RSVP'}
           </button>
           {rsvpError && (
             <button type="button" onClick={onRetry} className="btn-secondary">Try Again</button>
@@ -228,7 +237,7 @@ function RSVPForm({ guestData, onSubmit, submitting, rsvpError, onRetry }) {
 }
 
 /* ── Confirmation ───────────────────────────────────── */
-function RSVPConfirmation({ guestData }) {
+function RSVPConfirmation({ guestData, onEdit }) {
   const attending = guestData?.attending === 'YES'
   return (
     <div className="card corner-ornament max-w-lg mx-auto text-center">
@@ -284,18 +293,29 @@ function RSVPConfirmation({ guestData }) {
             </div>
           )}
           <p className="text-muted text-xs border border-line p-4">
-            A confirmation will be sent to you. For queries, please contact us directly.
+            For queries, please contact us directly.
           </p>
         </>
       ) : (
         <>
           <h3 className="font-serif text-3xl text-ink font-light mb-3">Thank You for Letting Us Know</h3>
-          <p className="text-muted text-sm leading-relaxed">
+          <p className="text-muted text-sm leading-relaxed mb-6">
             We're sorry you won't be able to join us, <strong className="text-ink font-medium">{guestData?.name}</strong>.
             You'll be with us in spirit on our special day.
           </p>
         </>
       )}
+
+      {/* Update button — always visible after submission */}
+      <button
+        onClick={onEdit}
+        className="mt-6 inline-flex items-center gap-2 text-muted hover:text-ink text-xs font-sans tracking-widest uppercase transition-colors duration-200 group"
+      >
+        <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor">
+          <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+        </svg>
+        <span className="group-hover:underline underline-offset-2">Change my RSVP</span>
+      </button>
     </div>
   )
 }
@@ -305,7 +325,7 @@ export default function RSVPSection({
   guestCode, setGuestCode,
   guestData, lookupState, lookupError,
   rsvpState, rsvpError,
-  onLookup, onSubmit, onRetry,
+  onLookup, onSubmit, onRetry, onEdit,
 }) {
   return (
     <section id="rsvp" className="py-24 px-6 bg-pearl-100">
@@ -394,7 +414,7 @@ export default function RSVPSection({
         )}
 
         {rsvpState === 'confirmed' && (
-          <RSVPConfirmation guestData={guestData} />
+          <RSVPConfirmation guestData={guestData} onEdit={onEdit} />
         )}
       </div>
 

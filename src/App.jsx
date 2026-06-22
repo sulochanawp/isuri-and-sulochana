@@ -72,8 +72,9 @@ export default function App() {
           ...prev,
           table:             data.table,
           attending:         data.attending,
-          attendingAdults:   data.attendingAdults,
-          attendingChildren: data.attendingChildren,
+          attendingAdults:   data.adults,
+          attendingChildren: data.children,
+          alreadySubmitted:  true,
         }))
         setRsvpState('confirmed')
       } else {
@@ -101,6 +102,7 @@ export default function App() {
         onLookup={lookupGuest}
         onSubmit={handleSubmitRSVP}
         onRetry={() => { setRsvpState('idle'); setRsvpError('') }}
+        onEdit={() => { setRsvpState('idle'); setRsvpError('') }}
       />
       <AgendaSection />
       <MenuSection />
