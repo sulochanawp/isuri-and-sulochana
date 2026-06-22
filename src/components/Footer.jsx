@@ -44,9 +44,19 @@ export default function Footer({ showMap = true, showWhatsApp = true }) {
         <h2 className="font-serif text-4xl md:text-5xl font-light text-pearl-100 tracking-wide mb-2">
           {WEDDING.bride} & {WEDDING.groom}
         </h2>
-        <p className="text-pearl-300/40 text-xs tracking-[0.4em] uppercase font-sans mb-10">
+        <p className="text-pearl-300/40 text-xs tracking-[0.4em] uppercase font-sans mb-6">
           {WEDDING.date}
         </p>
+
+        {/* RSVP jump button */}
+        <a
+          href="#rsvp"
+          className="inline-flex items-center gap-2 border border-pearl-300/30 px-8 py-3 mb-10
+                     text-pearl-200/70 hover:text-pearl-100 hover:border-pearl-300/60
+                     transition-all duration-200 font-sans text-xs tracking-[0.25em] uppercase"
+        >
+          Kindly RSVP before 1st November
+        </a>
 
         {/* Thin olive rule */}
         <div className="flex items-center gap-4 mb-10 opacity-20">
@@ -119,21 +129,6 @@ export default function Footer({ showMap = true, showWhatsApp = true }) {
             </a>
           </div>
         )}
-
-        {/* RSVP jump button */}
-        <div className="mt-10">
-          <a
-            href="#rsvp"
-            className="inline-flex items-center gap-2 border border-pearl-300/30 px-8 py-3
-                       text-pearl-200/70 hover:text-pearl-100 hover:border-pearl-300/60
-                       transition-all duration-200 font-sans text-xs tracking-[0.3em] uppercase"
-          >
-            <svg viewBox="0 0 20 20" width="14" height="14" fill="currentColor">
-              <path fillRule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clipRule="evenodd"/>
-            </svg>
-            RSVP
-          </a>
-        </div>
 
         <p className="text-pearl-300/20 text-xs font-sans tracking-widest mt-6">
           Made with love · {new Date().getFullYear()}
