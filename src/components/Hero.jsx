@@ -254,15 +254,6 @@ export default function Hero() {
           )}
         </div>
 
-        {/* CTAs */}
-        <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-          <a href="#rsvp" className="bg-pearl-100 text-olive-800 font-sans font-medium px-8 py-3 tracking-[0.25em] text-xs uppercase hover:bg-white transition-colors active:scale-95">
-            RSVP
-          </a>
-          <a href="#agenda" className="border border-pearl-300/30 text-pearl-200 font-sans font-medium px-8 py-3 tracking-[0.25em] text-xs uppercase hover:bg-pearl-100/10 transition-colors">
-            View Agenda
-          </a>
-        </div>
       </div>
 
       {/* Bottom floral strip */}

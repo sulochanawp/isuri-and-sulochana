@@ -76,12 +76,6 @@ export function ThankYouPage() {
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6 py-8 animate-fade-up">
       <ThankYouCard />
-      <a
-        href={import.meta.env.BASE_URL || '/'}
-        className="mt-6 text-muted text-xs font-sans tracking-widest uppercase hover:text-ink transition-colors"
-      >
-        ← Back to Website
-      </a>
     </div>
   )
 }

@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
-import { WEDDING } from '../config'
 
-const BASE_LINKS = [
+const LINKS = [
   { label: 'Home',   href: '#' },
   { label: 'RSVP',   href: '#rsvp' },
   { label: 'Agenda', href: '#agenda' },
@@ -11,9 +10,6 @@ const BASE_LINKS = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
-  const [thankYouVisible, setThankYouVisible] = useState(
-    () => Date.now() >= WEDDING.thankYouRevealTime.getTime()
-  )
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60)
@@ -21,20 +17,7 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  useEffect(() => {
-    if (thankYouVisible) return
-    const id = setInterval(() => {
-      if (Date.now() >= WEDDING.thankYouRevealTime.getTime()) {
-        setThankYouVisible(true)
-        clearInterval(id)
-      }
-    }, 30_000)
-    return () => clearInterval(id)
-  }, [thankYouVisible])
-
-  const links = thankYouVisible
-    ? [...BASE_LINKS, { label: 'Thank You', href: '#thankyou' }]
-    : BASE_LINKS
+  const links = LINKS
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${

@@ -67,6 +67,38 @@ export default function Footer() {
           </div>
         </div>
 
+        {/* Google Maps embed */}
+        {WEDDING.venue.mapsEmbed && (
+          <div className="mb-10 w-full max-w-2xl mx-auto">
+            <p className="text-pearl-300/25 text-xs tracking-[0.3em] uppercase font-sans mb-3">Find Us</p>
+            <div className="relative w-full overflow-hidden" style={{ height: 240 }}>
+              <iframe
+                src={WEDDING.venue.mapsEmbed}
+                width="100%"
+                height="240"
+                style={{ border: 0, display: 'block', filter: 'grayscale(30%) contrast(1.05)' }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Venue map"
+              />
+            </div>
+            {WEDDING.venue.mapsUrl && (
+              <a
+                href={WEDDING.venue.mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 mt-3 text-pearl-300/40 hover:text-pearl-200 text-xs font-sans tracking-widest uppercase transition-colors duration-200"
+              >
+                <svg viewBox="0 0 20 20" width="12" height="12" fill="currentColor">
+                  <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd"/>
+                </svg>
+                Open in Google Maps
+              </a>
+            )}
+          </div>
+        )}
+
         {/* WhatsApp contact */}
         {WEDDING.whatsappNumber && (
           <div className="mb-10">

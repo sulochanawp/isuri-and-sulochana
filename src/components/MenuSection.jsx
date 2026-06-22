@@ -46,7 +46,7 @@ export default function MenuSection() {
   return (
     <section id="menu" className="py-24 px-6 bg-pearl-100">
       {/* Top floral stripe */}
-      <FloralStripe className="mb-16" />
+      <FloralStripe className="mb-6" />
 
       <div className="max-w-3xl mx-auto">
 
@@ -92,7 +92,7 @@ export default function MenuSection() {
         </div>
 
         {/* Bottom floral stripe */}
-        <FloralStripe className="mt-16" />
+        <FloralStripe className="mt-6" />
 
         {/* Dietary key */}
         <div className="mt-8 flex items-center justify-center gap-4 flex-wrap">

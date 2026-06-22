@@ -6,7 +6,7 @@ import RSVPSection from './components/RSVPSection'
 import AgendaSection from './components/AgendaSection'
 import MenuSection from './components/MenuSection'
 import Footer from './components/Footer'
-import ThankYouSection, { ThankYouPage } from './components/ThankYouSection'
+import { ThankYouPage } from './components/ThankYouSection'
 
 export default function App() {
   // Standalone thank you page — renders nothing else
@@ -112,7 +112,6 @@ export default function App() {
       />
       <AgendaSection />
       <MenuSection />
-      <ThankYouSection />
       <Footer />
     </div>
   )
