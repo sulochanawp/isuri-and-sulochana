@@ -141,11 +141,10 @@ function handleGetThankYouPhoto(folderId) {
     var file = files.next();
     var mime = file.getMimeType();
     if (mime.indexOf('image/') === 0) {
-      file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
       return respond({
         success: true,
         fileId:  file.getId(),
-        url:     'https://lh3.googleusercontent.com/d/' + file.getId(),
+        url:     'https://drive.google.com/uc?id=' + file.getId() + '&export=view',
       });
     }
   }
