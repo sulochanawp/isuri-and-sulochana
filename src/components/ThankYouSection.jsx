@@ -105,8 +105,7 @@ export function ThankYouPage() {
                 <img
                   src={photoUrl}
                   alt={`${WEDDING.bride} & ${WEDDING.groom}`}
-                  className="w-full object-cover block"
-                  style={{ maxHeight: '520px' }}
+                  className="w-full h-auto block"
                 />
               ) : photoError ? (
                 <div className="w-full flex items-center justify-center bg-pearl-50 text-olive-300" style={{ height: 400 }}>
