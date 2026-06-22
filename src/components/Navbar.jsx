@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { WEDDING } from '../config'
 
 const BASE_LINKS = [
-  { label: 'Home',   href: '#home' },
+  { label: 'Home',   href: '#' },
   { label: 'RSVP',   href: '#rsvp' },
   { label: 'Agenda', href: '#agenda' },
   { label: 'Menu',   href: '#menu' },
