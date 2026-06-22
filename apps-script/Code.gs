@@ -3,24 +3,24 @@
 //  Paste this entire file into your Apps Script project.
 // ============================================================
 
-// STEP 1: Replace with your Google Sheet ID (from the sheet URL)
 var SPREADSHEET_ID = 'YOUR_SPREADSHEET_ID_HERE';
+var GUESTS_SHEET   = 'Guests';
 
-var GUESTS_SHEET = 'Guests';
-
-// ── Google Sheets column layout (1-indexed) ─────────────────
+// ── Google Sheets column layout (1-indexed for getRange) ────
 // A(1)  Code
 // B(2)  Name
-// C(3)  Email            ← optional, leave blank if none
-// D(4)  Mobile1          ← primary WhatsApp / mobile number
-// E(5)  Mobile2          ← secondary number (optional)
-// F(6)  AllowedGuests    ← max seats on this invitation
-// G(7)  Attending        ← PENDING | YES | NO
-// H(8)  AttendingCount   ← actual confirmed count
-// I(9)  Dietary          ← dietary requirements
-// J(10) Table            ← table number/name assigned by organiser
-// K(11) Message          ← message to couple
-// L(12) SubmittedAt      ← ISO timestamp
+// C(3)  Email              ← optional
+// D(4)  Mobile1            ← primary WhatsApp / mobile
+// E(5)  Mobile2            ← secondary number (optional)
+// F(6)  AllowedAdults      ← max adults on this invitation (includes main guest)
+// G(7)  AllowedChildren    ← max children on this invitation (0 if none)
+// H(8)  Attending          ← PENDING | YES | NO
+// I(9)  AttendingAdults    ← confirmed adult count
+// J(10) AttendingChildren  ← confirmed child count
+// K(11) Dietary            ← dietary requirements
+// L(12) Table              ← table number/name (you fill this)
+// M(13) Message            ← message to couple
+// N(14) SubmittedAt        ← ISO timestamp
 
 // ── Entry points ────────────────────────────────────────────
 
@@ -58,23 +58,25 @@ function handleGetGuest(code) {
   for (var i = 1; i < data.length; i++) {
     var row = data[i];
     if (String(row[0]).toUpperCase().trim() === code.toUpperCase().trim()) {
-      var attending = String(row[6]).toUpperCase().trim();
+      var attending = String(row[7]).toUpperCase().trim();
       return respond({
         success: true,
         guest: {
-          code:            row[0],
-          name:            row[1],
-          email:           row[2] || '',
-          mobile1:         row[3] || '',
-          mobile2:         row[4] || '',
-          allowedGuests:   row[5] || 1,
-          attending:       attending || 'PENDING',
-          attendingCount:  row[7] || 0,
-          dietary:         row[8] || '',
-          table:           row[9] || '',
-          message:         row[10] || '',
-          submittedAt:     row[11] || '',
-          alreadySubmitted: attending === 'YES' || attending === 'NO',
+          code:              row[0],
+          name:              row[1],
+          email:             row[2]  || '',
+          mobile1:           row[3]  || '',
+          mobile2:           row[4]  || '',
+          allowedAdults:     Number(row[5]) || 1,
+          allowedChildren:   Number(row[6]) || 0,
+          attending:         attending || 'PENDING',
+          attendingAdults:   Number(row[8]) || 0,
+          attendingChildren: Number(row[9]) || 0,
+          dietary:           row[10] || '',
+          table:             row[11] || '',
+          message:           row[12] || '',
+          submittedAt:       row[13] || '',
+          alreadySubmitted:  attending === 'YES' || attending === 'NO',
         }
       });
     }
@@ -84,11 +86,12 @@ function handleGetGuest(code) {
 }
 
 function handleSubmitRSVP(params) {
-  var code      = params.code;
-  var attending = params.attending;
-  var count     = params.count;
-  var dietary   = params.dietary  || '';
-  var message   = params.message  || '';
+  var code     = params.code;
+  var attending = params.attending;           // YES | NO
+  var adults   = parseInt(params.adults)  || 0;
+  var children = parseInt(params.children) || 0;
+  var dietary  = params.dietary  || '';
+  var message  = params.message  || '';
 
   if (!code) return respond({ error: 'No code provided' });
 
@@ -99,22 +102,25 @@ function handleSubmitRSVP(params) {
 
   for (var i = 1; i < data.length; i++) {
     if (String(data[i][0]).toUpperCase().trim() === code.toUpperCase().trim()) {
-      var rowNum = i + 1;
+      var rowNum      = i + 1;
       var isAttending = attending === 'YES';
 
-      sheet.getRange(rowNum, 7).setValue(isAttending ? 'YES' : 'NO');   // G — Attending
-      sheet.getRange(rowNum, 8).setValue(isAttending ? (parseInt(count) || 1) : 0); // H — AttendingCount
-      sheet.getRange(rowNum, 9).setValue(dietary);                       // I — Dietary
-      sheet.getRange(rowNum, 11).setValue(message);                      // K — Message
-      sheet.getRange(rowNum, 12).setValue(new Date().toISOString());     // L — SubmittedAt
+      sheet.getRange(rowNum, 8).setValue(isAttending ? 'YES' : 'NO');   // H Attending
+      sheet.getRange(rowNum, 9).setValue(isAttending ? adults   : 0);   // I AttendingAdults
+      sheet.getRange(rowNum, 10).setValue(isAttending ? children : 0);  // J AttendingChildren
+      sheet.getRange(rowNum, 11).setValue(dietary);                     // K Dietary
+      sheet.getRange(rowNum, 13).setValue(message);                     // M Message
+      sheet.getRange(rowNum, 14).setValue(new Date().toISOString());    // N SubmittedAt
 
       SpreadsheetApp.flush();
 
       return respond({
-        success:   true,
-        name:      data[i][1],
-        table:     data[i][9] || '',   // J — Table
-        attending: isAttending ? 'YES' : 'NO',
+        success:           true,
+        name:              data[i][1],
+        table:             data[i][11] || '',   // L Table
+        attending:         isAttending ? 'YES' : 'NO',
+        attendingAdults:   isAttending ? adults   : 0,
+        attendingChildren: isAttending ? children : 0,
       });
     }
   }

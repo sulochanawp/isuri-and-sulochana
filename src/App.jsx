@@ -60,14 +60,21 @@ export default function App() {
         action: 'submitRSVP',
         code: guestCode.trim(),
         attending: formData.attending ? 'YES' : 'NO',
-        count: formData.attendingCount,
-        dietary: formData.dietary,
-        message: formData.message,
+        adults:   formData.attendingAdults,
+        children: formData.attendingChildren,
+        dietary:  formData.dietary,
+        message:  formData.message,
       })
       const res = await fetch(`${WEDDING.appsScriptUrl}?${params.toString()}`)
       const data = await res.json()
       if (data.success) {
-        setGuestData(prev => ({ ...prev, table: data.table, attending: data.attending }))
+        setGuestData(prev => ({
+          ...prev,
+          table:             data.table,
+          attending:         data.attending,
+          attendingAdults:   data.attendingAdults,
+          attendingChildren: data.attendingChildren,
+        }))
         setRsvpState('confirmed')
       } else {
         setRsvpError(data.error || 'Submission failed. Please try again.')

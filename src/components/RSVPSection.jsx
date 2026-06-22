@@ -47,30 +47,46 @@ function CodeEntry({ guestCode, setGuestCode, onLookup, loading }) {
 
 /* ── RSVP form ──────────────────────────────────────── */
 function RSVPForm({ guestData, onSubmit, submitting, rsvpError, onRetry }) {
-  const [attending, setAttending] = useState(true)
-  const [count, setCount] = useState(1)
-  const [dietary, setDietary] = useState('')
-  const [message, setMessage] = useState('')
-  const [formError, setFormError] = useState('')
+  const [attending, setAttending]     = useState(true)
+  const [adultCount, setAdultCount]   = useState(1)
+  const [childCount, setChildCount]   = useState(0)
+  const [dietary, setDietary]         = useState('')
+  const [message, setMessage]         = useState('')
+  const [formError, setFormError]     = useState('')
 
-  const maxGuests = guestData?.allowedGuests || 1
+  const maxAdults   = guestData?.allowedAdults   || 1
+  const maxChildren = guestData?.allowedChildren || 0
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (attending && count < 1) { setFormError('Please select the number of guests.'); return }
+    if (attending && adultCount < 1) {
+      setFormError('Please select at least 1 adult attending.')
+      return
+    }
     setFormError('')
-    onSubmit({ attending, attendingCount: attending ? count : 0, dietary, message })
+    onSubmit({
+      attending,
+      attendingAdults:   attending ? adultCount : 0,
+      attendingChildren: attending ? childCount : 0,
+      dietary,
+      message,
+    })
   }
+
+  // Invitation summary line
+  const inviteSummary = maxChildren > 0
+    ? `Your invitation includes up to ${maxAdults} ${maxAdults === 1 ? 'adult' : 'adults'} and ${maxChildren} ${maxChildren === 1 ? 'child' : 'children'}.`
+    : maxAdults > 1
+      ? `Your invitation includes up to ${maxAdults} adults.`
+      : null
 
   return (
     <div className="card corner-ornament max-w-2xl mx-auto">
       <div className="text-center mb-8">
         <h3 className="font-serif text-3xl text-ink font-light">Welcome, {guestData?.name}</h3>
         <p className="text-muted text-sm mt-2">Your invitation is confirmed — please let us know if you'll be joining us.</p>
-        {maxGuests > 1 && (
-          <p className="text-olive-600 text-xs mt-2 tracking-wide">
-            Your invitation includes up to {maxGuests} guests.
-          </p>
+        {inviteSummary && (
+          <p className="text-olive-600 text-xs mt-2 tracking-wide">{inviteSummary}</p>
         )}
       </div>
 
@@ -83,7 +99,7 @@ function RSVPForm({ guestData, onSubmit, submitting, rsvpError, onRetry }) {
           </p>
           <div className="grid grid-cols-2 gap-3">
             {[
-              { label: 'Joyfully Accept', val: true },
+              { label: 'Joyfully Accept',    val: true  },
               { label: 'Regretfully Decline', val: false },
             ].map(({ label, val }) => (
               <button
@@ -102,21 +118,56 @@ function RSVPForm({ guestData, onSubmit, submitting, rsvpError, onRetry }) {
           </div>
         </div>
 
-        {/* Guest count */}
+        {/* Adults + Children */}
         {attending && (
-          <div>
-            <label className="font-sans font-medium text-ink mb-2 text-xs tracking-[0.25em] uppercase block">
-              Number of Guests *
-            </label>
-            <select
-              value={count}
-              onChange={e => setCount(Number(e.target.value))}
-              className="input-field"
-            >
-              {Array.from({ length: maxGuests }, (_, i) => i + 1).map(n => (
-                <option key={n} value={n}>{n} {n === 1 ? 'Guest' : 'Guests'}</option>
-              ))}
-            </select>
+          <div className={`grid gap-4 ${maxChildren > 0 ? 'sm:grid-cols-2' : 'grid-cols-1'}`}>
+            {/* Adults */}
+            <div>
+              <label className="font-sans font-medium text-ink mb-2 text-xs tracking-[0.25em] uppercase block">
+                Adults Attending *
+              </label>
+              <select
+                value={adultCount}
+                onChange={e => setAdultCount(Number(e.target.value))}
+                className="input-field"
+              >
+                {Array.from({ length: maxAdults }, (_, i) => i + 1).map(n => (
+                  <option key={n} value={n}>{n} {n === 1 ? 'Adult' : 'Adults'}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Children — only shown if invitation allows children */}
+            {maxChildren > 0 && (
+              <div>
+                <label className="font-sans font-medium text-ink mb-2 text-xs tracking-[0.25em] uppercase block">
+                  Children Attending
+                </label>
+                <select
+                  value={childCount}
+                  onChange={e => setChildCount(Number(e.target.value))}
+                  className="input-field"
+                >
+                  {Array.from({ length: maxChildren + 1 }, (_, i) => i).map(n => (
+                    <option key={n} value={n}>{n === 0 ? 'None' : `${n} ${n === 1 ? 'Child' : 'Children'}`}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Attending count summary */}
+        {attending && (
+          <div className="bg-olive-50 border border-olive-100 px-4 py-3 text-xs text-olive-700 font-sans flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rotate-45 bg-olive-400 flex-shrink-0" />
+            <span>
+              Confirming <strong>{adultCount} {adultCount === 1 ? 'adult' : 'adults'}</strong>
+              {maxChildren > 0 && childCount > 0 && (
+                <> and <strong>{childCount} {childCount === 1 ? 'child' : 'children'}</strong></>
+              )}
+              {maxChildren > 0 && childCount === 0 && <>, no children</>}
+            </span>
           </div>
         )}
 
@@ -130,11 +181,11 @@ function RSVPForm({ guestData, onSubmit, submitting, rsvpError, onRetry }) {
               type="text"
               value={dietary}
               onChange={e => setDietary(e.target.value)}
-              placeholder="e.g. Vegetarian, Gluten Free, Nut allergy…"
+              placeholder="e.g. 1 vegetarian, 1 nut allergy, children's meals needed…"
               className="input-field"
               maxLength={200}
             />
-            <p className="text-muted text-xs mt-1">Leave blank if none — we'll do our best to accommodate.</p>
+            <p className="text-muted text-xs mt-1">Please mention each person's requirements. Leave blank if none.</p>
           </div>
         )}
 
@@ -196,10 +247,31 @@ function RSVPConfirmation({ guestData }) {
       {attending ? (
         <>
           <h3 className="font-serif text-3xl text-ink font-light mb-3">We Can't Wait to See You</h3>
-          <p className="text-muted text-sm leading-relaxed mb-6">
+          <p className="text-muted text-sm leading-relaxed mb-4">
             Thank you for confirming, <strong className="text-ink font-medium">{guestData?.name}</strong>.
             Your RSVP has been received. We are so excited to celebrate this special day with you.
           </p>
+
+          {/* Attending breakdown */}
+          <div className="flex flex-wrap justify-center gap-4 mb-6">
+            {guestData?.attendingAdults > 0 && (
+              <div className="border border-olive-200 bg-olive-50 px-5 py-3 text-center">
+                <p className="font-serif text-2xl text-ink font-light">{guestData.attendingAdults}</p>
+                <p className="text-olive-500 text-xs tracking-widest uppercase font-sans mt-0.5">
+                  {guestData.attendingAdults === 1 ? 'Adult' : 'Adults'}
+                </p>
+              </div>
+            )}
+            {guestData?.attendingChildren > 0 && (
+              <div className="border border-olive-200 bg-olive-50 px-5 py-3 text-center">
+                <p className="font-serif text-2xl text-ink font-light">{guestData.attendingChildren}</p>
+                <p className="text-olive-500 text-xs tracking-widest uppercase font-sans mt-0.5">
+                  {guestData.attendingChildren === 1 ? 'Child' : 'Children'}
+                </p>
+              </div>
+            )}
+          </div>
+
           {guestData?.table && (
             <div className="border border-olive-200 bg-olive-50 p-6 mb-6 relative">
               <span className="absolute -top-1 -left-1  w-2 h-2 rotate-45 bg-olive-400" />
