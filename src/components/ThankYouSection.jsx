@@ -113,7 +113,7 @@ export function ThankYouPage() {
         {/* Download button */}
         {WEDDING.thankYouPhotoUrl && WEDDING.thankYouPhotoUrl !== 'YOUR_PHOTO_URL_HERE' && (
           <a
-            href={WEDDING.thankYouPhotoUrl.replace('export=view', 'export=download')}
+            href={`https://drive.google.com/uc?id=${WEDDING.thankYouPhotoUrl.split('/d/').pop()}&export=download`}
             download
             className="inline-flex items-center gap-2 border border-olive-300 bg-olive-700 text-pearl-100
                        px-8 py-3 font-sans text-xs tracking-[0.25em] uppercase
