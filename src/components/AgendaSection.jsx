@@ -29,7 +29,7 @@ export default function AgendaSection() {
           onClick={() => setOpen(o => !o)}
           className="w-full flex items-center justify-between border border-line hover:border-olive-300 bg-pearl-50 px-6 py-5 transition-colors duration-200 group"
         >
-          <span className="font-serif text-xl text-ink font-light tracking-wide">View the Full Schedule</span>
+          <span className="font-serif text-xl text-ink font-light tracking-wide">View the Agenda</span>
           <span className={`transition-transform duration-300 text-olive-400 ${open ? 'rotate-180' : ''}`}>
             <svg viewBox="0 0 20 20" width="18" height="18" fill="currentColor">
               <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd"/>

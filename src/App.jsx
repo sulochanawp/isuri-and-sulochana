@@ -40,6 +40,7 @@ function MainSite() {
   }, [])
 
   useEffect(() => {
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual'
     const params = new URLSearchParams(window.location.search)
     const code = params.get('code')
     if (code) {
@@ -48,6 +49,8 @@ function MainSite() {
       setTimeout(() => {
         document.getElementById('rsvp')?.scrollIntoView({ behavior: 'smooth' })
       }, 800)
+    } else {
+      window.scrollTo(0, 0)
     }
   }, [lookupGuest])
 
