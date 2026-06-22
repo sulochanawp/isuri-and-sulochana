@@ -46,101 +46,123 @@ function CardLotus() {
   )
 }
 
+/* ── Standalone full-page wrapper (used when ?view=thankyou) ── */
+export function ThankYouPage() {
+  const revealed = useIsRevealed(WEDDING.thankYouRevealTime)
+
+  if (!revealed) {
+    return (
+      <div className="min-h-screen bg-pearl-100 flex flex-col items-center justify-center px-6 text-center">
+        <div className="text-olive-400 mb-6">
+          <CardLotus />
+        </div>
+        <p className="text-olive-500 text-xs tracking-[0.4em] uppercase font-sans mb-3">
+          {WEDDING.date}
+        </p>
+        <h2 className="font-serif text-3xl text-ink font-light mb-4">A Message Is Coming</h2>
+        <div className="flex items-center gap-4 my-4 opacity-20 w-32">
+          <div className="flex-1 border-t border-ink" />
+          <div className="w-1.5 h-1.5 rotate-45 bg-ink" />
+          <div className="flex-1 border-t border-ink" />
+        </div>
+        <p className="text-muted text-sm max-w-xs leading-relaxed">
+          Our heartfelt thank you card will appear here on the day of the wedding.
+          Please check back then.
+        </p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6 py-16 animate-fade-up">
+      <ThankYouCard />
+    </div>
+  )
+}
+
+/* ── Card extracted so both views can share it ── */
+function ThankYouCard() {
+  return (
+    <div className="w-full max-w-2xl">
+      <FloralStripe className="mb-16" />
+
+      <div className="text-center mb-10">
+        <p className="text-olive-500 text-xs tracking-[0.4em] uppercase font-sans mb-3">
+          {WEDDING.date}
+        </p>
+        <h2 className="section-heading">Thank You</h2>
+        <LotusDivider />
+      </div>
+
+      <div className="relative border-2 border-olive-200 bg-pearl-50 px-8 md:px-14 py-12 text-center">
+        <FloralCorner className="absolute -top-3 -left-3 text-olive-500 w-12 h-12" />
+        <FloralCorner className="absolute -top-3 -right-3 text-olive-500 w-12 h-12 rotate-90" />
+        <FloralCorner className="absolute -bottom-3 -left-3 text-olive-500 w-12 h-12 -rotate-90" />
+        <FloralCorner className="absolute -bottom-3 -right-3 text-olive-500 w-12 h-12 rotate-180" />
+
+        <div className="border border-olive-100 px-6 md:px-10 py-10">
+          <div className="flex justify-center mb-6"><CardLotus /></div>
+
+          <p className="text-olive-400 text-xs tracking-[0.5em] uppercase font-sans mb-4">
+            With all our love & gratitude
+          </p>
+          <h3 className="font-serif text-4xl md:text-5xl text-ink font-light leading-snug mb-2">
+            From the bottom<br />
+            <span className="italic">of our hearts,</span>
+          </h3>
+
+          <div className="flex items-center justify-center gap-3 my-6">
+            <div className="flex-1 max-w-[60px] border-t border-olive-200" />
+            <div className="w-1.5 h-1.5 rotate-45 bg-olive-400" />
+            <div className="flex-1 max-w-[60px] border-t border-olive-200" />
+          </div>
+
+          <p className="text-muted text-sm md:text-base leading-relaxed max-w-md mx-auto">
+            Today we became one, and you made our day complete. Thank you
+            for your presence, your love, and the memories we will carry
+            with us forever. It truly means the world to have you here.
+          </p>
+
+          <div className="mt-8">
+            <p className="font-serif text-2xl md:text-3xl text-olive-700 italic font-light tracking-wide">
+              {WEDDING.bride} & {WEDDING.groom}
+            </p>
+            <p className="text-muted text-xs tracking-[0.3em] uppercase font-sans mt-2">
+              {WEDDING.date}
+            </p>
+          </div>
+
+          <div className="flex items-center justify-center gap-3 mt-8 text-olive-300">
+            <div className="flex-1 border-t border-current opacity-40" />
+            <svg viewBox="0 0 60 24" width="60" height="24" fill="none">
+              <path d="M30 20 Q18 14 18 4 Q24 10 30 14 Q36 10 42 4 Q42 14 30 20Z"
+                stroke="currentColor" strokeWidth="0.8" fill="currentColor" fillOpacity="0.15"/>
+              <circle cx="30" cy="13" r="2.5" fill="currentColor" fillOpacity="0.5"/>
+            </svg>
+            <div className="flex-1 border-t border-current opacity-40" />
+          </div>
+        </div>
+      </div>
+
+      <p className="text-center text-muted text-xs mt-6 tracking-wide">
+        Screenshot or save this page as a keepsake 🌿
+      </p>
+
+      <FloralStripe className="mt-16" />
+    </div>
+  )
+}
+
 export default function ThankYouSection() {
   const revealed = useIsRevealed(WEDDING.thankYouRevealTime)
 
   if (!revealed) return null
 
   return (
-    <section
-      id="thankyou"
-      className="py-24 px-6 bg-white animate-fade-up"
-    >
-      <FloralStripe className="mb-16" />
-
+    <section id="thankyou" className="py-24 px-6 bg-white animate-fade-up">
       <div className="max-w-2xl mx-auto">
-
-        {/* Section label */}
-        <div className="text-center mb-10">
-          <p className="text-olive-500 text-xs tracking-[0.4em] uppercase font-sans mb-3">
-            {WEDDING.date}
-          </p>
-          <h2 className="section-heading">Thank You</h2>
-          <LotusDivider />
-        </div>
-
-        {/* ── Thank you card ── */}
-        <div className="relative border-2 border-olive-200 bg-pearl-50 px-8 md:px-14 py-12 text-center">
-
-          {/* Floral corner ornaments */}
-          <FloralCorner className="absolute -top-3 -left-3 text-olive-500 w-12 h-12" />
-          <FloralCorner className="absolute -top-3 -right-3 text-olive-500 w-12 h-12 rotate-90" />
-          <FloralCorner className="absolute -bottom-3 -left-3 text-olive-500 w-12 h-12 -rotate-90" />
-          <FloralCorner className="absolute -bottom-3 -right-3 text-olive-500 w-12 h-12 rotate-180" />
-
-          {/* Inner border */}
-          <div className="border border-olive-100 px-6 md:px-10 py-10">
-
-            {/* Lotus */}
-            <div className="flex justify-center mb-6">
-              <CardLotus />
-            </div>
-
-            {/* Headline */}
-            <p className="text-olive-400 text-xs tracking-[0.5em] uppercase font-sans mb-4">
-              With all our love & gratitude
-            </p>
-            <h3 className="font-serif text-4xl md:text-5xl text-ink font-light leading-snug mb-2">
-              From the bottom<br />
-              <span className="italic">of our hearts,</span>
-            </h3>
-
-            {/* Thin rule */}
-            <div className="flex items-center justify-center gap-3 my-6">
-              <div className="flex-1 max-w-[60px] border-t border-olive-200" />
-              <div className="w-1.5 h-1.5 rotate-45 bg-olive-400" />
-              <div className="flex-1 max-w-[60px] border-t border-olive-200" />
-            </div>
-
-            {/* Message */}
-            <p className="text-muted text-sm md:text-base leading-relaxed max-w-md mx-auto">
-              Today we became one, and you made our day complete. Thank you
-              for your presence, your love, and the memories we will carry
-              with us forever. It truly means the world to have you here.
-            </p>
-
-            {/* Couple names */}
-            <div className="mt-8">
-              <p className="font-serif text-2xl md:text-3xl text-olive-700 italic font-light tracking-wide">
-                {WEDDING.bride} & {WEDDING.groom}
-              </p>
-              <p className="text-muted text-xs tracking-[0.3em] uppercase font-sans mt-2">
-                {WEDDING.date}
-              </p>
-            </div>
-
-            {/* Bottom lotus row */}
-            <div className="flex items-center justify-center gap-3 mt-8 text-olive-300">
-              <div className="flex-1 border-t border-current opacity-40" />
-              <svg viewBox="0 0 60 24" width="60" height="24" fill="none">
-                <path d="M30 20 Q18 14 18 4 Q24 10 30 14 Q36 10 42 4 Q42 14 30 20Z"
-                  stroke="currentColor" strokeWidth="0.8" fill="currentColor" fillOpacity="0.15"/>
-                <circle cx="30" cy="13" r="2.5" fill="currentColor" fillOpacity="0.5"/>
-              </svg>
-              <div className="flex-1 border-t border-current opacity-40" />
-            </div>
-
-          </div>
-        </div>
-
-        {/* Print hint */}
-        <p className="text-center text-muted text-xs mt-6 tracking-wide">
-          Screenshot or save this page as a keepsake 🌿
-        </p>
-
+        <ThankYouCard />
       </div>
-
-      <FloralStripe className="mt-16" />
     </section>
   )
 }

@@ -6,9 +6,15 @@ import RSVPSection from './components/RSVPSection'
 import AgendaSection from './components/AgendaSection'
 import MenuSection from './components/MenuSection'
 import Footer from './components/Footer'
-import ThankYouSection from './components/ThankYouSection'
+import ThankYouSection, { ThankYouPage } from './components/ThankYouSection'
 
 export default function App() {
+  // Standalone thank you page — renders nothing else
+  const searchParams = new URLSearchParams(window.location.search)
+  if (searchParams.get('view') === 'thankyou') {
+    return <ThankYouPage />
+  }
+
   const [guestCode, setGuestCode] = useState('')
   const [guestData, setGuestData] = useState(null)
   const [lookupState, setLookupState] = useState('idle') // idle | loading | found | error
