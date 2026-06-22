@@ -2,9 +2,10 @@ import { useState } from 'react'
 import { AGENDA, WEDDING } from '../config'
 import { LotusDivider, FloralStripe } from './Hero'
 
-/* ── Agenda section ─────────────────────────────────── */
 export default function AgendaSection() {
-  const [open, setOpen] = useState(false)
+  const [expanded, setExpanded] = useState(false)
+
+  const visibleItems = expanded ? AGENDA : AGENDA.slice(0, 4)
 
   return (
     <section id="agenda" className="py-24 bg-white">
@@ -24,31 +25,19 @@ export default function AgendaSection() {
           </p>
         </div>
 
-        {/* Accordion trigger */}
-        <button
-          onClick={() => setOpen(o => !o)}
-          className="w-full flex items-center justify-between border border-line hover:border-olive-300 bg-pearl-50 px-6 py-5 transition-colors duration-200 group"
-        >
-          <span className="font-serif text-xl text-ink font-light tracking-wide">View the Agenda</span>
-          <span className={`transition-transform duration-300 text-olive-400 ${open ? 'rotate-180' : ''}`}>
-            <svg viewBox="0 0 20 20" width="18" height="18" fill="currentColor">
-              <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd"/>
-            </svg>
-          </span>
-        </button>
+        {/* Timeline */}
+        <div className="relative">
+          <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-px bg-olive-100 md:-translate-x-px" />
 
-        {/* Collapsible timeline */}
-        <div className={`overflow-hidden transition-all duration-500 ${open ? 'max-h-[9999px] opacity-100' : 'max-h-0 opacity-0'}`}>
-          <div className="relative pt-8 pb-4">
-            <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-px bg-olive-100 md:-translate-x-px" />
-
-            <div className="space-y-6">
-              {AGENDA.map((item, i) => (
+          <div className="space-y-6">
+            {visibleItems.map((item, i) => {
+              const fading = !expanded && i === 3
+              return (
                 <div
                   key={i}
-                  className={`relative flex items-start gap-6 md:gap-0 ${
-                    i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
-                  }`}
+                  className={`relative flex items-start gap-6 md:gap-0 transition-opacity duration-300 ${
+                    fading ? 'opacity-40' : 'opacity-100'
+                  } ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}
                 >
                   <div className={`ml-16 md:ml-0 md:w-5/12 ${i % 2 === 0 ? 'md:pr-10 md:text-right' : 'md:pl-10 md:text-left'}`}>
                     <div className="border border-line hover:border-olive-300 transition-colors duration-300 p-5 bg-pearl-50">
@@ -69,9 +58,39 @@ export default function AgendaSection() {
 
                   <div className="hidden md:block md:w-5/12" />
                 </div>
-              ))}
-            </div>
+              )
+            })}
           </div>
+
+          {/* Fade gradient + expand button */}
+          {!expanded ? (
+            <div
+              className="relative -mt-28 pt-4 flex flex-col items-center"
+              style={{ background: 'linear-gradient(to bottom, transparent, white 55%)' }}
+            >
+              <button
+                onClick={() => setExpanded(true)}
+                className="mt-16 border border-olive-300 bg-white px-8 py-3 font-sans text-xs tracking-[0.25em] uppercase text-olive-600 hover:bg-olive-50 hover:border-olive-400 transition-colors duration-200 flex items-center gap-3"
+              >
+                <svg viewBox="0 0 20 20" width="14" height="14" fill="currentColor" className="text-olive-400">
+                  <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd"/>
+                </svg>
+                View the full agenda for the day
+              </button>
+            </div>
+          ) : (
+            <div className="flex justify-center mt-8">
+              <button
+                onClick={() => setExpanded(false)}
+                className="border border-olive-300 bg-white px-8 py-3 font-sans text-xs tracking-[0.25em] uppercase text-olive-600 hover:bg-olive-50 hover:border-olive-400 transition-colors duration-200 flex items-center gap-3"
+              >
+                <svg viewBox="0 0 20 20" width="14" height="14" fill="currentColor" className="text-olive-400">
+                  <path fillRule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clipRule="evenodd"/>
+                </svg>
+                Collapse the agenda
+              </button>
+            </div>
+          )}
         </div>
       </div>
 

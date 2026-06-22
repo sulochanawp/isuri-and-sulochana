@@ -120,7 +120,22 @@ export default function Footer({ showMap = true, showWhatsApp = true }) {
           </div>
         )}
 
-        <p className="text-pearl-300/20 text-xs font-sans tracking-widest">
+        {/* RSVP jump button */}
+        <div className="mt-10">
+          <a
+            href="#rsvp"
+            className="inline-flex items-center gap-2 border border-pearl-300/30 px-8 py-3
+                       text-pearl-200/70 hover:text-pearl-100 hover:border-pearl-300/60
+                       transition-all duration-200 font-sans text-xs tracking-[0.3em] uppercase"
+          >
+            <svg viewBox="0 0 20 20" width="14" height="14" fill="currentColor">
+              <path fillRule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clipRule="evenodd"/>
+            </svg>
+            RSVP
+          </a>
+        </div>
+
+        <p className="text-pearl-300/20 text-xs font-sans tracking-widest mt-6">
           Made with love · {new Date().getFullYear()}
         </p>
       </div>

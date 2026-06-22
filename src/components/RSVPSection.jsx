@@ -365,7 +365,7 @@ export default function RSVPSection({
                 </svg>
               ))}
               <p className="text-pearl-300/60 text-xs tracking-[0.35em] uppercase font-sans mb-1">
-                Kindly reply before
+                Kindly RSVP before
               </p>
               <p className="font-serif text-2xl text-pearl-100 font-light tracking-wide">
                 {WEDDING.rsvpDeadline}
