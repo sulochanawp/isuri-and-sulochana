@@ -184,19 +184,19 @@ export default function Hero() {
       {/* Vignette */}
       <div className="absolute inset-0 bg-gradient-to-b from-olive-900/60 via-transparent to-olive-900/80 pointer-events-none" />
 
-      {/* Floral strip top */}
-      <div className="absolute top-0 left-0 right-0">
+      {/* Floral strip — sits below the fixed navbar (navbar is ~64px tall) */}
+      <div className="absolute top-16 left-0 right-0">
         <FloralStripe light />
       </div>
 
-      {/* Top rule */}
-      <div className="absolute top-20 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 opacity-25">
+      {/* Top rule — below the floral strip */}
+      <div className="absolute top-32 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 opacity-25">
         <div className="w-px h-8 bg-pearl-200" />
         <div className="w-1.5 h-1.5 rotate-45 bg-pearl-200" />
       </div>
 
-      {/* Main content */}
-      <div className="relative z-10 px-6 animate-fade-up">
+      {/* Main content — pt-32 ensures it clears the navbar + floral strip */}
+      <div className="relative z-10 px-6 pt-32 animate-fade-up">
         <p className="text-pearl-300/55 text-xs tracking-[0.5em] uppercase font-sans mb-7">
           You are cordially invited to the wedding of
         </p>
