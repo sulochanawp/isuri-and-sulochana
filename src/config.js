@@ -33,7 +33,7 @@ export const WEDDING = {
 
   // Paste your deployed Google Apps Script URL here
   // Format: https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec
-  appsScriptUrl: "YOUR_APPS_SCRIPT_URL_HERE",
+  appsScriptUrl: "https://script.google.com/macros/s/AKfycbxXqQTa-M3sGzurc0Gny27JxhGFTrarEHvO3Qf0dphc1OkRjdOd1RZp-uddB__sRF_C/exec",
 
   // Optional: a short message shown on the hero
   heroMessage: "Together with their families, invite you to celebrate their marriage",
