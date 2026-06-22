@@ -11,18 +11,15 @@ var GUESTS_SHEET   = 'Guests';
 // C(3)  Email
 // D(4)  Mobile1
 // E(5)  Mobile2
-// F(6)  AllowedAdults      ← you fill: max adults on invitation
-// G(7)  AllowedChildren    ← you fill: max children (0 if none)
+// F(6)  AllowedAdults      ← you fill: your estimated / max adults
+// G(7)  AllowedChildren    ← you fill: your estimated / max children (0 if none)
 // H(8)  Attending          ← PENDING | YES | NO
-// I(9)  AttendingAdults    ← ORIGINAL first-submission adult count
-// J(10) AttendingChildren  ← ORIGINAL first-submission child count
+// I(9)  AttendingAdults    ← latest confirmed adult count from guest
+// J(10) AttendingChildren  ← latest confirmed child count from guest
 // K(11) Dietary
 // L(12) Table              ← you fill
 // M(13) Message
-// N(14) SubmittedAt        ← timestamp of FIRST submission (never overwritten)
-// O(15) UpdatedAdults      ← latest updated adult count (blank until first update)
-// P(16) UpdatedChildren    ← latest updated child count
-// Q(17) LastUpdatedAt      ← timestamp of most recent change
+// N(14) SubmittedAt        ← timestamp of latest submission (always overwritten)
 
 // ── Entry points ─────────────────────────────────────────────
 
@@ -81,9 +78,6 @@ function handleGetGuest(code) {
           message:           row[12] || '',
           submittedAt:       row[13] || '',
           // Latest update counts (blank if never updated)
-          updatedAdults:     row[14] !== '' ? Number(row[14]) : null,
-          updatedChildren:   row[15] !== '' ? Number(row[15]) : null,
-          lastUpdatedAt:     row[16] || '',
           alreadySubmitted:  isSubmitted,
         }
       });
@@ -111,38 +105,26 @@ function handleSubmitRSVP(params) {
 
   for (var i = 1; i < data.length; i++) {
     if (String(data[i][0]).toUpperCase().trim() === code.toUpperCase().trim()) {
-      var rowNum         = i + 1;
-      var isAttending    = attending === 'YES';
-      var currentStatus  = String(data[i][7]).toUpperCase().trim();
-      var isFirstSubmit  = currentStatus === 'PENDING' || currentStatus === '';
+      var rowNum      = i + 1;
+      var isAttending = attending === 'YES';
 
-      // Always update: attending status, dietary, message
-      sheet.getRange(rowNum, 8).setValue(isAttending ? 'YES' : 'NO'); // H
-      sheet.getRange(rowNum, 11).setValue(dietary);                    // K
-      sheet.getRange(rowNum, 13).setValue(message);                    // M
-
-      if (isFirstSubmit) {
-        // First submission — write to original columns I, J, N
-        sheet.getRange(rowNum, 9).setValue(isAttending ? adults    : 0); // I AttendingAdults
-        sheet.getRange(rowNum, 10).setValue(isAttending ? children : 0); // J AttendingChildren
-        sheet.getRange(rowNum, 14).setValue(now);                        // N SubmittedAt
-      } else {
-        // Update — write new counts to O, P, Q (original I/J/N preserved)
-        sheet.getRange(rowNum, 15).setValue(isAttending ? adults    : 0); // O UpdatedAdults
-        sheet.getRange(rowNum, 16).setValue(isAttending ? children : 0);  // P UpdatedChildren
-        sheet.getRange(rowNum, 17).setValue(now);                          // Q LastUpdatedAt
-      }
+      // Always overwrite with latest values
+      sheet.getRange(rowNum, 8).setValue(isAttending ? 'YES' : 'NO'); // H Attending
+      sheet.getRange(rowNum, 9).setValue(isAttending ? adults    : 0); // I AttendingAdults
+      sheet.getRange(rowNum, 10).setValue(isAttending ? children : 0); // J AttendingChildren
+      sheet.getRange(rowNum, 11).setValue(dietary);                    // K Dietary
+      sheet.getRange(rowNum, 13).setValue(message);                    // M Message
+      sheet.getRange(rowNum, 14).setValue(now);                        // N SubmittedAt
 
       SpreadsheetApp.flush();
 
       return respond({
-        success:    true,
-        name:       data[i][1],
-        table:      data[i][11] || '',
-        attending:  isAttending ? 'YES' : 'NO',
-        isUpdate:   !isFirstSubmit,
-        adults:     isAttending ? adults    : 0,
-        children:   isAttending ? children : 0,
+        success:   true,
+        name:      data[i][1],
+        table:     data[i][11] || '',
+        attending: isAttending ? 'YES' : 'NO',
+        adults:    isAttending ? adults   : 0,
+        children:  isAttending ? children : 0,
       });
     }
   }
