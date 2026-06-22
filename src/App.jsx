@@ -8,18 +8,13 @@ import MenuSection from './components/MenuSection'
 import Footer from './components/Footer'
 import { ThankYouPage } from './components/ThankYouSection'
 
-export default function App() {
-  // Standalone thank you page — renders nothing else
-  const searchParams = new URLSearchParams(window.location.search)
-  if (searchParams.get('view') === 'thankyou') {
-    return <ThankYouPage />
-  }
-
+/* ── Main site (all hooks live here, called unconditionally) ── */
+function MainSite() {
   const [guestCode, setGuestCode] = useState('')
   const [guestData, setGuestData] = useState(null)
-  const [lookupState, setLookupState] = useState('idle') // idle | loading | found | error
+  const [lookupState, setLookupState] = useState('idle')
   const [lookupError, setLookupError] = useState('')
-  const [rsvpState, setRsvpState] = useState('idle') // idle | submitting | confirmed | error
+  const [rsvpState, setRsvpState] = useState('idle')
   const [rsvpError, setRsvpError] = useState('')
 
   const lookupGuest = useCallback(async (code) => {
@@ -33,9 +28,7 @@ export default function App() {
       if (data.success) {
         setGuestData(data.guest)
         setLookupState('found')
-        if (data.guest.alreadySubmitted) {
-          setRsvpState('confirmed')
-        }
+        if (data.guest.alreadySubmitted) setRsvpState('confirmed')
       } else {
         setLookupError(data.error || 'Guest not found. Please check your code.')
         setLookupState('error')
@@ -63,13 +56,13 @@ export default function App() {
     setRsvpError('')
     try {
       const params = new URLSearchParams({
-        action: 'submitRSVP',
-        code: guestCode.trim(),
+        action:    'submitRSVP',
+        code:      guestCode.trim(),
         attending: formData.attending ? 'YES' : 'NO',
-        adults:   formData.attendingAdults,
-        children: formData.attendingChildren,
-        dietary:  formData.dietary,
-        message:  formData.message,
+        adults:    formData.attendingAdults,
+        children:  formData.attendingChildren,
+        dietary:   formData.dietary,
+        message:   formData.message,
       })
       const res = await fetch(`${WEDDING.appsScriptUrl}?${params.toString()}`)
       const data = await res.json()
@@ -115,4 +108,10 @@ export default function App() {
       <Footer />
     </div>
   )
+}
+
+/* ── Root — no hooks here, safe to branch before rendering ── */
+export default function App() {
+  const isThankYouView = new URLSearchParams(window.location.search).get('view') === 'thankyou'
+  return isThankYouView ? <ThankYouPage /> : <MainSite />
 }
