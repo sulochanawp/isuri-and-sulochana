@@ -142,7 +142,7 @@ function RSVPForm({ guestData, onSubmit, submitting, rsvpError, onRetry }) {
                 className="input-field"
               >
                 {Array.from({ length: maxAdults }, (_, i) => i + 1).map(n => (
-                  <option key={n} value={n}>{n} {n === 1 ? 'Adult' : 'Adults'}</option>
+                  <option key={n} value={n}>{String(n).padStart(2, '0')} {n === 1 ? 'Adult' : 'Adults'}</option>
                 ))}
               </select>
             </div>
@@ -159,7 +159,7 @@ function RSVPForm({ guestData, onSubmit, submitting, rsvpError, onRetry }) {
                   className="input-field"
                 >
                   {Array.from({ length: maxChildren + 1 }, (_, i) => i).map(n => (
-                    <option key={n} value={n}>{n === 0 ? 'None' : `${n} ${n === 1 ? 'Child' : 'Children'}`}</option>
+                    <option key={n} value={n}>{n === 0 ? 'None' : `${String(n).padStart(2, '0')} ${n === 1 ? 'Child' : 'Children'}`}</option>
                   ))}
                 </select>
               </div>
@@ -266,7 +266,7 @@ function RSVPConfirmation({ guestData, onEdit }) {
           <div className="flex flex-wrap justify-center gap-4 mb-6">
             {guestData?.attendingAdults > 0 && (
               <div className="border border-olive-200 bg-olive-50 px-5 py-3 text-center">
-                <p className="font-serif text-2xl text-ink font-light">{guestData.attendingAdults}</p>
+                <p className="font-serif text-2xl text-ink font-light">{String(guestData.attendingAdults).padStart(2, '0')}</p>
                 <p className="text-olive-500 text-xs tracking-widest uppercase font-sans mt-0.5">
                   {guestData.attendingAdults === 1 ? 'Adult' : 'Adults'}
                 </p>
@@ -274,7 +274,7 @@ function RSVPConfirmation({ guestData, onEdit }) {
             )}
             {guestData?.attendingChildren > 0 && (
               <div className="border border-olive-200 bg-olive-50 px-5 py-3 text-center">
-                <p className="font-serif text-2xl text-ink font-light">{guestData.attendingChildren}</p>
+                <p className="font-serif text-2xl text-ink font-light">{String(guestData.attendingChildren).padStart(2, '0')}</p>
                 <p className="text-olive-500 text-xs tracking-widest uppercase font-sans mt-0.5">
                   {guestData.attendingChildren === 1 ? 'Child' : 'Children'}
                 </p>
