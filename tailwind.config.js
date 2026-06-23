@@ -29,8 +29,8 @@ export default {
         line:  '#D5D9C8',
       },
       fontFamily: {
-        serif: ['"EB Garamond"', 'Georgia', 'serif'],
-        sans:  ['Lato', 'system-ui', 'sans-serif'],
+        serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+        sans:  ['Inter', 'system-ui', 'sans-serif'],
       },
       backgroundImage: {
         // Subtle repeating diamond grid — Kandyan textile reference
