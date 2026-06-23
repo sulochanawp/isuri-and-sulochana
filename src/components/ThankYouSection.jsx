@@ -45,7 +45,7 @@ export function ThankYouPage() {
       .then(r => r.json())
       .then(data => {
         if (data.success) {
-          setPhotoUrl(data.url)
+          setPhotoUrl(`https://drive.google.com/thumbnail?id=${data.fileId}&sz=w2000`)
           setPhotoFileId(data.fileId)
         } else {
           setPhotoError(true)

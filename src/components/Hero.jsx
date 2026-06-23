@@ -213,7 +213,7 @@ export default function Hero() {
         </div>
 
         {/* Date */}
-        <p className="text-pearl-200/70 font-sans text-xs tracking-[0.35em] uppercase">{ordinal(WEDDING.date)}</p>
+        <p className="text-pearl-100 font-serif text-xl md:text-2xl tracking-widest">{ordinal(WEDDING.date)}</p>
 
         {/* Countdown */}
         <Countdown target={WEDDING.weddingDate} />
