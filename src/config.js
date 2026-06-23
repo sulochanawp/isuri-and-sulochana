@@ -125,7 +125,7 @@ starters: [
   {
     name: "Black Currant Welcome Drink",
     description: "Refreshing chilled black currant drink served as a welcome beverage",
-    badges: ["V", "GF"],
+    badges: ["V"],
   },
   {
     name: "Thai Chicken on Baked Vegetables",
@@ -135,22 +135,22 @@ starters: [
   {
     name: "Grilled Vegetable Salad",
     description: "Char-grilled seasonal vegetables tossed with light herbs and dressing",
-    badges: ["V", "GF"],
+    badges: ["V"],
   },
   {
     name: "Chicken Hawaiian Salad",
     description: "Chicken salad with tropical pineapple, vegetables, and creamy dressing",
-    badges: ["GF"],
+    badges: [],
   },
   {
     name: "Tuna Salad with Green Papaya",
     description: "Flaked tuna with crisp green papaya, fresh vegetables, and tangy dressing",
-    badges: ["GF"],
+    badges: [],
   },
   {
     name: "Garlic Mayo",
     description: "Creamy garlic mayonnaise served as a dipping sauce",
-    badges: ["GF"],
+    badges: [],
   },
   {
     name: "Noodles & Seafood Red Soup",
@@ -163,7 +163,7 @@ mains: [
   {
     name: "Steamed Basmati Rice",
     description: "Fragrant long-grain basmati rice, lightly steamed until fluffy",
-    badges: ["V", "GF"],
+    badges: ["V"],
   },
   {
     name: "Vegetable and Tofu Noodles",
@@ -178,32 +178,32 @@ mains: [
   {
     name: "Chicken Black Curry",
     description: "Sri Lankan-style chicken curry cooked with roasted spices and rich curry gravy",
-    badges: ["GF"],
+    badges: [],
   },
   {
     name: "Fish Stew with Vegetables",
     description: "Tender fish simmered with vegetables in a light, mildly spiced stew",
-    badges: ["GF"],
+    badges: [],
   },
   {
     name: "Dhal Tempered",
     description: "Sri Lankan lentil curry tempered with onions, curry leaves, and spices",
-    badges: ["V", "GF"],
+    badges: ["V"],
   },
   {
     name: "Green Bean Curry",
     description: "Sri Lankan-style green beans cooked in coconut curry with aromatic spices",
-    badges: ["V", "GF"],
+    badges: ["V"],
   },
   {
     name: "Cauliflower & Potato White Curry",
     description: "Cauliflower and potatoes simmered in a mild coconut-based white curry",
-    badges: ["V", "GF"],
+    badges: ["V"],
   },
   {
     name: "Batu Moju",
     description: "Sri Lankan sweet and sour eggplant pickle with onions, spices, and gentle heat",
-    badges: ["V", "GF"],
+    badges: ["V"],
   },
 ],
 
@@ -211,27 +211,26 @@ desserts: [
   {
     name: "Sri Lankan Cut Fruits",
     description: "Selection of fresh seasonal Sri Lankan fruits, sliced and served chilled",
-    badges: ["V", "GF"],
+    badges: ["V"],
   },
   {
     name: "Broken Jelly",
     description: "Colorful jelly pieces served as a light and refreshing dessert",
-    badges: ["GF"],
+    badges: [],
   },
   {
     name: "Watalappam",
     description: "Traditional Sri Lankan coconut and jaggery custard flavored with warm spices",
-    badges: ["GF"],
+    badges: [],
   },
   {
     name: "Ice Cream",
     description: "Classic chilled ice cream served as a creamy dessert option",
-    badges: ["V", "GF"],
+    badges: ["V"],
   },
 ],
 
   dietaryKey: [
-    { code: "V",  label: "Vegetarian",  color: "bg-olive-50 text-olive-600 border border-olive-200" },
-    { code: "GF", label: "Gluten Free", color: "bg-pearl-200 text-muted border border-pearl-300" },
+    { code: "V", label: "Vegetarian", color: "bg-olive-50 text-olive-600 border border-olive-200" },
   ],
 };
