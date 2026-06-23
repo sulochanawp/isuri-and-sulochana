@@ -27,7 +27,7 @@ function MenuCard({ item }) {
         {/* Small diamond bullet */}
         <span className="mt-2 w-1.5 h-1.5 rotate-45 bg-olive-400 flex-shrink-0 group-hover:bg-olive-600 transition-colors" />
         <div>
-          <h4 className="text-lg text-ink font-semibold leading-snug" style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}>{item.name}</h4>
+          <h4 className="text-lg text-ink font-semibold leading-snug" style={{ fontFamily: '"Cormorant Upright", Georgia, serif' }}>{item.name}</h4>
           <p className="text-muted text-sm mt-0.5 leading-relaxed">{item.description}</p>
         </div>
       </div>
