@@ -55,7 +55,7 @@ export default function AgendaSection() {
                       <span className="text-olive-500 text-xs tracking-[0.25em] uppercase font-sans block mb-1">
                         {item.time}
                       </span>
-                      <h3 className="font-serif text-lg text-ink font-light mb-1">{item.title}</h3>
+                      <h3 className="text-lg text-ink font-semibold mb-1" style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}>{item.title}</h3>
                       <p className="text-muted text-sm leading-relaxed">{item.description}</p>
                     </div>
                   </div>
