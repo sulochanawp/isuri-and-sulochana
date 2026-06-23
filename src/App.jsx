@@ -47,9 +47,7 @@ function MainSite() {
     if (code) {
       setGuestCode(code)
       lookupGuest(code)
-      setTimeout(() => {
-        document.getElementById('rsvp')?.scrollIntoView({ behavior: 'smooth' })
-      }, 800)
+      window.scrollTo(0, 0)
     } else {
       window.scrollTo(0, 0)
     }
