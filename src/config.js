@@ -118,64 +118,114 @@ export const AGENDA = [
 export const MENU = {
   note: "Please indicate any dietary requirements when you RSVP. All dishes are prepared fresh on the day.",
 
-  starters: [
-    {
-      name: "Garden Salad",
-      description: "Mixed greens, cherry tomatoes, cucumber ribbons, house lemon vinaigrette",
-      badges: ["V", "GF"],
-    },
-    {
-      name: "Roasted Pumpkin Soup",
-      description: "Velvety pumpkin bisque, toasted pepitas, swirl of cream",
-      badges: ["V", "GF"],
-    },
-    {
-      name: "Charcuterie & Cheese Board",
-      description: "Cured meats, artisan cheeses, grapes, honey, sourdough crackers",
-      badges: [],
-    },
-  ],
+starters: [
+  {
+    name: "Black Currant Welcome Drink",
+    description: "Refreshing chilled black currant drink served as a welcome beverage",
+    badges: ["V", "GF"],
+  },
+  {
+    name: "Thai Chicken on Baked Vegetables",
+    description: "Tender Thai-style chicken served over seasoned baked vegetables",
+    badges: [],
+  },
+  {
+    name: "Grilled Vegetable Salad",
+    description: "Char-grilled seasonal vegetables tossed with light herbs and dressing",
+    badges: ["V", "GF"],
+  },
+  {
+    name: "Chicken Hawaiian Salad",
+    description: "Chicken salad with tropical pineapple, vegetables, and creamy dressing",
+    badges: ["GF"],
+  },
+  {
+    name: "Tuna Salad with Green Papaya",
+    description: "Flaked tuna with crisp green papaya, fresh vegetables, and tangy dressing",
+    badges: ["GF"],
+  },
+  {
+    name: "Garlic Mayo",
+    description: "Creamy garlic mayonnaise served as a dipping sauce",
+    badges: ["GF"],
+  },
+  {
+    name: "Noodles & Seafood Red Soup",
+    description: "Spicy red soup with noodles, seafood, vegetables, and aromatic spices",
+    badges: [],
+  },
+],
 
-  mains: [
-    {
-      name: "Pan-Roasted Chicken Supreme",
-      description: "Free-range chicken, herb jus, roasted seasonal vegetables, truffle mash",
-      badges: ["GF"],
-    },
-    {
-      name: "Atlantic Salmon Fillet",
-      description: "Grilled salmon, lemon butter sauce, asparagus, wild rice pilaf",
-      badges: ["GF"],
-    },
-    {
-      name: "Beef Tenderloin",
-      description: "6 oz filet mignon, red wine reduction, pomme purée, haricot verts",
-      badges: ["GF"],
-    },
-    {
-      name: "Wild Mushroom Risotto",
-      description: "Arborio rice, porcini & shiitake mushrooms, parmesan, fresh thyme",
-      badges: ["V", "GF"],
-    },
-  ],
+mains: [
+  {
+    name: "Steamed Basmati Rice",
+    description: "Fragrant long-grain basmati rice, lightly steamed until fluffy",
+    badges: ["V", "GF"],
+  },
+  {
+    name: "Vegetable and Tofu Noodles",
+    description: "Stir-fried noodles with mixed vegetables, tofu, and savory seasoning",
+    badges: ["V"],
+  },
+  {
+    name: "Chicken Fried Noodles",
+    description: "Wok-fried noodles with chicken, vegetables, and flavorful Asian seasoning",
+    badges: [],
+  },
+  {
+    name: "Chicken Black Curry",
+    description: "Sri Lankan-style chicken curry cooked with roasted spices and rich curry gravy",
+    badges: ["GF"],
+  },
+  {
+    name: "Fish Stew with Vegetables",
+    description: "Tender fish simmered with vegetables in a light, mildly spiced stew",
+    badges: ["GF"],
+  },
+  {
+    name: "Dhal Tempered",
+    description: "Sri Lankan lentil curry tempered with onions, curry leaves, and spices",
+    badges: ["V", "GF"],
+  },
+  {
+    name: "Green Bean Curry",
+    description: "Sri Lankan-style green beans cooked in coconut curry with aromatic spices",
+    badges: ["V", "GF"],
+  },
+  {
+    name: "Cauliflower & Potato White Curry",
+    description: "Cauliflower and potatoes simmered in a mild coconut-based white curry",
+    badges: ["V", "GF"],
+  },
+  {
+    name: "Batu Moju",
+    description: "Sri Lankan sweet and sour eggplant pickle with onions, spices, and gentle heat",
+    badges: ["V", "GF"],
+  },
+],
 
-  desserts: [
-    {
-      name: "Wedding Cake",
-      description: "Layers of vanilla sponge, champagne buttercream, fresh floral decoration",
-      badges: ["V"],
-    },
-    {
-      name: "Warm Chocolate Fondant",
-      description: "Valrhona chocolate, vanilla bean ice cream, raspberry coulis",
-      badges: ["V"],
-    },
-    {
-      name: "Pavlova",
-      description: "Crisp meringue, Chantilly cream, fresh seasonal berries",
-      badges: ["V", "GF"],
-    },
-  ],
+desserts: [
+  {
+    name: "Sri Lankan Cut Fruits",
+    description: "Selection of fresh seasonal Sri Lankan fruits, sliced and served chilled",
+    badges: ["V", "GF"],
+  },
+  {
+    name: "Broken Jelly",
+    description: "Colorful jelly pieces served as a light and refreshing dessert",
+    badges: ["GF"],
+  },
+  {
+    name: "Watalappam",
+    description: "Traditional Sri Lankan coconut and jaggery custard flavored with warm spices",
+    badges: ["GF"],
+  },
+  {
+    name: "Ice Cream",
+    description: "Classic chilled ice cream served as a creamy dessert option",
+    badges: ["V", "GF"],
+  },
+],
 
   dietaryKey: [
     { code: "V",  label: "Vegetarian",  color: "bg-olive-50 text-olive-600 border border-olive-200" },
