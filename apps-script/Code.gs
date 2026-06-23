@@ -11,15 +11,16 @@ var GUESTS_SHEET   = 'Guests';
 // C(3)  Email
 // D(4)  Mobile1
 // E(5)  Mobile2
-// F(6)  AllowedAdults      ← you fill: your estimated / max adults
-// G(7)  AllowedChildren    ← you fill: your estimated / max children (0 if none)
-// H(8)  Attending          ← PENDING | YES | NO
-// I(9)  AttendingAdults    ← latest confirmed adult count from guest
-// J(10) AttendingChildren  ← latest confirmed child count from guest
-// K(11) Dietary
-// L(12) Table              ← you fill
-// M(13) Message
-// N(14) SubmittedAt        ← timestamp of latest submission (always overwritten)
+// F(6)  InvitationURL      ← personal RSVP link (auto or manually set)
+// G(7)  AllowedAdults      ← you fill: your estimated / max adults
+// H(8)  AllowedChildren    ← you fill: your estimated / max children (0 if none)
+// I(9)  Attending          ← PENDING | YES | NO
+// J(10) AttendingAdults    ← latest confirmed adult count from guest
+// K(11) AttendingChildren  ← latest confirmed child count from guest
+// L(12) Dietary
+// M(13) Table              ← you fill
+// N(14) Message
+// O(15) SubmittedAt        ← timestamp of latest submission (always overwritten)
 
 // ── Entry points ─────────────────────────────────────────────
 
@@ -58,7 +59,7 @@ function handleGetGuest(code) {
   for (var i = 1; i < data.length; i++) {
     var row = data[i];
     if (String(row[0]).toUpperCase().trim() === code.toUpperCase().trim()) {
-      var attending = String(row[7]).toUpperCase().trim();
+      var attending = String(row[8]).toUpperCase().trim();
       var isSubmitted = attending === 'YES' || attending === 'NO';
       return respond({
         success: true,
@@ -68,17 +69,16 @@ function handleGetGuest(code) {
           email:             row[2]  || '',
           mobile1:           row[3]  || '',
           mobile2:           row[4]  || '',
-          allowedAdults:     Number(row[5])  || 1,
-          allowedChildren:   Number(row[6])  || 0,
+          invitationUrl:     row[5]  || '',
+          allowedAdults:     Number(row[6])  || 1,
+          allowedChildren:   Number(row[7])  || 0,
           attending:         attending        || 'PENDING',
-          // Original counts from first submission
-          attendingAdults:   Number(row[8])  || 0,
-          attendingChildren: Number(row[9])  || 0,
-          dietary:           row[10] || '',
-          table:             row[11] || '',
-          message:           row[12] || '',
-          submittedAt:       row[13] || '',
-          // Latest update counts (blank if never updated)
+          attendingAdults:   Number(row[9])  || 0,
+          attendingChildren: Number(row[10]) || 0,
+          dietary:           row[11] || '',
+          table:             row[12] || '',
+          message:           row[13] || '',
+          submittedAt:       row[14] || '',
           alreadySubmitted:  isSubmitted,
         }
       });
@@ -109,20 +109,19 @@ function handleSubmitRSVP(params) {
       var rowNum      = i + 1;
       var isAttending = attending === 'YES';
 
-      // Always overwrite with latest values
-      sheet.getRange(rowNum, 8).setValue(isAttending ? 'YES' : 'NO'); // H Attending
-      sheet.getRange(rowNum, 9).setValue(isAttending ? adults    : 0); // I AttendingAdults
-      sheet.getRange(rowNum, 10).setValue(isAttending ? children : 0); // J AttendingChildren
-      sheet.getRange(rowNum, 11).setValue(dietary);                    // K Dietary
-      sheet.getRange(rowNum, 13).setValue(message);                    // M Message
-      sheet.getRange(rowNum, 14).setValue(now);                        // N SubmittedAt
+      sheet.getRange(rowNum, 9).setValue(isAttending ? 'YES' : 'NO'); // I  Attending
+      sheet.getRange(rowNum, 10).setValue(isAttending ? adults    : 0); // J  AttendingAdults
+      sheet.getRange(rowNum, 11).setValue(isAttending ? children : 0); // K  AttendingChildren
+      sheet.getRange(rowNum, 12).setValue(dietary);                    // L  Dietary
+      sheet.getRange(rowNum, 14).setValue(message);                    // N  Message
+      sheet.getRange(rowNum, 15).setValue(now);                        // O  SubmittedAt
 
       SpreadsheetApp.flush();
 
       return respond({
         success:   true,
         name:      data[i][1],
-        table:     data[i][11] || '',
+        table:     data[i][12] || '',
         attending: isAttending ? 'YES' : 'NO',
         adults:    isAttending ? adults   : 0,
         children:  isAttending ? children : 0,
