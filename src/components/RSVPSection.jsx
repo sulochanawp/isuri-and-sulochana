@@ -108,23 +108,28 @@ function RSVPForm({ guestData, onSubmit, submitting, rsvpError, onRetry }) {
             Will you be attending? *
           </p>
           <div className="grid grid-cols-2 gap-3">
-            {[
-              { label: 'Joyfully Accept',    val: true  },
-              { label: 'Regretfully Decline', val: false },
-            ].map(({ label, val }) => (
-              <button
-                key={label}
-                type="button"
-                onClick={() => setAttending(val)}
-                className={`py-4 border font-sans font-medium text-xs tracking-[0.15em] uppercase transition-all duration-200 ${
-                  attending === val
-                    ? 'border-olive-600 bg-olive-700 text-pearl-100'
-                    : 'border-line text-muted hover:border-olive-400 hover:text-ink'
-                }`}
-              >
-                {label}
-              </button>
-            ))}
+            <button
+              type="button"
+              onClick={() => setAttending(true)}
+              className={`py-4 border font-sans font-medium text-xs tracking-[0.15em] uppercase transition-all duration-200 leading-relaxed ${
+                attending === true
+                  ? 'border-olive-600 bg-olive-700 text-pearl-100'
+                  : 'border-line text-muted hover:border-olive-400 hover:text-ink'
+              }`}
+            >
+              Joyfully<br />Accept
+            </button>
+            <button
+              type="button"
+              onClick={() => setAttending(false)}
+              className={`py-4 border font-sans font-medium text-xs tracking-[0.15em] uppercase transition-all duration-200 ${
+                attending === false
+                  ? 'border-rose-400 bg-rose-50 text-rose-700'
+                  : 'border-line text-rose-400/70 hover:border-rose-300 hover:text-rose-500'
+              }`}
+            >
+              Regretfully Decline
+            </button>
           </div>
         </div>
 
