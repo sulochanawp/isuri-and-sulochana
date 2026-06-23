@@ -143,7 +143,7 @@ export function ThankYouPage() {
       </div>
 
       {/* ── Footer: reuse main Footer without the map ── */}
-      <Footer showMap={false} showWhatsApp={false} />
+      <Footer showMap={false} showWhatsApp={false} showRsvpButton={false} />
 
     </div>
   )

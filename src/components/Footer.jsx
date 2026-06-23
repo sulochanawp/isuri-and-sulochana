@@ -1,4 +1,5 @@
 import { WEDDING } from '../config'
+import { ordinal } from '../utils.jsx'
 
 /* Full lotus for footer */
 function FooterLotus() {
@@ -21,7 +22,7 @@ function FooterLotus() {
   )
 }
 
-export default function Footer({ showMap = true, showWhatsApp = true }) {
+export default function Footer({ showMap = true, showWhatsApp = true, showRsvpButton = true }) {
   return (
     <footer
       className="bg-olive-800 text-pearl-100 py-20 px-6"
@@ -45,18 +46,18 @@ export default function Footer({ showMap = true, showWhatsApp = true }) {
           {WEDDING.bride} & {WEDDING.groom}
         </h2>
         <p className="text-pearl-300/40 text-xs tracking-[0.4em] uppercase font-sans mb-8">
-          {WEDDING.date}
+          {ordinal(WEDDING.date)}
         </p>
 
-        {/* Thin divider */}
-        <div className="flex items-center gap-4 mb-8 opacity-20 max-w-xs mx-auto">
+        {/* Thin divider — only shown alongside the RSVP button */}
+        {showRsvpButton && <div className="flex items-center gap-4 mb-8 opacity-20 max-w-xs mx-auto">
           <div className="flex-1 border-t border-pearl-100" />
           <div className="w-1.5 h-1.5 rotate-45 bg-olive-300" />
           <div className="flex-1 border-t border-pearl-100" />
-        </div>
+        </div>}
 
         {/* RSVP jump button */}
-        <a
+        {showRsvpButton && <a
           href="#rsvp"
           className="inline-flex items-center gap-5 border border-pearl-300/30 px-8 py-4 mb-10
                      hover:border-pearl-300/60 transition-all duration-200 group"
@@ -66,9 +67,9 @@ export default function Footer({ showMap = true, showWhatsApp = true }) {
           </svg>
           <span className="flex flex-col items-start gap-1">
             <span className="font-sans text-xs tracking-[0.3em] uppercase text-pearl-300/60 group-hover:text-pearl-200/80 transition-colors">Kindly RSVP before</span>
-            <span className="font-serif text-xl font-light tracking-wide text-pearl-100 group-hover:text-white transition-colors">{WEDDING.rsvpDeadline}</span>
+            <span className="font-serif text-xl font-light tracking-wide text-pearl-100 group-hover:text-white transition-colors">{ordinal(WEDDING.rsvpDeadline)}</span>
           </span>
-        </a>
+        </a>}
 
         {/* Thin olive rule */}
         <div className="flex items-center gap-4 mb-10 opacity-20">

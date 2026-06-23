@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { WEDDING } from '../config'
 import { LotusDivider, FloralStripe } from './Hero'
+import { ordinal } from '../utils.jsx'
 
 /* ── Code entry ─────────────────────────────────────── */
 function CodeEntry({ guestCode, setGuestCode, onLookup, loading }) {
@@ -368,7 +369,7 @@ export default function RSVPSection({
                 Kindly RSVP before
               </p>
               <p className="font-serif text-2xl text-pearl-100 font-light tracking-wide">
-                {WEDDING.rsvpDeadline}
+                {ordinal(WEDDING.rsvpDeadline)}
               </p>
             </div>
           </div>

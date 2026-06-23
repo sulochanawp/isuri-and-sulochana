@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import { AGENDA, WEDDING } from '../config'
 import { LotusDivider, FloralStripe } from './Hero'
+import { ordinal } from '../utils.jsx'
 
 export default function AgendaSection() {
   const [expanded, setExpanded] = useState(false)
@@ -24,7 +25,7 @@ export default function AgendaSection() {
         {/* Heading */}
         <div className="text-center mb-12">
           <p className="text-olive-500 text-xs tracking-[0.4em] uppercase font-sans mb-3">
-            {WEDDING.date}
+            {ordinal(WEDDING.date)}
           </p>
           <h2 className="section-heading">The Day</h2>
           <LotusDivider />

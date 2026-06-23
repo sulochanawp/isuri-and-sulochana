@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { WEDDING } from '../config'
+import { ordinal } from '../utils.jsx'
 
 /* ════════════════════════════════════════════════════════════
    SHARED DECORATIVE EXPORTS
@@ -212,7 +213,7 @@ export default function Hero() {
         </div>
 
         {/* Date */}
-        <p className="text-pearl-200/70 font-sans text-xs tracking-[0.35em] uppercase">{WEDDING.date}</p>
+        <p className="text-pearl-200/70 font-sans text-xs tracking-[0.35em] uppercase">{ordinal(WEDDING.date)}</p>
 
         {/* Countdown */}
         <Countdown target={WEDDING.weddingDate} />
