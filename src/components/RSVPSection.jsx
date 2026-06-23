@@ -124,7 +124,7 @@ function RSVPForm({ guestData, onSubmit, submitting, rsvpError, onRetry }) {
               onClick={() => setAttending(false)}
               className={`py-4 border font-sans font-medium text-xs tracking-[0.15em] uppercase transition-all duration-200 ${
                 attending === false
-                  ? 'border-rose-400 bg-rose-100 text-muted'
+                  ? 'border-rose-700 bg-rose-700 text-pearl-100'
                   : 'border-line text-muted hover:border-olive-400 hover:text-ink'
               }`}
             >
