@@ -42,6 +42,10 @@ function MainSite() {
 
   useEffect(() => {
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual'
+    // Remove #home hash so browser doesn't auto-scroll away from the top
+    if (window.location.hash === '#home') {
+      history.replaceState(null, '', window.location.pathname + window.location.search)
+    }
     const params = new URLSearchParams(window.location.search)
     const code = params.get('code')
     if (code) {
