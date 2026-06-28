@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { WEDDING } from '../config'
-import { LotusDivider, FloralStripe, FloralCorner } from './Hero'
+import { LotusDivider, FloralStripe } from './Hero'
 import Footer from './Footer'
 
 function useIsRevealed(revealTime) {
@@ -94,10 +94,10 @@ export function ThankYouPage() {
 
         {/* Photo frame */}
         <div className="relative w-full max-w-2xl mb-8">
-          <FloralCorner className="absolute -top-3 -left-3 text-olive-500 w-12 h-12 z-10" />
-          <FloralCorner className="absolute -top-3 -right-3 text-olive-500 w-12 h-12 rotate-90 z-10" />
-          <FloralCorner className="absolute -bottom-3 -left-3 text-olive-500 w-12 h-12 -rotate-90 z-10" />
-          <FloralCorner className="absolute -bottom-3 -right-3 text-olive-500 w-12 h-12 rotate-180 z-10" />
+          <span className="absolute -top-1 -left-1  w-1.5 h-1.5 rotate-45 bg-olive-500 z-10" />
+          <span className="absolute -top-1 -right-1 w-1.5 h-1.5 rotate-45 bg-olive-500 z-10" />
+          <span className="absolute -bottom-1 -left-1  w-1.5 h-1.5 rotate-45 bg-olive-500 z-10" />
+          <span className="absolute -bottom-1 -right-1 w-1.5 h-1.5 rotate-45 bg-olive-500 z-10" />
 
           <div className="border-2 border-olive-200 p-2">
             <div className="border border-olive-100">

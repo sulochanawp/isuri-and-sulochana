@@ -363,27 +363,10 @@ export default function RSVPSection({
           {/* ── RSVP deadline highlight ── */}
           <div className="mt-8 inline-flex flex-col items-center">
             <div className="relative border-2 border-olive-600 bg-olive-700 px-8 py-4">
-              {/* Floral corners */}
-              {[
-                'absolute -top-2 -left-2 text-olive-300',
-                'absolute -top-2 -right-2 text-olive-300 rotate-90',
-                'absolute -bottom-2 -left-2 text-olive-300 -rotate-90',
-                'absolute -bottom-2 -right-2 text-olive-300 rotate-180',
-              ].map((cls, i) => (
-                <svg key={i} viewBox="0 0 24 24" width="20" height="20" fill="none"
-                  className={cls}>
-                  <line x1="1" y1="1" x2="10" y2="1" stroke="currentColor" strokeWidth="0.8"/>
-                  <line x1="1" y1="1" x2="1"  y2="10" stroke="currentColor" strokeWidth="0.8"/>
-                  <g transform="translate(6,6)">
-                    {[0,72,144,216,288].map(r => (
-                      <ellipse key={r} cx="0" cy="-4" rx="1.2" ry="2.8"
-                        fill="currentColor" fillOpacity="0.3" stroke="currentColor" strokeWidth="0.4"
-                        transform={`rotate(${r} 0 0)`}/>
-                    ))}
-                    <circle cx="0" cy="0" r="1.6" fill="currentColor" fillOpacity="0.6"/>
-                  </g>
-                </svg>
-              ))}
+              <span className="absolute -top-1 -left-1  w-1.5 h-1.5 rotate-45 bg-olive-400" />
+              <span className="absolute -top-1 -right-1 w-1.5 h-1.5 rotate-45 bg-olive-400" />
+              <span className="absolute -bottom-1 -left-1  w-1.5 h-1.5 rotate-45 bg-olive-400" />
+              <span className="absolute -bottom-1 -right-1 w-1.5 h-1.5 rotate-45 bg-olive-400" />
               <p className="text-pearl-300/60 text-xs tracking-[0.35em] uppercase font-sans mb-1">
                 Kindly RSVP before
               </p>

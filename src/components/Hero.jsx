@@ -98,23 +98,26 @@ export function FloralStripe({ light = false, className = '' }) {
 /* ── Floral corner ornament ── */
 export function FloralCorner({ className = '' }) {
   return (
-    <svg viewBox="0 0 40 40" width="40" height="40" fill="none" className={className}>
-      {/* L-frame */}
-      <line x1="2" y1="2" x2="18" y2="2"  stroke="currentColor" strokeWidth="0.7"/>
-      <line x1="2" y1="2" x2="2"  y2="18" stroke="currentColor" strokeWidth="0.7"/>
-      {/* Small flower at corner */}
-      <g transform="translate(9,9)">
-        {[0,72,144,216,288].map(r => (
-          <ellipse key={r} cx="0" cy="-5" rx="1.6" ry="3.5"
-            fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="0.5"
-            transform={`rotate(${r} 0 0)`}/>
-        ))}
-        <circle cx="0" cy="0" r="2" fill="currentColor" fillOpacity="0.5"/>
-        <circle cx="0" cy="0" r="0.9" fill="currentColor"/>
-      </g>
-      {/* Tiny leaf on arm */}
-      <path d="M14,2 Q14,-3 18,-4 Q16,-1 14,2" fill="currentColor" fillOpacity="0.25" stroke="currentColor" strokeWidth="0.4"/>
-      <path d="M2,14 Q-3,14 -4,18 Q-1,16 2,14" fill="currentColor" fillOpacity="0.25" stroke="currentColor" strokeWidth="0.4"/>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 300 300"
+      className={className}
+    >
+      <path fill="currentColor" d="M832.49,20V0H205.62V68.54H157.08V0H0V157.08H68.54v48.54H0V832.49H20V225.62H68.54v68.54H294.16V68.54H225.62V20ZM205.62,88.54v48.54H157.08V88.54Zm-68.54,48.54H88.54V88.54h48.54ZM20,137.08V20H137.08V68.54H68.54v68.54Zm68.54,20h48.54v48.54H88.54ZM274.16,88.54V274.16H88.54V225.62h68.54V157.08h68.54V88.54Z"/>
+    </svg>
+  )
+}
+
+/* ── Botanical vintage corner — hero names frame only ── */
+export function HeroCorner({ className = '' }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 171.8 171.25" className={className}>
+      <path fill="currentColor" d="M131.54,50.18c6.81-5.73,24.62-11.74,27,1.59a9.51,9.51,0,0,1-6.95,10.82c-4.76,1.23-10.69-1.26-11.93-5.92a4.7,4.7,0,0,1-.26-1.09c-.25-2.18.87-4.09,2.51-4.28s3.16,1.43,3.41,3.61a4.46,4.46,0,0,1-.94,3.42c2.8,2.27,8.39,1.05,10.17-2.38a7.45,7.45,0,0,0-.69-7.45c-3.41-4.9-14.29-1.42-18.65,1.84-8.56,6.41-12.09,18.59-13.12,28.71a48.85,48.85,0,0,0,3.89,25.24c3.55,7.67,10.68,12.74,17.39,17.48,4.24,3-1.9,1.83-2.85,1.19C128.92,115.15,121.1,106.35,119,92.2S120.17,59.77,131.54,50.18Z"/>
+      <path fill="currentColor" d="M166.88,4c-6.89-5-16.38,1-21.56,6-6.91,6.6-9.9,15.74-11.82,24.92a176.8,176.8,0,0,1-44.14,3.35C75.12,37.47,58,33.67,50.41,20.37c-5.84-10.19,6-16.86,14.43-12.14,4.61,2.57,6.66,10,.7,12.25a9.27,9.27,0,0,1-3.7.38,5.55,5.55,0,0,1-4.09-2.95,4.35,4.35,0,0,0,4.15-1.63c1.5-1.82,1.45-4.31-.09-5.58a3.87,3.87,0,0,0-5.15.63,2.28,2.28,0,0,0-.34.35,4.58,4.58,0,0,0-.56.87c-2.88,5.07.79,12.17,6.69,12.43,7.79.34,12-8,8.64-14.61C66.67,1.63,55.18-.5,48.66,7.26s.22,18.47,6.21,24c8.34,7.64,21.47,10,32.34,11,14,1.29,28.52-.11,42.37-2.49,1-.17,2.06-.36,3.1-.55-.19,1-.38,2.08-.55,3.1-2.38,13.84-3.78,28.34-2.49,42.37,1,10.87,3.34,24,11,32.34,5.49,6,16.19,12.73,24,6.21s5.62-18-3.11-22.43c-6.61-3.35-14.95.85-14.61,8.64.26,5.9,7.36,9.57,12.43,6.69a5.83,5.83,0,0,0,.87-.56,1.92,1.92,0,0,0,.35-.35,3.87,3.87,0,0,0,.63-5.15c-1.27-1.54-3.77-1.58-5.58-.08a4.33,4.33,0,0,0-1.63,4.15,5.54,5.54,0,0,1-3-4.09,9.65,9.65,0,0,1,.38-3.7c2.22-6,9.69-3.91,12.26.7,4.72,8.46-2,20.26-12.14,14.43-13.31-7.61-17.1-24.72-17.9-38.95a177.24,177.24,0,0,1,3.36-44.14c9.18-1.92,18.32-4.91,24.92-11.83,4.93-5.17,10.94-14.66,6-21.55A8.13,8.13,0,0,0,166.88,4Zm-.69,3.37c3.74,7.58-6.33,16.75-10.88,20C150.09,31,144,32.69,137.81,34c1.34-6.15,3-12.28,6.68-17.5C147.69,12,157.36,1.7,164.44,5.65A4.74,4.74,0,0,1,166.19,7.4Z"/>
+      <path fill="currentColor" d="M121.65,40.3c5.74-6.81,11.74-24.62-1.58-27a9.51,9.51,0,0,0-10.83,7C108,25.05,110.51,31,115.17,32.22a5.33,5.33,0,0,0,1.08.26c2.18.25,4.1-.88,4.29-2.51s-1.43-3.16-3.61-3.41a4.44,4.44,0,0,0-3.42.94c-2.27-2.8-1.05-8.4,2.38-10.17a7.42,7.42,0,0,1,7.45.69c4.9,3.41,1.42,14.29-1.84,18.65-6.41,8.56-18.59,12.08-28.71,13.12A49,49,0,0,1,67.54,45.9c-7.66-3.55-12.73-10.68-17.47-17.39-3-4.25-1.83,1.9-1.19,2.85,7.8,11.56,16.6,19.38,30.76,21.52S112.07,51.67,121.65,40.3Z"/>
+      <path fill="currentColor" d="M151.79,126.8c8,4.31,13.07,11.27,13.07,20.45V169.1c0,3-4.51,2.89-4.51-.46V150.86c0-4.22.28-8.21-1.3-12.22-1.86-4.72-6.33-8.35-10.58-10.89s2.31-1.5,3.32-1Z"/>
+      <path fill="currentColor" d="M44.45,19.46C40.13,11.47,33.18,6.39,24,6.39H2.15c-3,0-2.89,4.51.46,4.51H20.39c4.22,0,8.21-.28,12.22,1.31,4.72,1.85,8.35,6.32,10.88,10.57s1.51-2.31,1-3.32Z"/>
+      <path fill="currentColor" d="M105,64.37C95.49,54.68,92.52,38.6,95,25.51,97.64,11.34,108,2.05,122.21,0c1.09-.16.59,3.15-.32,3.28C109.07,5.13,97.57,13.34,96.13,27.05c-1.36,13,2.9,27.1,12,36.67,9.57,9,23.68,13.32,36.67,12,13.71-1.44,21.92-12.94,23.76-25.76.14-.9,3.44-1.41,3.29-.32-2.05,14.22-11.33,24.57-25.5,27.24-13.09,2.45-28.88-.22-38.87-10A22.64,22.64,0,0,1,105,64.37Z"/>
     </svg>
   )
 }
@@ -193,10 +196,10 @@ export default function Hero() {
 
         {/* Framed couple names */}
         <div className="relative inline-block px-10 md:px-16 py-8">
-          <FloralCorner className="absolute top-0 left-0 text-olive-400" />
-          <FloralCorner className="absolute top-0 right-0 text-olive-400 rotate-90" />
-          <FloralCorner className="absolute bottom-0 left-0 text-olive-400 -rotate-90" />
-          <FloralCorner className="absolute bottom-0 right-0 text-olive-400 rotate-180" />
+          <HeroCorner className="absolute top-0 left-0 text-olive-400 w-[35px] h-[35px] -rotate-90" />
+          <HeroCorner className="absolute top-0 right-0 text-olive-400 w-[35px] h-[35px]" />
+          <HeroCorner className="absolute bottom-0 left-0 text-olive-400 w-[35px] h-[35px] rotate-180" />
+          <HeroCorner className="absolute bottom-0 right-0 text-olive-400 w-[35px] h-[35px] rotate-90" />
 
           <h1 className="font-serif font-light text-pearl-100 leading-none">
             <span className="block text-5xl md:text-7xl lg:text-8xl tracking-wide">{WEDDING.bride}</span>
@@ -220,11 +223,10 @@ export default function Hero() {
 
         {/* ── Venue highlight block ── */}
         <div className="mt-8 mx-6 md:mx-auto md:max-w-sm border border-pearl-300/20 bg-white/5 backdrop-blur-sm px-6 py-5 relative">
-          {/* floral corners on venue card */}
-          <FloralCorner className="absolute -top-2 -left-2 text-olive-400 w-6 h-6" />
-          <FloralCorner className="absolute -top-2 -right-2 text-olive-400 w-6 h-6 rotate-90" />
-          <FloralCorner className="absolute -bottom-2 -left-2 text-olive-400 w-6 h-6 -rotate-90" />
-          <FloralCorner className="absolute -bottom-2 -right-2 text-olive-400 w-6 h-6 rotate-180" />
+          <span className="absolute -top-1 -left-1  w-1.5 h-1.5 rotate-45 bg-olive-400" />
+          <span className="absolute -top-1 -right-1 w-1.5 h-1.5 rotate-45 bg-olive-400" />
+          <span className="absolute -bottom-1 -left-1  w-1.5 h-1.5 rotate-45 bg-olive-400" />
+          <span className="absolute -bottom-1 -right-1 w-1.5 h-1.5 rotate-45 bg-olive-400" />
 
           <p className="text-pearl-300/40 text-xs tracking-[0.3em] uppercase font-sans mb-1">Venue</p>
           <p className="font-serif text-xl text-pearl-100 font-light">{WEDDING.venue.name}</p>
