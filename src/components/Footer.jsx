@@ -71,9 +71,7 @@ export default function Footer({ showMap = true, showWhatsApp = true, showRsvpBu
           <p className="font-serif text-xl text-pearl-200/70 font-light mb-2">{WEDDING.venue.name}</p>
           <p className="text-xs">{WEDDING.venue.address}</p>
           <div className="flex flex-wrap items-center justify-center gap-4 mt-3 text-xs tracking-widest uppercase">
-            <span>Ceremony · {WEDDING.venue.ceremonyTime}</span>
-            <span className="w-1 h-1 rotate-45 bg-olive-400 inline-block" />
-            <span>Reception · {WEDDING.venue.receptionTime}</span>
+            <span>Poruwa Ceremony · {WEDDING.venue.ceremonyTime}</span>
           </div>
         </div>
 
