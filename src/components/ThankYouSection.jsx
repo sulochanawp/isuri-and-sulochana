@@ -80,7 +80,7 @@ export function ThankYouPage() {
 
       {/* ── Top: heading + photo frame ── */}
       <div className="flex flex-col items-center px-6 pt-10 pb-10">
-        <FloralStripe className="mb-6 w-full" />
+        <FloralStripe className="mb-10 w-full" />
 
         {/* Heading */}
         <div className="text-center mb-8 w-full max-w-2xl">
@@ -139,7 +139,6 @@ export function ThankYouPage() {
           </a>
         )}
 
-        <FloralStripe className="mt-10 w-full" />
       </div>
 
       {/* ── Footer: reuse main Footer without the map ── */}

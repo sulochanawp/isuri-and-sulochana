@@ -48,7 +48,7 @@ export default function MenuSection() {
   return (
     <section id="menu" className="py-24 px-6 bg-pearl-100">
       {/* Top floral stripe */}
-      <FloralStripe className="mb-6" />
+      <FloralStripe className="mb-10" />
 
       <div className="max-w-3xl mx-auto">
 
@@ -92,9 +92,6 @@ export default function MenuSection() {
             <MenuCard key={i} item={item} />
           ))}
         </div>
-
-        {/* Bottom floral stripe */}
-        <FloralStripe className="mt-6" />
 
       </div>
 

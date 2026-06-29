@@ -350,7 +350,7 @@ export default function RSVPSection({
   return (
     <section id="rsvp" className="py-24 px-6 bg-pearl-100">
       {/* Top floral stripe */}
-      <FloralStripe className="mb-6" />
+      <FloralStripe className="mb-10" />
 
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
@@ -420,9 +420,6 @@ export default function RSVPSection({
           <RSVPConfirmation guestData={guestData} onEdit={onEdit} />
         )}
       </div>
-
-      {/* Bottom floral stripe */}
-      <FloralStripe className="mt-6" />
     </section>
   )
 }

@@ -18,7 +18,7 @@ export default function AgendaSection() {
 
   return (
     <section id="agenda" className="py-24 bg-white">
-      <FloralStripe className="mb-6" />
+      <FloralStripe className="mb-10" />
 
       <div className="max-w-3xl mx-auto px-6">
 
@@ -106,8 +106,6 @@ export default function AgendaSection() {
           )}
         </div>
       </div>
-
-      <FloralStripe className="mt-6" />
     </section>
   )
 }

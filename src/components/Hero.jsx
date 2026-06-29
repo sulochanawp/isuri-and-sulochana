@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { WEDDING } from '../config'
 import { ordinal } from '../utils.jsx'
+import floralDivider from '../assets/floral-divider.svg?raw'
 
 /* ════════════════════════════════════════════════════════════
    SHARED DECORATIVE EXPORTS
@@ -36,61 +37,22 @@ export function LotusDivider({ light = false }) {
 }
 
 /* ── Botanical / floral stripe ──────────────────────────────
-   A repeating wavy vine with 5-petal flowers and leaves.
-   Works on both light (pearl) and dark (olive) backgrounds.  */
+   A single ornamental floral divider, centred in the section.
+   Inherits the section colour via currentColor, so it works on
+   both light (pearl) and dark (olive) backgrounds.  */
 export function FloralStripe({ light = false, className = '' }) {
-  const id   = light ? 'fp-light' : 'fp-dark'
-  const col  = light ? '#F5F2EA' : '#4A5C2A'
-  const opV  = light ? 0.45 : 0.35   // vine opacity
-  const opF  = light ? 0.55 : 0.45   // flower opacity
-  const opL  = light ? 0.35 : 0.28   // leaf opacity
+  const col = light ? '#F5F2EA' : '#4A5C2A'
 
   return (
-    <div className={`w-full overflow-hidden ${className}`} style={{ height: 52 }}>
-      <svg width="100%" height="52" viewBox="0 0 160 52" preserveAspectRatio="xMidYMid meet">
-        <defs>
-          <pattern id={id} x="0" y="0" width="160" height="52" patternUnits="userSpaceOnUse">
-            {/* Wavy vine */}
-            <path
-              d="M0,30 C20,22 40,38 80,30 C120,22 140,38 160,30"
-              stroke={col} strokeWidth="0.8" fill="none" opacity={opV}
-            />
-
-            {/* Flower centred at x=80, sitting above vine */}
-            <g transform="translate(80,22)" opacity={opF}>
-              {[0,72,144,216,288].map(r => (
-                <ellipse key={r} cx="0" cy="-7" rx="2.3" ry="5"
-                  fill={col} fillOpacity="0.18" stroke={col} strokeWidth="0.6"
-                  transform={`rotate(${r} 0 0)`}/>
-              ))}
-              <circle cx="0" cy="0" r="2.8" fill={col} fillOpacity="0.6"/>
-              <circle cx="0" cy="0" r="1.2" fill={col}/>
-            </g>
-
-            {/* Leaf pair at x=30 */}
-            <g transform="translate(30,26)" opacity={opL}>
-              <path d="M0,4 Q-9,-1 -7,-11 Q-2,-4 0,2"  fill={col} fillOpacity="0.25" stroke={col} strokeWidth="0.5"/>
-              <path d="M0,4 Q 9,-1  7,-11 Q 2,-4 0,2"  fill={col} fillOpacity="0.25" stroke={col} strokeWidth="0.5"/>
-            </g>
-
-            {/* Leaf pair at x=130 */}
-            <g transform="translate(130,26)" opacity={opL}>
-              <path d="M0,4 Q-9,-1 -7,-11 Q-2,-4 0,2"  fill={col} fillOpacity="0.25" stroke={col} strokeWidth="0.5"/>
-              <path d="M0,4 Q 9,-1  7,-11 Q 2,-4 0,2"  fill={col} fillOpacity="0.25" stroke={col} strokeWidth="0.5"/>
-            </g>
-
-            {/* Small buds */}
-            {[10, 52, 108, 150].map(x => (
-              <g key={x} transform={`translate(${x},28)`} opacity={opL * 0.8}>
-                <line x1="0" y1="4" x2="0" y2="-5" stroke={col} strokeWidth="0.5"/>
-                <ellipse cx="0" cy="-7" rx="1.5" ry="3"
-                  fill={col} fillOpacity="0.25" stroke={col} strokeWidth="0.4"/>
-              </g>
-            ))}
-          </pattern>
-        </defs>
-        <rect width="100%" height="52" fill={`url(#${id})`}/>
-      </svg>
+    <div
+      className={`w-full flex justify-center overflow-hidden ${className}`}
+      style={{ color: col }}
+      aria-hidden="true"
+    >
+      <span
+        className="block w-full max-w-xs opacity-50 [&>svg]:w-full [&>svg]:h-auto"
+        dangerouslySetInnerHTML={{ __html: floralDivider }}
+      />
     </div>
   )
 }
