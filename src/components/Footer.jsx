@@ -1,24 +1,14 @@
 import { WEDDING } from '../config'
 import { ordinal } from '../utils.jsx'
+import lotusDark from '../assets/lotus-dark.svg?raw'
 
 /* Full lotus for footer */
 function FooterLotus() {
   return (
-    <svg viewBox="0 0 100 60" width="100" height="60" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M50 52 Q30 38 30 14 Q40 26 50 34 Q60 26 70 14 Q70 38 50 52Z"
-        stroke="#A3B578" strokeWidth="0.8" fill="#A3B578" fillOpacity="0.12"/>
-      <path d="M50 48 Q22 40 10 18 Q28 26 44 38"
-        stroke="#A3B578" strokeWidth="0.8" fill="#A3B578" fillOpacity="0.08"/>
-      <path d="M50 48 Q78 40 90 18 Q72 26 56 38"
-        stroke="#A3B578" strokeWidth="0.8" fill="#A3B578" fillOpacity="0.08"/>
-      <path d="M50 44 Q10 44 2 24 Q20 28 40 40"
-        stroke="#A3B578" strokeWidth="0.6" fill="#A3B578" fillOpacity="0.05"/>
-      <path d="M50 44 Q90 44 98 24 Q80 28 60 40"
-        stroke="#A3B578" strokeWidth="0.6" fill="#A3B578" fillOpacity="0.05"/>
-      <line x1="50" y1="52" x2="50" y2="60" stroke="#A3B578" strokeWidth="0.8"/>
-      <circle cx="50" cy="34" r="5"  fill="#A3B578" fillOpacity="0.3"/>
-      <circle cx="50" cy="34" r="2.5" fill="#A3B578"/>
-    </svg>
+    <span
+      className="inline-block w-[100px] [&>svg]:w-full [&>svg]:h-auto"
+      dangerouslySetInnerHTML={{ __html: lotusDark }}
+    />
   )
 }
 

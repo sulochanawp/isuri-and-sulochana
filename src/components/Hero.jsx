@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { WEDDING } from '../config'
 import { ordinal } from '../utils.jsx'
 import floralDivider from '../assets/floral-divider.svg?raw'
+import lotusLight from '../assets/lotus-light.svg?raw'
+import lotusDark from '../assets/lotus-dark.svg?raw'
 
 /* ════════════════════════════════════════════════════════════
    SHARED DECORATIVE EXPORTS
@@ -9,19 +11,12 @@ import floralDivider from '../assets/floral-divider.svg?raw'
    ════════════════════════════════════════════════════════════ */
 
 /* ── Inline lotus ── */
-function Lotus({ className = '' }) {
+function Lotus({ dark = false, className = '' }) {
   return (
-    <svg viewBox="0 0 120 48" width="120" height="48" className={className} fill="none">
-      <path d="M60 40 Q44 28 44 14 Q52 22 60 28 Q68 22 76 14 Q76 28 60 40Z"
-        stroke="currentColor" strokeWidth="0.8" fill="currentColor" fillOpacity="0.12"/>
-      <path d="M60 36 Q38 30 30 16 Q42 20 52 28" stroke="currentColor" strokeWidth="0.8" fill="currentColor" fillOpacity="0.08"/>
-      <path d="M60 36 Q82 30 90 16 Q78 20 68 28" stroke="currentColor" strokeWidth="0.8" fill="currentColor" fillOpacity="0.08"/>
-      <path d="M60 36 Q28 34 16 22 Q32 22 48 30" stroke="currentColor" strokeWidth="0.8" fill="currentColor" fillOpacity="0.05"/>
-      <path d="M60 36 Q92 34 104 22 Q88 22 72 30" stroke="currentColor" strokeWidth="0.8" fill="currentColor" fillOpacity="0.05"/>
-      <line x1="60" y1="40" x2="60" y2="48" stroke="currentColor" strokeWidth="0.8"/>
-      <circle cx="60" cy="26" r="3"   fill="currentColor" fillOpacity="0.6"/>
-      <circle cx="60" cy="26" r="1.2" fill="currentColor"/>
-    </svg>
+    <span
+      className={`inline-block w-[120px] [&>svg]:w-full [&>svg]:h-auto ${className}`}
+      dangerouslySetInnerHTML={{ __html: dark ? lotusDark : lotusLight }}
+    />
   )
 }
 
@@ -30,7 +25,7 @@ export function LotusDivider({ light = false }) {
   return (
     <div className={`flex items-center justify-center gap-4 my-1 ${light ? 'text-pearl-300' : 'text-olive-400'}`}>
       <div className="flex-1 border-t border-current opacity-30" />
-      <Lotus className="opacity-70" />
+      <Lotus dark={light} className="opacity-70" />
       <div className="flex-1 border-t border-current opacity-30" />
     </div>
   )
@@ -173,7 +168,7 @@ export default function Hero() {
         {/* Lotus divider */}
         <div className="mt-6 mb-5 flex items-center justify-center gap-4 text-olive-400">
           <div className="flex-1 max-w-[80px] border-t border-current opacity-40" />
-          <Lotus />
+          <Lotus dark />
           <div className="flex-1 max-w-[80px] border-t border-current opacity-40" />
         </div>
 

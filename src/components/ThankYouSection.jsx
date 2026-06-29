@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { WEDDING } from '../config'
 import { LotusDivider, FloralStripe } from './Hero'
 import Footer from './Footer'
+import lotusLight from '../assets/lotus-light.svg?raw'
 
 function useIsRevealed(revealTime) {
   const [revealed, setRevealed] = useState(() => Date.now() >= revealTime.getTime())
@@ -17,15 +18,10 @@ function useIsRevealed(revealTime) {
 
 function SmallLotus() {
   return (
-    <svg viewBox="0 0 120 60" width="120" height="60" fill="none" className="text-olive-400">
-      <path d="M60 50 Q42 36 42 16 Q51 26 60 34 Q69 26 78 16 Q78 36 60 50Z"
-        stroke="currentColor" strokeWidth="0.9" fill="currentColor" fillOpacity="0.12"/>
-      <path d="M60 46 Q34 38 22 18 Q38 24 52 36" stroke="currentColor" strokeWidth="0.8" fill="currentColor" fillOpacity="0.08"/>
-      <path d="M60 46 Q86 38 98 18 Q82 24 68 36" stroke="currentColor" strokeWidth="0.8" fill="currentColor" fillOpacity="0.08"/>
-      <line x1="60" y1="50" x2="60" y2="60" stroke="currentColor" strokeWidth="0.9"/>
-      <circle cx="60" cy="32" r="4" fill="currentColor" fillOpacity="0.3"/>
-      <circle cx="60" cy="32" r="1.8" fill="currentColor"/>
-    </svg>
+    <span
+      className="inline-block w-[120px] [&>svg]:w-full [&>svg]:h-auto"
+      dangerouslySetInnerHTML={{ __html: lotusLight }}
+    />
   )
 }
 
@@ -76,7 +72,7 @@ export function ThankYouPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white flex flex-col animate-fade-up">
+    <div className="min-h-screen bg-pearl-100 flex flex-col animate-fade-up">
 
       {/* ── Top: heading + photo frame ── */}
       <div className="flex flex-col items-center px-6 pt-10 pb-10">

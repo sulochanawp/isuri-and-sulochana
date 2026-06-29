@@ -11,15 +11,6 @@ function CodeEntry({ guestCode, setGuestCode, onLookup, loading }) {
   }
   return (
     <div className="card corner-ornament max-w-md mx-auto text-center">
-      {/* Lotus top mark */}
-      <div className="flex justify-center mb-5 text-olive-400">
-        <svg viewBox="0 0 48 32" width="48" height="32" fill="none">
-          <path d="M24 28 Q14 20 14 8 Q19 14 24 18 Q29 14 34 8 Q34 20 24 28Z" stroke="currentColor" strokeWidth="0.8" fill="currentColor" fillOpacity="0.15"/>
-          <line x1="24" y1="28" x2="24" y2="32" stroke="currentColor" strokeWidth="0.8"/>
-          <circle cx="24" cy="16" r="2.5" fill="currentColor" fillOpacity="0.5"/>
-        </svg>
-      </div>
-
       <h3 className="font-serif text-2xl text-ink font-light mb-2">Find Your Invitation</h3>
       <p className="text-muted text-sm mb-6 leading-relaxed">
         Enter the unique code from your invitation to access your personalised RSVP.
