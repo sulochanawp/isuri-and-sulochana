@@ -10,12 +10,23 @@ function CodeEntry({ guestCode, setGuestCode, onLookup, loading }) {
     onLookup(guestCode)
   }
   return (
-    <div className="card corner-ornament max-w-md mx-auto text-center">
-      <h3 className="font-serif text-2xl text-ink font-light mb-2">Find Your Invitation</h3>
-      <p className="text-muted text-sm mb-6 leading-relaxed">
-        Enter the unique code from your invitation to access your personalised RSVP.
-      </p>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <div className="card corner-ornament max-w-md mx-auto overflow-hidden">
+      {/* Dark deadline header */}
+      <div className="bg-olive-700 px-8 py-5 text-center">
+        <p className="text-pearl-300/60 text-xs tracking-[0.35em] uppercase font-sans mb-1">
+          Kindly RSVP before
+        </p>
+        <p className="font-serif text-2xl text-pearl-100 font-light tracking-wide">
+          {ordinal(WEDDING.rsvpDeadline)}
+        </p>
+      </div>
+
+      <div className="px-8 py-7 text-center">
+        <h3 className="font-serif text-2xl text-ink font-light mb-2">Find Your Invitation</h3>
+        <p className="text-muted text-sm mb-6 leading-relaxed">
+          Enter the unique code from your invitation to access your personalised RSVP.
+        </p>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
           type="text"
           placeholder="e.g. ABC123"
@@ -33,6 +44,7 @@ function CodeEntry({ guestCode, setGuestCode, onLookup, loading }) {
           {loading ? 'Looking up…' : 'Find My Invitation'}
         </button>
       </form>
+      </div>
     </div>
   )
 }
@@ -351,21 +363,6 @@ export default function RSVPSection({
             Your presence at our celebration would mean the world to us.
           </p>
 
-          {/* ── RSVP deadline highlight ── */}
-          <div className="mt-8 inline-flex flex-col items-center">
-            <div className="relative border-2 border-olive-600 bg-olive-700 px-8 py-4">
-              <span className="absolute -top-1 -left-1  w-1.5 h-1.5 rotate-45 bg-olive-400" />
-              <span className="absolute -top-1 -right-1 w-1.5 h-1.5 rotate-45 bg-olive-400" />
-              <span className="absolute -bottom-1 -left-1  w-1.5 h-1.5 rotate-45 bg-olive-400" />
-              <span className="absolute -bottom-1 -right-1 w-1.5 h-1.5 rotate-45 bg-olive-400" />
-              <p className="text-pearl-300/60 text-xs tracking-[0.35em] uppercase font-sans mb-1">
-                Kindly RSVP before
-              </p>
-              <p className="font-serif text-2xl text-pearl-100 font-light tracking-wide">
-                {ordinal(WEDDING.rsvpDeadline)}
-              </p>
-            </div>
-          </div>
         </div>
 
         {(lookupState === 'idle' || lookupState === 'error') && rsvpState === 'idle' && (
