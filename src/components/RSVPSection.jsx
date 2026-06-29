@@ -34,7 +34,6 @@ function CodeEntry({ guestCode, setGuestCode, onLookup, loading }) {
           onChange={e => setGuestCode(e.target.value.toUpperCase())}
           className="input-field text-center text-lg tracking-[0.3em] font-medium"
           maxLength={20}
-          autoFocus
         />
         <button
           type="submit"
