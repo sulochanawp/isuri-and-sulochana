@@ -357,6 +357,9 @@ export default function RSVPSection({
 
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
+          <p className="text-olive-500 text-xs tracking-[0.4em] uppercase font-sans mb-3">
+            You're Invited
+          </p>
           <h2 className="section-heading">RSVP</h2>
           <LotusDivider />
           <p className="text-muted text-sm max-w-sm mx-auto mt-4 leading-relaxed">
