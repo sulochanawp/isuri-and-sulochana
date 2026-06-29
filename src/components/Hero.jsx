@@ -52,19 +52,6 @@ export function FloralStripe({ light = false, className = '' }) {
   )
 }
 
-/* ── Floral corner ornament ── */
-export function FloralCorner({ className = '' }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 300 300"
-      className={className}
-    >
-      <path fill="currentColor" d="M832.49,20V0H205.62V68.54H157.08V0H0V157.08H68.54v48.54H0V832.49H20V225.62H68.54v68.54H294.16V68.54H225.62V20ZM205.62,88.54v48.54H157.08V88.54Zm-68.54,48.54H88.54V88.54h48.54ZM20,137.08V20H137.08V68.54H68.54v68.54Zm68.54,20h48.54v48.54H88.54ZM274.16,88.54V274.16H88.54V225.62h68.54V157.08h68.54V88.54Z"/>
-    </svg>
-  )
-}
-
 /* ── Botanical vintage corner — hero names frame only ── */
 export function HeroCorner({ className = '' }) {
   return (
@@ -75,19 +62,6 @@ export function HeroCorner({ className = '' }) {
       <path fill="currentColor" d="M151.79,126.8c8,4.31,13.07,11.27,13.07,20.45V169.1c0,3-4.51,2.89-4.51-.46V150.86c0-4.22.28-8.21-1.3-12.22-1.86-4.72-6.33-8.35-10.58-10.89s2.31-1.5,3.32-1Z"/>
       <path fill="currentColor" d="M44.45,19.46C40.13,11.47,33.18,6.39,24,6.39H2.15c-3,0-2.89,4.51.46,4.51H20.39c4.22,0,8.21-.28,12.22,1.31,4.72,1.85,8.35,6.32,10.88,10.57s1.51-2.31,1-3.32Z"/>
       <path fill="currentColor" d="M105,64.37C95.49,54.68,92.52,38.6,95,25.51,97.64,11.34,108,2.05,122.21,0c1.09-.16.59,3.15-.32,3.28C109.07,5.13,97.57,13.34,96.13,27.05c-1.36,13,2.9,27.1,12,36.67,9.57,9,23.68,13.32,36.67,12,13.71-1.44,21.92-12.94,23.76-25.76.14-.9,3.44-1.41,3.29-.32-2.05,14.22-11.33,24.57-25.5,27.24-13.09,2.45-28.88-.22-38.87-10A22.64,22.64,0,0,1,105,64.37Z"/>
-    </svg>
-  )
-}
-
-/* ── Kandyan corner ornament ── */
-function CornerOrnament({ className = '' }) {
-  return (
-    <svg viewBox="0 0 36 36" width="36" height="36" className={className} fill="none">
-      <line x1="2" y1="2" x2="16" y2="2" stroke="currentColor" strokeWidth="0.8"/>
-      <line x1="2" y1="2" x2="2"  y2="16" stroke="currentColor" strokeWidth="0.8"/>
-      <rect x="5" y="5" width="5" height="5"
-        transform="rotate(45 7.5 7.5)" stroke="currentColor" strokeWidth="0.6"
-        fill="currentColor" fillOpacity="0.15"/>
     </svg>
   )
 }

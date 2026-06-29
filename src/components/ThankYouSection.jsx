@@ -143,7 +143,3 @@ export function ThankYouPage() {
     </div>
   )
 }
-
-export default function ThankYouSection() {
-  return null
-}

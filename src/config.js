@@ -11,7 +11,7 @@ export const WEDDING = {
   // Date shown to guests
   date: "Wednesday, 2nd December 2026",
   // JavaScript Date for the live countdown timer
-  weddingDate: new Date("2026-12-02T16:00:00"),
+  weddingDate: new Date("2026-12-02T09:00:00"),
 
   // Thank You section reveals at this moment (noon on the wedding day)
   thankYouRevealTime: new Date("2025-12-20T12:00:00"),
@@ -44,8 +44,6 @@ export const WEDDING = {
   appsScriptUrl: "https://script.google.com/macros/s/AKfycbxXqQTa-M3sGzurc0Gny27JxhGFTrarEHvO3Qf0dphc1OkRjdOd1RZp-uddB__sRF_C/exec",
   
 
-  // Optional: a short message shown on the hero
-  heroMessage: "Together with their families, invite you to celebrate their marriage",
 };
 
 // ============================================================

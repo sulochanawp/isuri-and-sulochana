@@ -18,8 +18,6 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const links = LINKS
-
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
       scrolled
@@ -39,7 +37,7 @@ export default function Navbar() {
 
         {/* Desktop links */}
         <ul className="hidden md:flex items-center gap-10">
-          {links.map(link => (
+          {LINKS.map(link => (
             <li key={link.label}>
               <a href={link.href} className={`font-sans text-xs tracking-[0.25em] uppercase transition-all duration-300 hover:opacity-60 ${
                 scrolled ? 'text-ink' : 'text-pearl-100'
@@ -67,7 +65,7 @@ export default function Navbar() {
         menuOpen ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'
       } bg-pearl-100 border-b border-line`}>
         <ul className="flex flex-col items-center gap-5 py-7">
-          {links.map(link => (
+          {LINKS.map(link => (
             <li key={link.label}>
               <a
                 href={link.href}
