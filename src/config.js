@@ -44,7 +44,7 @@ export const WEDDING = {
   appsScriptUrl: "https://script.google.com/macros/s/AKfycbxXqQTa-M3sGzurc0Gny27JxhGFTrarEHvO3Qf0dphc1OkRjdOd1RZp-uddB__sRF_C/exec",
 
   // Photo upload page reveals at this time (morning of the wedding day)
-  photoRevealTime: new Date("2026-12-02T07:00:00"),
+  photoRevealTime: new Date("2025-12-02T07:00:00"),
 
   // Google Drive folder ID where guest photos are saved.
   // Create a folder in Drive, share it with the Apps Script service account (or keep it private),
