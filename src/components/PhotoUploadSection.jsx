@@ -114,7 +114,7 @@ function DropZone({ onFiles, disabled }) {
 }
 
 function Thumbnail({ item, onRemove }) {
-  const canRemove = item.status === 'pending'
+  const canRemove = item.status !== 'uploading'
   return (
     <div className="relative group aspect-square bg-line overflow-hidden">
       {isVideo(item.file) ? (
@@ -174,6 +174,7 @@ let idSeq = 0
 export function PhotoUploadPage() {
   const revealed      = useIsRevealed(WEDDING.photoRevealTime)
   const [uploaderName, setUploaderName] = useState('')
+  const [nameError, setNameError]       = useState(false)
   const [items, setItems]               = useState([])
   const [phase, setPhase]               = useState('idle') // idle | uploading | done | error
 
@@ -197,8 +198,14 @@ export function PhotoUploadPage() {
   }
 
   const handleUpload = async () => {
-    const pending = items.filter(i => i.status === 'pending')
-    if (!pending.length || !uploaderName.trim()) return
+    if (!uploaderName.trim()) { setNameError(true); return }
+    setNameError(false)
+    // retry error items alongside pending ones
+    const pending = items.filter(i => i.status === 'pending' || i.status === 'error')
+    if (!pending.length) return
+    setItems(prev => prev.map(it =>
+      it.status === 'error' ? { ...it, status: 'pending', progress: 0 } : it
+    ))
     setPhase('uploading')
 
     let anyError = false
@@ -220,7 +227,7 @@ export function PhotoUploadPage() {
     setPhase(anyError ? 'error' : 'done')
   }
 
-  const pendingCount  = items.filter(i => i.status === 'pending').length
+  const pendingCount  = items.filter(i => i.status === 'pending' || i.status === 'error').length
   const uploading     = phase === 'uploading'
   const allDone       = phase === 'done' && items.length > 0 && items.every(i => i.status === 'done')
 
@@ -305,11 +312,14 @@ export function PhotoUploadPage() {
                 <input
                   type="text"
                   value={uploaderName}
-                  onChange={e => setUploaderName(e.target.value)}
+                  onChange={e => { setUploaderName(e.target.value); if (e.target.value.trim()) setNameError(false) }}
                   placeholder="e.g. Auntie Kamala"
-                  className="input-field"
+                  className={`input-field ${nameError ? 'border-red-400' : ''}`}
                   disabled={uploading}
                 />
+                {nameError && (
+                  <p className="text-xs text-red-500 font-sans mt-1.5">Please enter your name before uploading.</p>
+                )}
               </div>
 
               {/* Drop zone */}
@@ -339,11 +349,9 @@ export function PhotoUploadPage() {
               {/* Upload button */}
               <button
                 onClick={handleUpload}
-                disabled={!pendingCount || !uploaderName.trim() || uploading}
+                disabled={!pendingCount || uploading}
                 className={`btn-primary w-full ${
-                  !pendingCount || !uploaderName.trim() || uploading
-                    ? 'opacity-40 cursor-not-allowed'
-                    : ''
+                  !pendingCount || uploading ? 'opacity-40 cursor-not-allowed' : ''
                 }`}
               >
                 {uploading
