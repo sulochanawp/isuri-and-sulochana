@@ -31,13 +31,14 @@ const ACCEPTED_TYPES = [
 ]
 const ACCEPT_ATTR = 'image/jpeg,image/png,image/webp,image/heic,image/heif,video/mp4,video/quicktime,.heic,.heif,.mov'
 
-async function getUploadUrl(filename, mimeType, uploaderName) {
+async function getUploadUrl(filename, mimeType, uploaderName, fileSize) {
   const ts   = new Date().toISOString().replace(/[:.]/g, '-')
   const name = `${uploaderName}_${ts}_${filename}`
   const url  = `${WEDDING.appsScriptUrl}?action=getUploadUrl` +
                `&folderId=${encodeURIComponent(WEDDING.photoUploadFolderId)}` +
                `&filename=${encodeURIComponent(name)}` +
-               `&mimeType=${encodeURIComponent(mimeType || 'application/octet-stream')}`
+               `&mimeType=${encodeURIComponent(mimeType || 'application/octet-stream')}` +
+               `&fileSize=${fileSize}`
   const res  = await fetch(url)
   const data = await res.json()
   if (!data.success) throw new Error(data.error || 'Could not get upload URL')
@@ -48,11 +49,12 @@ function uploadFileDirect(file, uploadUrl, onProgress) {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest()
     xhr.upload.onprogress = (e) => { if (e.lengthComputable) onProgress(e.loaded / e.total) }
-    xhr.onload    = () => { xhr.status >= 200 && xhr.status < 300 ? resolve() : reject(new Error(`Error ${xhr.status}`)) }
-    xhr.onerror   = () => reject(new Error('Network error'))
+    xhr.onload  = () => { xhr.status >= 200 && xhr.status < 300 ? resolve() : reject(new Error(`Error ${xhr.status}`)) }
+    xhr.onerror = () => reject(new Error('Network error'))
     xhr.ontimeout = () => reject(new Error('Timed out'))
     xhr.open('PUT', uploadUrl)
     xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream')
+    xhr.setRequestHeader('Content-Range', `bytes 0-${file.size - 1}/${file.size}`)
     xhr.send(file)
   })
 }
@@ -208,7 +210,7 @@ export function PhotoUploadPage() {
       setItems(prev => prev.map(it => it.id === item.id ? { ...it, status: 'uploading', progress: 0 } : it))
 
       try {
-        const uploadUrl = await getUploadUrl(item.file.name, item.file.type, uploaderName.trim())
+        const uploadUrl = await getUploadUrl(item.file.name, item.file.type, uploaderName.trim(), item.file.size)
         await uploadFileDirect(item.file, uploadUrl, (progress) => {
           setItems(prev => prev.map(it => it.id === item.id ? { ...it, progress } : it))
         })
