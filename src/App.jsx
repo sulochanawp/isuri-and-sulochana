@@ -7,6 +7,7 @@ import AgendaSection from './components/AgendaSection'
 import MenuSection from './components/MenuSection'
 import Footer from './components/Footer'
 import { ThankYouPage } from './components/ThankYouSection'
+import { PhotoUploadPage } from './components/PhotoUploadSection'
 
 /* ── Main site (all hooks live here, called unconditionally) ── */
 function MainSite() {
@@ -142,6 +143,8 @@ function MainSite() {
 
 /* ── Root — no hooks here, safe to branch before rendering ── */
 export default function App() {
-  const isThankYouView = new URLSearchParams(window.location.search).get('view') === 'thankyou'
-  return isThankYouView ? <ThankYouPage /> : <MainSite />
+  const view = new URLSearchParams(window.location.search).get('view')
+  if (view === 'thankyou') return <ThankYouPage />
+  if (view === 'photos')   return <PhotoUploadPage />
+  return <MainSite />
 }
