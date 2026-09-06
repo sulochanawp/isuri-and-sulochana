@@ -296,7 +296,7 @@ export function PhotoUploadPage() {
                   type="text"
                   value={uploaderName}
                   onChange={e => { setUploaderName(e.target.value); if (e.target.value.trim()) setNameError(false) }}
-                  placeholder="e.g. Auntie Kamala"
+                  placeholder="e.g. Pasindu Jayawardhana"
                   className={`input-field ${nameError ? 'border-red-400' : ''}`}
                   disabled={uploading}
                 />
@@ -354,7 +354,7 @@ export function PhotoUploadPage() {
               </button>
 
               <p className="text-xs text-muted font-sans mt-4 text-center leading-relaxed">
-                Files are sent directly to our private Drive folder.
+                Files are sent directly to us.
                 Photos and videos of any size are supported.
               </p>
             </>
