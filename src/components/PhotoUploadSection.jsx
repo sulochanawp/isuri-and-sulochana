@@ -255,9 +255,6 @@ export function PhotoUploadPage() {
 
       <div className="flex flex-col items-center px-6 pt-10 pb-6">
         <FloralStripe className="mb-10 w-full" />
-        <p className="text-olive-600 text-xs tracking-[0.4em] uppercase font-sans mb-3">
-          {WEDDING.date}
-        </p>
         <h1 className="section-heading mb-1">Share Your Moments</h1>
         <LotusDivider />
         <p className="text-muted text-sm mt-5 leading-relaxed max-w-sm text-center">
@@ -270,11 +267,8 @@ export function PhotoUploadPage() {
         <div className="card corner-ornament w-full max-w-lg overflow-hidden">
 
           <div className="bg-olive-700 px-8 py-5 text-center -mx-6 md:-mx-8 -mt-6 md:-mt-8 mb-7">
-            <p className="text-pearl-300/60 text-xs tracking-[0.35em] uppercase font-sans mb-1">
-              Isuri &amp; Sulochana
-            </p>
             <p className="font-serif text-xl text-pearl-100 font-light tracking-wide">
-              Guest Photos
+              Our Love Story, Through Your Lens
             </p>
           </div>
 
