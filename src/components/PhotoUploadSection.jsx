@@ -255,16 +255,18 @@ export function PhotoUploadPage() {
 
       <div className="flex flex-col items-center px-6 pt-10 pb-6">
         <FloralStripe className="mb-10 w-full" />
-        <h1 className="section-heading mb-1">Share Your Moments</h1>
-        <LotusDivider />
-        <p className="text-muted text-sm mt-5 leading-relaxed max-w-sm text-center">
-          Thank you for celebrating with us today. We would love to see the day
-          through your eyes — share your favourite photos and videos below.
-        </p>
+        <div className="text-center mb-4 w-full max-w-2xl">
+          <h1 className="section-heading">Share Your Moments</h1>
+          <LotusDivider />
+          <p className="text-muted text-sm mt-4 leading-relaxed max-w-md mx-auto">
+            Thank you for celebrating with us today. We would love to see the day
+            through your eyes — share your favourite photos and videos below.
+          </p>
+        </div>
       </div>
 
       <div className="flex-1 flex flex-col items-center px-6 pb-16">
-        <div className="card corner-ornament w-full max-w-lg overflow-hidden">
+        <div className="card corner-ornament w-full max-w-2xl overflow-hidden">
 
           <div className="bg-olive-700 px-8 py-5 text-center -mx-6 md:-mx-8 -mt-6 md:-mt-8 mb-7">
             <p className="font-serif text-xl text-pearl-100 font-light tracking-wide">
