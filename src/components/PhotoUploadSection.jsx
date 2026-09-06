@@ -25,50 +25,39 @@ function SmallLotus() {
   )
 }
 
-// Compress image to ≤ maxKB, returns base64 string (no data: prefix)
-async function compressImage(file, maxKB = 2000) {
-  return new Promise((resolve, reject) => {
-    const img    = new Image()
-    const reader = new FileReader()
-    reader.onerror = reject
-    reader.onload  = (e) => {
-      img.onerror = reject
-      img.onload  = () => {
-        const MAX_DIM = 2400
-        let { width, height } = img
-        if (width > MAX_DIM || height > MAX_DIM) {
-          if (width > height) { height = Math.round(height * MAX_DIM / width); width = MAX_DIM }
-          else { width = Math.round(width * MAX_DIM / height); height = MAX_DIM }
-        }
-        const canvas = document.createElement('canvas')
-        canvas.width  = width
-        canvas.height = height
-        canvas.getContext('2d').drawImage(img, 0, 0, width, height)
+const ACCEPTED_TYPES = [
+  'image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif',
+  'video/mp4', 'video/quicktime',
+]
+const ACCEPT_ATTR = 'image/jpeg,image/png,image/webp,image/heic,image/heif,video/mp4,video/quicktime,.heic,.heif,.mov'
 
-        let quality = 0.88
-        const tryCompress = () => {
-          canvas.toBlob((blob) => {
-            if (!blob) return reject(new Error('Compression failed'))
-            if (blob.size <= maxKB * 1024 || quality <= 0.3) {
-              const r2 = new FileReader()
-              r2.onload = () => resolve(r2.result.split(',')[1])
-              r2.readAsDataURL(blob)
-            } else {
-              quality = Math.round((quality - 0.1) * 10) / 10
-              tryCompress()
-            }
-          }, 'image/jpeg', quality)
-        }
-        tryCompress()
-      }
-      img.src = e.target.result
-    }
-    reader.readAsDataURL(file)
+async function getUploadUrl(filename, mimeType, uploaderName) {
+  const ts   = new Date().toISOString().replace(/[:.]/g, '-')
+  const name = `${uploaderName}_${ts}_${filename}`
+  const url  = `${WEDDING.appsScriptUrl}?action=getUploadUrl` +
+               `&folderId=${encodeURIComponent(WEDDING.photoUploadFolderId)}` +
+               `&filename=${encodeURIComponent(name)}` +
+               `&mimeType=${encodeURIComponent(mimeType || 'application/octet-stream')}`
+  const res  = await fetch(url)
+  const data = await res.json()
+  if (!data.success) throw new Error(data.error || 'Could not get upload URL')
+  return data.uploadUrl
+}
+
+function uploadFileDirect(file, uploadUrl, onProgress) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest()
+    xhr.upload.onprogress = (e) => { if (e.lengthComputable) onProgress(e.loaded / e.total) }
+    xhr.onload    = () => { xhr.status >= 200 && xhr.status < 300 ? resolve() : reject(new Error(`Error ${xhr.status}`)) }
+    xhr.onerror   = () => reject(new Error('Network error'))
+    xhr.ontimeout = () => reject(new Error('Timed out'))
+    xhr.open('PUT', uploadUrl)
+    xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream')
+    xhr.send(file)
   })
 }
 
-const ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif']
-const ACCEPT_ATTR    = 'image/jpeg,image/png,image/webp,image/heic,image/heif,.heic,.heif'
+function isVideo(file) { return file.type.startsWith('video/') }
 
 function DropZone({ onFiles, disabled }) {
   const [dragging, setDragging] = useState(false)
@@ -79,7 +68,7 @@ function DropZone({ onFiles, disabled }) {
     setDragging(false)
     if (disabled) return
     const files = [...e.dataTransfer.files].filter(
-      f => ACCEPTED_TYPES.includes(f.type) || f.name.match(/\.(heic|heif)$/i)
+      f => ACCEPTED_TYPES.includes(f.type) || f.name.match(/\.(heic|heif|mov)$/i)
     )
     if (files.length) onFiles(files)
   }, [onFiles, disabled])
@@ -110,9 +99,9 @@ function DropZone({ onFiles, disabled }) {
           d="M6.5 8H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1.5M15 3h-6l-1.5 2.5h9L15 3ZM12 11a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z" />
       </svg>
       <p className="font-sans text-sm text-ink mb-1">
-        {dragging ? 'Drop here to add' : 'Drag & drop your photos'}
+        {dragging ? 'Drop here to add' : 'Drag & drop photos or videos'}
       </p>
-      <p className="font-sans text-xs text-muted">or click to browse · JPG · PNG · HEIC</p>
+      <p className="font-sans text-xs text-muted">or click to browse · JPG · PNG · HEIC · MP4 · MOV</p>
     </div>
   )
 }
@@ -121,7 +110,16 @@ function Thumbnail({ item, onRemove }) {
   const canRemove = item.status !== 'uploading'
   return (
     <div className="relative group aspect-square bg-line overflow-hidden">
-      <img src={item.preview} alt={item.file.name} className="w-full h-full object-cover" />
+      {isVideo(item.file) ? (
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-ink/10 p-1">
+          <svg className="w-6 h-6 text-olive-600 mb-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"/>
+          </svg>
+          <p className="text-olive-700 text-[9px] font-sans text-center truncate w-full px-1">{item.file.name}</p>
+        </div>
+      ) : (
+        <img src={item.preview} alt={item.file.name} className="w-full h-full object-cover" />
+      )}
 
       {canRemove && (
         <button
@@ -135,7 +133,10 @@ function Thumbnail({ item, onRemove }) {
       {item.status === 'uploading' && (
         <div className="absolute inset-0 flex flex-col items-end justify-end bg-ink/30 p-1.5">
           <div className="w-full h-1 bg-pearl-100/40 overflow-hidden">
-            <div className="h-full bg-pearl-100 animate-pulse w-full" />
+            <div
+              className="h-full bg-pearl-100 transition-all duration-200"
+              style={{ width: `${Math.round((item.progress || 0) * 100)}%` }}
+            />
           </div>
         </div>
       )}
@@ -164,15 +165,16 @@ export function PhotoUploadPage() {
   const [uploaderName, setUploaderName] = useState('')
   const [nameError, setNameError]       = useState(false)
   const [items, setItems]               = useState([])
-  const [phase, setPhase]               = useState('idle') // idle | uploading | done | error
+  const [phase, setPhase]               = useState('idle')
   const [progress, setProgress]         = useState({ current: 0, total: 0 })
 
   const addFiles = useCallback((files) => {
     const newItems = files.map(file => ({
-      id:      ++idSeq,
+      id:       ++idSeq,
       file,
-      preview: URL.createObjectURL(file),
-      status:  'pending',
+      preview:  isVideo(file) ? null : URL.createObjectURL(file),
+      status:   'pending',
+      progress: 0,
     }))
     setItems(prev => [...prev, ...newItems])
   }, [])
@@ -192,9 +194,8 @@ export function PhotoUploadPage() {
     const pending = items.filter(i => i.status === 'pending' || i.status === 'error')
     if (!pending.length) return
 
-    // reset error items back to pending before retrying
     setItems(prev => prev.map(it =>
-      it.status === 'error' ? { ...it, status: 'pending' } : it
+      it.status === 'error' ? { ...it, status: 'pending', progress: 0 } : it
     ))
     setPhase('uploading')
     setProgress({ current: 0, total: pending.length })
@@ -204,23 +205,14 @@ export function PhotoUploadPage() {
     for (let i = 0; i < pending.length; i++) {
       const item = pending[i]
       setProgress({ current: i + 1, total: pending.length })
-      setItems(prev => prev.map(it => it.id === item.id ? { ...it, status: 'uploading' } : it))
+      setItems(prev => prev.map(it => it.id === item.id ? { ...it, status: 'uploading', progress: 0 } : it))
 
       try {
-        const base64 = await compressImage(item.file)
-        const ts     = new Date().toISOString().replace(/[:.]/g, '-')
-        const body   = JSON.stringify({
-          action:       'uploadPhoto',
-          folderId:     WEDDING.photoUploadFolderId,
-          uploaderName: uploaderName.trim(),
-          filename:     `${uploaderName.trim()}_${ts}_${item.file.name}`,
-          mimeType:     'image/jpeg',
-          base64data:   base64,
+        const uploadUrl = await getUploadUrl(item.file.name, item.file.type, uploaderName.trim())
+        await uploadFileDirect(item.file, uploadUrl, (progress) => {
+          setItems(prev => prev.map(it => it.id === item.id ? { ...it, progress } : it))
         })
-        const res  = await fetch(WEDDING.appsScriptUrl, { method: 'POST', body })
-        const data = await res.json()
-        if (!data.success) throw new Error(data.error || 'Upload failed')
-        setItems(prev => prev.map(it => it.id === item.id ? { ...it, status: 'done' } : it))
+        setItems(prev => prev.map(it => it.id === item.id ? { ...it, status: 'done', progress: 1 } : it))
       } catch {
         anyError = true
         setItems(prev => prev.map(it => it.id === item.id ? { ...it, status: 'error' } : it))
@@ -259,7 +251,6 @@ export function PhotoUploadPage() {
   return (
     <div className="min-h-screen bg-pearl-100 flex flex-col">
 
-      {/* ── Page header ── */}
       <div className="flex flex-col items-center px-6 pt-10 pb-6">
         <FloralStripe className="mb-10 w-full" />
         <p className="text-olive-600 text-xs tracking-[0.4em] uppercase font-sans mb-3">
@@ -269,15 +260,13 @@ export function PhotoUploadPage() {
         <LotusDivider />
         <p className="text-muted text-sm mt-5 leading-relaxed max-w-sm text-center">
           Thank you for celebrating with us today. We would love to see the day
-          through your eyes — share your favourite photos below.
+          through your eyes — share your favourite photos and videos below.
         </p>
       </div>
 
-      {/* ── Upload card ── */}
       <div className="flex-1 flex flex-col items-center px-6 pb-16">
         <div className="card corner-ornament w-full max-w-lg overflow-hidden">
 
-          {/* Dark header */}
           <div className="bg-olive-700 px-8 py-5 text-center -mx-6 md:-mx-8 -mt-6 md:-mt-8 mb-7">
             <p className="text-pearl-300/60 text-xs tracking-[0.35em] uppercase font-sans mb-1">
               Isuri &amp; Sulochana
@@ -303,11 +292,8 @@ export function PhotoUploadPage() {
             </div>
           ) : (
             <>
-              {/* Name field */}
               <div className="mb-5">
-                <label className="block font-sans text-xs tracking-[0.2em] uppercase text-muted mb-2">
-                  Your Name
-                </label>
+                <label className="block font-sans text-xs tracking-[0.2em] uppercase text-muted mb-2">Your Name</label>
                 <input
                   type="text"
                   value={uploaderName}
@@ -321,15 +307,13 @@ export function PhotoUploadPage() {
                 )}
               </div>
 
-              {/* Drop zone */}
               <div className="mb-5">
                 <label className="block font-sans text-xs tracking-[0.2em] uppercase text-muted mb-2">
-                  Photos
+                  Photos &amp; Videos
                 </label>
                 <DropZone onFiles={addFiles} disabled={uploading} />
               </div>
 
-              {/* Thumbnail grid */}
               {items.length > 0 && (
                 <div className="grid grid-cols-4 sm:grid-cols-5 gap-2 mb-5">
                   {items.map(item => (
@@ -338,7 +322,6 @@ export function PhotoUploadPage() {
                 </div>
               )}
 
-              {/* Progress */}
               {uploading && (
                 <div className="mb-5">
                   <div className="flex justify-between font-sans text-xs text-muted mb-1.5">
@@ -354,14 +337,12 @@ export function PhotoUploadPage() {
                 </div>
               )}
 
-              {/* Error note */}
               {phase === 'error' && (
                 <p className="text-sm text-red-600 font-sans mb-4 text-center">
-                  Some photos could not be uploaded. Tap Upload to try again.
+                  Some files could not be uploaded. Tap Upload to try again.
                 </p>
               )}
 
-              {/* Upload button */}
               <button
                 onClick={handleUpload}
                 disabled={!pendingCount || uploading}
@@ -370,13 +351,13 @@ export function PhotoUploadPage() {
                 {uploading
                   ? `Uploading ${progress.current} of ${progress.total}…`
                   : pendingCount
-                    ? `Upload ${pendingCount} Photo${pendingCount !== 1 ? 's' : ''}`
-                    : 'Select Photos to Upload'}
+                    ? `Upload ${pendingCount} File${pendingCount !== 1 ? 's' : ''}`
+                    : 'Select Files to Upload'}
               </button>
 
               <p className="text-xs text-muted font-sans mt-4 text-center leading-relaxed">
-                Photos are saved privately to our wedding album.
-                Images are automatically optimised before sending.
+                Files are sent directly to our private Drive folder.
+                Photos and videos of any size are supported.
               </p>
             </>
           )}
