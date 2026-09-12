@@ -133,51 +133,6 @@ function NameSearch({ onSearch, onSelect, loading }) {
   )
 }
 
-/* ── Code entry ─────────────────────────────────────── */
-function CodeEntry({ guestCode, setGuestCode, onLookup, loading }) {
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    onLookup(guestCode)
-  }
-  return (
-    <div className="card corner-ornament max-w-md mx-auto overflow-hidden">
-      {/* Dark deadline header */}
-      <div className="bg-olive-700 px-8 py-5 text-center">
-        <p className="text-pearl-300/60 text-xs tracking-[0.35em] uppercase font-sans mb-1">
-          Kindly RSVP before
-        </p>
-        <p className="font-serif text-2xl text-pearl-100 font-light tracking-wide">
-          {ordinal(WEDDING.rsvpDeadline)}
-        </p>
-      </div>
-
-      <div className="px-8 py-7 text-center">
-        <h3 className="font-serif text-2xl text-ink font-light mb-2">Find Your Invitation</h3>
-        <p className="text-muted text-sm mb-6 leading-relaxed">
-          Enter the unique code from your invitation to access your personalised RSVP.
-        </p>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <input
-          type="text"
-          placeholder="e.g. ABC123"
-          value={guestCode}
-          onChange={e => setGuestCode(e.target.value.toUpperCase())}
-          className="input-field text-center text-lg tracking-[0.3em] font-medium"
-          maxLength={20}
-        />
-        <button
-          type="submit"
-          disabled={!guestCode.trim() || loading}
-          className="btn-primary w-full text-center disabled:opacity-40 disabled:cursor-not-allowed"
-        >
-          {loading ? 'Looking up…' : 'Find My Invitation'}
-        </button>
-      </form>
-      </div>
-    </div>
-  )
-}
-
 /* ── RSVP form ──────────────────────────────────────── */
 function RSVPForm({ guestData, onSubmit, submitting, rsvpError, onRetry }) {
   const isUpdate = guestData?.alreadySubmitted
@@ -479,9 +434,6 @@ export default function RSVPSection({
   rsvpState, rsvpError,
   onLookup, onSearch, onSubmit, onRetry, onEdit,
 }) {
-  // 'name' = new name-search flow (default) · 'code' = original code entry
-  const [mode, setMode] = useState('name')
-
   const handleSelectGuest = (guest) => {
     setGuestCode(guest.code)
     onLookup(guest.code)
@@ -507,31 +459,11 @@ export default function RSVPSection({
 
         {(lookupState === 'idle' || lookupState === 'error') && rsvpState === 'idle' && (
           <div className="space-y-4">
-            {mode === 'name' ? (
-              <NameSearch
-                onSearch={onSearch}
-                onSelect={handleSelectGuest}
-                loading={lookupState === 'loading'}
-              />
-            ) : (
-              <CodeEntry
-                guestCode={guestCode}
-                setGuestCode={setGuestCode}
-                onLookup={onLookup}
-                loading={false}
-              />
-            )}
-
-            {/* Switch between the two lookup methods */}
-            <div className="text-center">
-              <button
-                type="button"
-                onClick={() => setMode(mode === 'name' ? 'code' : 'name')}
-                className="text-muted hover:text-ink text-xs font-sans tracking-widest uppercase transition-colors duration-200 underline underline-offset-4 decoration-line hover:decoration-olive-400"
-              >
-                {mode === 'name' ? 'Have an invitation code? Use it instead' : 'Prefer to search by name?'}
-              </button>
-            </div>
+            <NameSearch
+              onSearch={onSearch}
+              onSelect={handleSelectGuest}
+              loading={lookupState === 'loading'}
+            />
 
             {lookupError && (
               <p className="text-red-600 text-xs text-center bg-red-50 border border-red-200 p-3 max-w-md mx-auto">
