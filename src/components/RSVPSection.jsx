@@ -21,35 +21,74 @@ function SideBadge({ side }) {
   )
 }
 
+// Match a guest name against every whitespace-separated term the guest typed,
+// in any order — so "asuramanna rav" still finds "Raveena Asuramanna".
+function matchGuest(name, terms) {
+  const n = name.toLowerCase()
+  return terms.every(t => n.indexOf(t) !== -1)
+}
+
 /* ── Name search ────────────────────────────────────── */
-function NameSearch({ onSearch, onSelect, loading }) {
+function NameSearch({ onSearch, onLoadGuests, onSelect, loading }) {
   const [query, setQuery]       = useState('')
   const [results, setResults]   = useState([])
   const [open, setOpen]         = useState(false)
   const [searching, setSearching] = useState(false)
   const [touched, setTouched]   = useState(false)
+  // Full guest list for instant client-side filtering. null until we know:
+  // an array = loaded (client mode); false = load failed → server-search fallback.
+  const [allGuests, setAllGuests] = useState(null)
   const boxRef = useRef(null)
   const reqId  = useRef(0)
 
-  // Debounced search as the guest types
+  // Load the full guest list once so typing can filter instantly, with no
+  // network round-trip per keystroke. Falls back to per-keystroke server search.
   useEffect(() => {
-    const q = query.trim()
+    let cancelled = false
+    onLoadGuests().then(list => {
+      if (cancelled) return
+      setAllGuests(Array.isArray(list) && list.length ? list : false)
+    })
+    return () => { cancelled = true }
+  }, [onLoadGuests])
+
+  // Filter as the guest types. Instant when the list is loaded (client mode);
+  // debounced server search when it isn't (fallback).
+  useEffect(() => {
+    const q = query.trim().toLowerCase()
     if (q.length < 2) {
       setResults([])
       setSearching(false)
       return
     }
+    const terms = q.split(/\s+/).filter(Boolean)
+
+    if (Array.isArray(allGuests)) {
+      setResults(allGuests.filter(g => matchGuest(g.name, terms)).slice(0, 15))
+      setSearching(false)
+      setOpen(true)
+      return
+    }
+    if (allGuests === null) {
+      // Guest list still loading on first use — show a spinner, don't hit the
+      // server; this effect re-runs and resolves once the list arrives.
+      setSearching(true)
+      setOpen(true)
+      return
+    }
+
+    // Fallback: server-side search, debounced
     setSearching(true)
     const id = ++reqId.current
     const t = setTimeout(async () => {
-      const guests = await onSearch(q)
+      const guests = await onSearch(query.trim())
       if (id !== reqId.current) return // stale response, ignore
       setResults(guests)
       setSearching(false)
       setOpen(true)
     }, 300)
     return () => clearTimeout(t)
-  }, [query, onSearch])
+  }, [query, allGuests, onSearch])
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -121,7 +160,7 @@ function NameSearch({ onSearch, onSelect, loading }) {
 
         {showNoResults && (
           <p className="text-muted text-xs mt-3">
-            No matching name found. Try a different spelling, or use your invitation code below.
+            No matching name found. Try a different spelling, or contact us if you can't find your name.
           </p>
         )}
 
@@ -432,7 +471,7 @@ export default function RSVPSection({
   guestCode, setGuestCode,
   guestData, lookupState, lookupError,
   rsvpState, rsvpError,
-  onLookup, onSearch, onSubmit, onRetry, onEdit,
+  onLookup, onSearch, onLoadGuests, onSubmit, onRetry, onEdit,
 }) {
   const handleSelectGuest = (guest) => {
     setGuestCode(guest.code)
@@ -461,6 +500,7 @@ export default function RSVPSection({
           <div className="space-y-4">
             <NameSearch
               onSearch={onSearch}
+              onLoadGuests={onLoadGuests}
               onSelect={handleSelectGuest}
               loading={lookupState === 'loading'}
             />

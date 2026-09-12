@@ -30,6 +30,7 @@ function doGet(e) {
     var action = e.parameter.action;
     if (action === 'getGuest')         return handleGetGuest(e.parameter.code);
     if (action === 'searchGuests')     return handleSearchGuests(e.parameter.q);
+    if (action === 'listGuests')       return handleListGuests();
     if (action === 'submitRSVP')       return handleSubmitRSVP(e.parameter);
     if (action === 'getThankYouPhoto') return handleGetThankYouPhoto(e.parameter.folderId);
     if (action === 'getUploadUrl')     return handleGetUploadUrl(e.parameter);
@@ -122,7 +123,41 @@ function handleSearchGuests(q) {
   return respond({ success: true, guests: matches });
 }
 
-function handleSubmitRSVP(params) {
+// Return the whole guest list (name + side + code) in one call so the site can
+// filter instantly in the browser as the guest types, instead of making a slow
+// round-trip per keystroke. Cached briefly to keep repeat loads fast. If you add
+// or rename guests in the sheet, changes appear within CACHE_TTL, or run
+// clearGuestCache() to publish them immediately.
+var GUEST_LIST_CACHE_KEY = 'guestList';
+var CACHE_TTL            = 600; // seconds (10 min)
+
+function handleListGuests() {
+  var cache  = CacheService.getScriptCache();
+  var cached = cache.get(GUEST_LIST_CACHE_KEY);
+  if (cached) return respond({ success: true, guests: JSON.parse(cached), cached: true });
+
+  var sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(GUESTS_SHEET);
+  if (!sheet) return respond({ error: 'Guests sheet not found' });
+
+  var data   = sheet.getDataRange().getValues();
+  var guests = [];
+  for (var i = 1; i < data.length; i++) {
+    var row  = data[i];
+    var name = String(row[1] || '').trim();
+    if (!name) continue;
+    guests.push({ code: row[0], name: name, side: row[15] || '' });
+  }
+
+  var json = JSON.stringify(guests);
+  if (json.length < 100000) cache.put(GUEST_LIST_CACHE_KEY, json, CACHE_TTL);
+  return respond({ success: true, guests: guests });
+}
+
+// Run this manually after editing the guest list to refresh the site instantly.
+function clearGuestCache() {
+  CacheService.getScriptCache().remove(GUEST_LIST_CACHE_KEY);
+  console.log('Guest list cache cleared.');
+}
   var code      = params.code;
   var attending = params.attending;
   var adults    = parseInt(params.adults)   || 0;

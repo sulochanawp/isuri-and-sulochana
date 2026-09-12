@@ -41,6 +41,17 @@ function MainSite() {
     }
   }, [])
 
+  const loadGuests = useCallback(async () => {
+    try {
+      const url = `${WEDDING.appsScriptUrl}?action=listGuests`
+      const res = await fetch(url)
+      const data = await res.json()
+      return data.success ? (data.guests || []) : null
+    } catch {
+      return null
+    }
+  }, [])
+
   const searchGuests = useCallback(async (query) => {
     const q = query?.trim()
     if (!q || q.length < 2) return []
@@ -130,6 +141,7 @@ function MainSite() {
         rsvpError={rsvpError}
         onLookup={lookupGuest}
         onSearch={searchGuests}
+        onLoadGuests={loadGuests}
         onSubmit={handleSubmitRSVP}
         onRetry={() => { setRsvpState('idle'); setRsvpError('') }}
         onEdit={() => { setRsvpState('idle'); setRsvpError('') }}
