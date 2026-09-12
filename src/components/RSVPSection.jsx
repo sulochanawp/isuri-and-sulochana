@@ -28,32 +28,54 @@ function matchGuest(name, terms) {
   return terms.every(t => n.indexOf(t) !== -1)
 }
 
+const GUEST_CACHE_KEY = 'rsvpGuestList_v1'
+const MAX_RESULTS = 25
+
 /* ── Name search ────────────────────────────────────── */
 function NameSearch({ onSearch, onLoadGuests, onSelect, loading }) {
-  const [query, setQuery]       = useState('')
-  const [results, setResults]   = useState([])
-  const [open, setOpen]         = useState(false)
+  const [query, setQuery]         = useState('')
+  const [results, setResults]     = useState([])
   const [searching, setSearching] = useState(false)
-  const [touched, setTouched]   = useState(false)
-  // Full guest list for instant client-side filtering. null until we know:
-  // an array = loaded (client mode); false = load failed → server-search fallback.
+  // Full guest list for instant client-side filtering. null = still loading the
+  // list for the first time; an array = loaded; false = load failed → server-search fallback.
   const [allGuests, setAllGuests] = useState(null)
-  const boxRef = useRef(null)
-  const reqId  = useRef(0)
+  const reqId = useRef(0)
 
-  // Load the full guest list once so typing can filter instantly, with no
-  // network round-trip per keystroke. Falls back to per-keystroke server search.
+  // Load the full guest list once. Use a cached copy from a previous visit for
+  // an instant start (important on slow mobile connections), then refresh from
+  // the network in the background with a few retries. Falls back to per-keystroke
+  // server search only if there's no cache AND every network attempt fails.
   useEffect(() => {
     let cancelled = false
-    onLoadGuests().then(list => {
-      if (cancelled) return
-      setAllGuests(Array.isArray(list) && list.length ? list : false)
-    })
+
+    try {
+      const raw = localStorage.getItem(GUEST_CACHE_KEY)
+      if (raw) {
+        const cached = JSON.parse(raw)
+        if (Array.isArray(cached) && cached.length) setAllGuests(cached)
+      }
+    } catch { /* ignore unavailable/corrupt cache */ }
+
+    ;(async () => {
+      for (let attempt = 0; attempt < 3 && !cancelled; attempt++) {
+        const list = await onLoadGuests()
+        if (cancelled) return
+        if (Array.isArray(list) && list.length) {
+          setAllGuests(list)
+          try { localStorage.setItem(GUEST_CACHE_KEY, JSON.stringify(list)) } catch { /* ignore */ }
+          return
+        }
+        await new Promise(r => setTimeout(r, 1500))
+      }
+      // No usable list from the network — keep any cached list, else go to fallback.
+      if (!cancelled) setAllGuests(prev => (Array.isArray(prev) ? prev : false))
+    })()
+
     return () => { cancelled = true }
   }, [onLoadGuests])
 
   // Filter as the guest types. Instant when the list is loaded (client mode);
-  // debounced server search when it isn't (fallback).
+  // debounced server search only in the fallback case.
   useEffect(() => {
     const q = query.trim().toLowerCase()
     if (q.length < 2) {
@@ -64,16 +86,12 @@ function NameSearch({ onSearch, onLoadGuests, onSelect, loading }) {
     const terms = q.split(/\s+/).filter(Boolean)
 
     if (Array.isArray(allGuests)) {
-      setResults(allGuests.filter(g => matchGuest(g.name, terms)).slice(0, 15))
+      setResults(allGuests.filter(g => matchGuest(g.name, terms)).slice(0, MAX_RESULTS))
       setSearching(false)
-      setOpen(true)
       return
     }
     if (allGuests === null) {
-      // Guest list still loading on first use — show a spinner, don't hit the
-      // server; this effect re-runs and resolves once the list arrives.
-      setSearching(true)
-      setOpen(true)
+      setSearching(true) // list still loading on first use
       return
     }
 
@@ -85,32 +103,24 @@ function NameSearch({ onSearch, onLoadGuests, onSelect, loading }) {
       if (id !== reqId.current) return // stale response, ignore
       setResults(guests)
       setSearching(false)
-      setOpen(true)
     }, 300)
     return () => clearTimeout(t)
   }, [query, allGuests, onSearch])
 
-  // Close dropdown on outside click
-  useEffect(() => {
-    const onClick = (e) => {
-      if (boxRef.current && !boxRef.current.contains(e.target)) setOpen(false)
-    }
-    document.addEventListener('mousedown', onClick)
-    return () => document.removeEventListener('mousedown', onClick)
-  }, [])
-
   const handleSelect = (guest) => {
     setQuery(guest.name)
-    setOpen(false)
     onSelect(guest)
   }
 
-  const showNoResults = touched && !searching && query.trim().length >= 2 && results.length === 0
+  const q = query.trim()
+  const listLoading = allGuests === null
+  const showNoResults = !searching && !listLoading && q.length >= 2 && results.length === 0
+  const truncated = results.length >= MAX_RESULTS
 
   return (
-    <div className="card corner-ornament max-w-md mx-auto overflow-hidden">
+    <div className="card corner-ornament max-w-md mx-auto">
       {/* Dark deadline header */}
-      <div className="bg-olive-700 px-8 py-5 text-center">
+      <div className="bg-olive-700 px-8 py-5 text-center -mx-6 md:-mx-8 -mt-6 md:-mt-8 mb-7 overflow-hidden">
         <p className="text-pearl-300/60 text-xs tracking-[0.35em] uppercase font-sans mb-1">
           Kindly RSVP before
         </p>
@@ -119,53 +129,67 @@ function NameSearch({ onSearch, onLoadGuests, onSelect, loading }) {
         </p>
       </div>
 
-      <div className="px-8 py-7 text-center">
+      <div className="text-center">
         <h3 className="font-serif text-2xl text-ink font-light mb-2">Find Your Invitation</h3>
-        <p className="text-muted text-sm mb-6 leading-relaxed">
-          Start typing your name and select yourself from the list.
+        <p className="text-muted text-sm mb-5 leading-relaxed">
+          Type your name below, then tap yourself in the list to RSVP.
         </p>
 
-        <div ref={boxRef} className="relative text-left">
-          <input
-            type="text"
-            placeholder="Start typing your name…"
-            value={query}
-            onChange={e => { setQuery(e.target.value); setTouched(true) }}
-            onFocus={() => { if (results.length) setOpen(true) }}
-            className="input-field text-center text-lg"
-            autoComplete="off"
-          />
+        <input
+          type="text"
+          placeholder="Enter your name…"
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+          className="input-field text-center text-lg"
+          autoComplete="off"
+          autoCapitalize="words"
+        />
 
-          {/* Dropdown */}
-          {open && (results.length > 0 || searching) && (
-            <ul className="absolute z-20 left-0 right-0 mt-1 bg-white border border-line shadow-lg max-h-64 overflow-y-auto">
-              {searching && results.length === 0 && (
-                <li className="px-4 py-3 text-muted text-sm font-sans text-center">Searching…</li>
-              )}
-              {results.map((g) => (
-                <li key={g.code}>
-                  <button
-                    type="button"
-                    onClick={() => handleSelect(g)}
-                    className="w-full flex items-center justify-between text-left px-4 py-3 hover:bg-olive-50 transition-colors duration-150 border-b border-line/60 last:border-b-0"
-                  >
-                    <span className="font-sans text-ink text-sm">{g.name}</span>
-                    <SideBadge side={g.side} />
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+        {/* Helper line under the input */}
+        {q.length > 0 && q.length < 2 && (
+          <p className="text-muted text-xs mt-3">Keep typing to search…</p>
+        )}
+        {q.length >= 2 && !searching && results.length > 0 && (
+          <p className="text-olive-600 text-xs mt-4 mb-1 tracking-wide font-sans">
+            {results.length}{truncated ? '+' : ''} {results.length === 1 ? 'match' : 'matches'} — tap your name
+          </p>
+        )}
+
+        {/* Results render inline so the section grows (no clipped dropdown) */}
+        {q.length >= 2 && (results.length > 0 || searching) && (
+          <ul className="mt-2 text-left border border-line divide-y divide-line/60 max-h-80 overflow-y-auto">
+            {searching && results.length === 0 && (
+              <li className="px-4 py-3 text-muted text-sm font-sans text-center">
+                {listLoading ? 'Loading guest list…' : 'Searching…'}
+              </li>
+            )}
+            {results.map((g) => (
+              <li key={g.code}>
+                <button
+                  type="button"
+                  onClick={() => handleSelect(g)}
+                  className="w-full flex items-center justify-between text-left px-4 py-3 hover:bg-olive-50 active:bg-olive-100 transition-colors duration-150"
+                >
+                  <span className="font-sans text-ink text-sm">{g.name}</span>
+                  <SideBadge side={g.side} />
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {truncated && (
+          <p className="text-muted text-xs mt-3">Too many matches — add your surname to narrow it down.</p>
+        )}
 
         {showNoResults && (
-          <p className="text-muted text-xs mt-3">
+          <p className="text-muted text-xs mt-4">
             No matching name found. Try a different spelling, or contact us if you can't find your name.
           </p>
         )}
 
         {loading && (
-          <p className="text-olive-600 text-xs mt-3 font-sans tracking-wide">Loading your invitation…</p>
+          <p className="text-olive-600 text-xs mt-4 font-sans tracking-wide">Loading your invitation…</p>
         )}
       </div>
     </div>

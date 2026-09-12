@@ -5,23 +5,28 @@
 var SPREADSHEET_ID = '1DdFnrl2yXZV8RTpEbNCYljYdiOnRc_nfMziKPDfwFhA';
 var GUESTS_SHEET   = 'Guests';
 
-// ── Column layout (1-indexed for getRange, 0-indexed for array) ─
-// A(1)  Code
-// B(2)  Name
-// C(3)  Email
-// D(4)  Mobile1
-// E(5)  Mobile2
-// F(6)  InvitationURL
-// G(7)  AllowedAdults
-// H(8)  AllowedChildren
-// I(9)  Attending          ← PENDING | YES | NO
-// J(10) AttendingAdults
-// K(11) AttendingChildren
-// L(12) Dietary
-// M(13) Table
-// N(14) Message
-// O(15) SubmittedAt
-// P(16) Side               ← you fill: Groom | Bride (used to disambiguate name search)
+// ── Columns are matched BY HEADER NAME (row 1), not by position ──
+// This means you can reorder or move columns freely in the sheet — e.g. put
+// "Side" in column C — without changing any code, as long as row 1 keeps these
+// header labels. Matching ignores case, spaces and punctuation, so "Allowed
+// Adults", "AllowedAdults" and "allowed_adults" are all equivalent.
+//
+//   Code               (required)  guest's unique code / ID
+//   Name               (required)  guest's full name
+//   Side                           Groom | Bride  (shown in name search)
+//   Email
+//   Mobile1
+//   Mobile2
+//   InvitationURL
+//   AllowedAdults                  max adults the invitation allows
+//   AllowedChildren                max children the invitation allows
+//   Attending                      PENDING | YES | NO   (written on submit)
+//   AttendingAdults                                     (written on submit)
+//   AttendingChildren                                   (written on submit)
+//   Dietary                                             (written on submit)
+//   Table
+//   Message                                             (written on submit)
+//   SubmittedAt                                         (written on submit)
 
 // ── Entry points ─────────────────────────────────────────────
 
@@ -50,6 +55,33 @@ function doPost(e) {
   }
 }
 
+// ── Column-mapping helpers (match columns by header name) ─────
+
+// Normalize a header cell to a lookup key: lowercase alphanumerics only.
+function normHeader(h) {
+  return String(h == null ? '' : h).toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
+// Build { normalizedHeader: columnIndex } from the sheet's first row.
+function buildColMap(headerRow) {
+  var map = {};
+  for (var i = 0; i < headerRow.length; i++) {
+    var key = normHeader(headerRow[i]);
+    if (key && map[key] === undefined) map[key] = i;
+  }
+  return map;
+}
+
+// Read a field from a row by header key; '' if that column doesn't exist.
+function cell(row, col, key) {
+  return col[key] === undefined ? '' : row[col[key]];
+}
+
+// Write a value into a row's column by header key (no-op if column absent).
+function writeCell(sheet, rowNum, col, key, value) {
+  if (col[key] !== undefined) sheet.getRange(rowNum, col[key] + 1).setValue(value);
+}
+
 // ── Handlers ──────────────────────────────────────────────────
 
 function handleGetGuest(code) {
@@ -59,31 +91,33 @@ function handleGetGuest(code) {
   if (!sheet) return respond({ error: 'Guests sheet not found' });
 
   var data = sheet.getDataRange().getValues();
+  if (data.length < 2) return respond({ error: 'Guest not found. Please check your invitation code.' });
+  var col = buildColMap(data[0]);
 
   for (var i = 1; i < data.length; i++) {
     var row = data[i];
-    if (String(row[0]).toUpperCase().trim() === code.toUpperCase().trim()) {
-      var attending   = String(row[8]).toUpperCase().trim();
+    if (String(cell(row, col, 'code')).toUpperCase().trim() === code.toUpperCase().trim()) {
+      var attending   = String(cell(row, col, 'attending')).toUpperCase().trim();
       var isSubmitted = attending === 'YES' || attending === 'NO';
       return respond({
         success: true,
         guest: {
-          code:              row[0],
-          name:              row[1],
-          email:             row[2]  || '',
-          mobile1:           row[3]  || '',
-          mobile2:           row[4]  || '',
-          invitationUrl:     row[5]  || '',
-          allowedAdults:     Number(row[6])  || 1,
-          allowedChildren:   Number(row[7])  || 0,
-          attending:         attending        || 'PENDING',
-          attendingAdults:   Number(row[9])  || 0,
-          attendingChildren: Number(row[10]) || 0,
-          dietary:           row[11] || '',
-          table:             row[12] || '',
-          message:           row[13] || '',
-          submittedAt:       row[14] || '',
-          side:              row[15] || '',
+          code:              cell(row, col, 'code'),
+          name:              cell(row, col, 'name'),
+          email:             cell(row, col, 'email')         || '',
+          mobile1:           cell(row, col, 'mobile1')       || '',
+          mobile2:           cell(row, col, 'mobile2')       || '',
+          invitationUrl:     cell(row, col, 'invitationurl') || '',
+          allowedAdults:     Number(cell(row, col, 'allowedadults'))   || 1,
+          allowedChildren:   Number(cell(row, col, 'allowedchildren')) || 0,
+          attending:         attending || 'PENDING',
+          attendingAdults:   Number(cell(row, col, 'attendingadults'))   || 0,
+          attendingChildren: Number(cell(row, col, 'attendingchildren')) || 0,
+          dietary:           cell(row, col, 'dietary')     || '',
+          table:             cell(row, col, 'table')       || '',
+          message:           cell(row, col, 'message')     || '',
+          submittedAt:       cell(row, col, 'submittedat') || '',
+          side:              cell(row, col, 'side')        || '',
           alreadySubmitted:  isSubmitted,
         }
       });
@@ -104,17 +138,19 @@ function handleSearchGuests(q) {
   if (!sheet) return respond({ error: 'Guests sheet not found' });
 
   var data = sheet.getDataRange().getValues();
+  if (data.length < 2) return respond({ success: true, guests: [] });
+  var col = buildColMap(data[0]);
   var matches = [];
 
   for (var i = 1; i < data.length; i++) {
     var row  = data[i];
-    var name = String(row[1] || '').trim();
+    var name = String(cell(row, col, 'name') || '').trim();
     if (!name) continue;
     if (name.toLowerCase().indexOf(query) !== -1) {
       matches.push({
-        code: row[0],
+        code: cell(row, col, 'code'),
         name: name,
-        side: row[15] || '',
+        side: cell(row, col, 'side') || '',
       });
       if (matches.length >= 15) break;
     }
@@ -141,11 +177,14 @@ function handleListGuests() {
 
   var data   = sheet.getDataRange().getValues();
   var guests = [];
-  for (var i = 1; i < data.length; i++) {
-    var row  = data[i];
-    var name = String(row[1] || '').trim();
-    if (!name) continue;
-    guests.push({ code: row[0], name: name, side: row[15] || '' });
+  if (data.length >= 2) {
+    var col = buildColMap(data[0]);
+    for (var i = 1; i < data.length; i++) {
+      var row  = data[i];
+      var name = String(cell(row, col, 'name') || '').trim();
+      if (!name) continue;
+      guests.push({ code: cell(row, col, 'code'), name: name, side: cell(row, col, 'side') || '' });
+    }
   }
 
   var json = JSON.stringify(guests);
@@ -173,26 +212,28 @@ function handleSubmitRSVP(params) {
   if (!sheet) return respond({ error: 'Guests sheet not found' });
 
   var data = sheet.getDataRange().getValues();
-  var now  = new Date().toISOString();
+  if (data.length < 2) return respond({ error: 'Guest not found' });
+  var col = buildColMap(data[0]);
+  var now = new Date().toISOString();
 
   for (var i = 1; i < data.length; i++) {
-    if (String(data[i][0]).toUpperCase().trim() === code.toUpperCase().trim()) {
+    if (String(cell(data[i], col, 'code')).toUpperCase().trim() === code.toUpperCase().trim()) {
       var rowNum      = i + 1;
       var isAttending = attending === 'YES';
 
-      sheet.getRange(rowNum, 9).setValue(isAttending ? 'YES' : 'NO');
-      sheet.getRange(rowNum, 10).setValue(isAttending ? adults   : 0);
-      sheet.getRange(rowNum, 11).setValue(isAttending ? children : 0);
-      sheet.getRange(rowNum, 12).setValue(dietary);
-      sheet.getRange(rowNum, 14).setValue(message);
-      sheet.getRange(rowNum, 15).setValue(now);
+      writeCell(sheet, rowNum, col, 'attending',         isAttending ? 'YES' : 'NO');
+      writeCell(sheet, rowNum, col, 'attendingadults',   isAttending ? adults   : 0);
+      writeCell(sheet, rowNum, col, 'attendingchildren', isAttending ? children : 0);
+      writeCell(sheet, rowNum, col, 'dietary',           dietary);
+      writeCell(sheet, rowNum, col, 'message',           message);
+      writeCell(sheet, rowNum, col, 'submittedat',       now);
 
       SpreadsheetApp.flush();
 
       return respond({
         success:   true,
-        name:      data[i][1],
-        table:     data[i][12] || '',
+        name:      cell(data[i], col, 'name'),
+        table:     cell(data[i], col, 'table') || '',
         attending: isAttending ? 'YES' : 'NO',
         adults:    isAttending ? adults   : 0,
         children:  isAttending ? children : 0,
