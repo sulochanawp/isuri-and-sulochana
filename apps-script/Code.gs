@@ -21,6 +21,7 @@ var GUESTS_SHEET   = 'Guests';
 // M(13) Table              ← you fill
 // N(14) Message
 // O(15) SubmittedAt        ← timestamp of latest submission (always overwritten)
+// P(16) Side               ← you fill: Groom | Bride (used to disambiguate name search)
 
 // ── Entry points ─────────────────────────────────────────────
 
@@ -28,6 +29,7 @@ function doGet(e) {
   try {
     var action = e.parameter.action;
     if (action === 'getGuest')        return handleGetGuest(e.parameter.code);
+    if (action === 'searchGuests')    return handleSearchGuests(e.parameter.q);
     if (action === 'submitRSVP')      return handleSubmitRSVP(e.parameter);
     if (action === 'getThankYouPhoto') return handleGetThankYouPhoto(e.parameter.folderId);
     return respond({ error: 'Unknown action' });
@@ -79,6 +81,7 @@ function handleGetGuest(code) {
           table:             row[12] || '',
           message:           row[13] || '',
           submittedAt:       row[14] || '',
+          side:              row[15] || '',
           alreadySubmitted:  isSubmitted,
         }
       });
@@ -86,6 +89,36 @@ function handleGetGuest(code) {
   }
 
   return respond({ error: 'Guest not found. Please check your invitation code.' });
+}
+
+// Search guests by name — returns a short list of matches so the guest can
+// pick the correct person from a dropdown. Side is included to disambiguate
+// guests who share the same/similar name across the groom and bride sides.
+function handleSearchGuests(q) {
+  var query = String(q || '').toLowerCase().trim();
+  if (query.length < 2) return respond({ success: true, guests: [] });
+
+  var sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(GUESTS_SHEET);
+  if (!sheet) return respond({ error: 'Guests sheet not found' });
+
+  var data = sheet.getDataRange().getValues();
+  var matches = [];
+
+  for (var i = 1; i < data.length; i++) {
+    var row  = data[i];
+    var name = String(row[1] || '').trim();
+    if (!name) continue;
+    if (name.toLowerCase().indexOf(query) !== -1) {
+      matches.push({
+        code: row[0],
+        name: name,
+        side: row[15] || '',
+      });
+      if (matches.length >= 15) break;
+    }
+  }
+
+  return respond({ success: true, guests: matches });
 }
 
 function handleSubmitRSVP(params) {
