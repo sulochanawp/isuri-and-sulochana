@@ -41,6 +41,19 @@ function MainSite() {
     }
   }, [])
 
+  const searchGuests = useCallback(async (query) => {
+    const q = query?.trim()
+    if (!q || q.length < 2) return []
+    try {
+      const url = `${WEDDING.appsScriptUrl}?action=searchGuests&q=${encodeURIComponent(q)}`
+      const res = await fetch(url)
+      const data = await res.json()
+      return data.success ? (data.guests || []) : []
+    } catch {
+      return []
+    }
+  }, [])
+
   useEffect(() => {
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual'
     // Remove #home hash so browser doesn't auto-scroll away from the top
@@ -116,6 +129,7 @@ function MainSite() {
         rsvpState={rsvpState}
         rsvpError={rsvpError}
         onLookup={lookupGuest}
+        onSearch={searchGuests}
         onSubmit={handleSubmitRSVP}
         onRetry={() => { setRsvpState('idle'); setRsvpError('') }}
         onEdit={() => { setRsvpState('idle'); setRsvpError('') }}

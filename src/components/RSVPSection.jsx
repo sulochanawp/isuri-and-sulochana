@@ -1,7 +1,137 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { WEDDING } from '../config'
 import { LotusDivider, FloralStripe } from './Hero'
 import { ordinal } from '../utils.jsx'
+
+/* ── Side badge (Groom / Bride) ─────────────────────── */
+function SideBadge({ side }) {
+  if (!side) return null
+  const s = String(side).toLowerCase()
+  const isGroom = s.indexOf('groom') !== -1
+  const isBride = s.indexOf('bride') !== -1
+  const label = isGroom ? "Groom's side" : isBride ? "Bride's side" : side
+  return (
+    <span className={`ml-2 inline-block text-[10px] tracking-widest uppercase font-sans px-2 py-0.5 border flex-shrink-0 ${
+      isBride
+        ? 'text-rose-700 border-rose-200 bg-rose-50'
+        : 'text-olive-600 border-olive-200 bg-olive-50'
+    }`}>
+      {label}
+    </span>
+  )
+}
+
+/* ── Name search ────────────────────────────────────── */
+function NameSearch({ onSearch, onSelect, loading }) {
+  const [query, setQuery]       = useState('')
+  const [results, setResults]   = useState([])
+  const [open, setOpen]         = useState(false)
+  const [searching, setSearching] = useState(false)
+  const [touched, setTouched]   = useState(false)
+  const boxRef = useRef(null)
+  const reqId  = useRef(0)
+
+  // Debounced search as the guest types
+  useEffect(() => {
+    const q = query.trim()
+    if (q.length < 2) {
+      setResults([])
+      setSearching(false)
+      return
+    }
+    setSearching(true)
+    const id = ++reqId.current
+    const t = setTimeout(async () => {
+      const guests = await onSearch(q)
+      if (id !== reqId.current) return // stale response, ignore
+      setResults(guests)
+      setSearching(false)
+      setOpen(true)
+    }, 300)
+    return () => clearTimeout(t)
+  }, [query, onSearch])
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const onClick = (e) => {
+      if (boxRef.current && !boxRef.current.contains(e.target)) setOpen(false)
+    }
+    document.addEventListener('mousedown', onClick)
+    return () => document.removeEventListener('mousedown', onClick)
+  }, [])
+
+  const handleSelect = (guest) => {
+    setQuery(guest.name)
+    setOpen(false)
+    onSelect(guest)
+  }
+
+  const showNoResults = touched && !searching && query.trim().length >= 2 && results.length === 0
+
+  return (
+    <div className="card corner-ornament max-w-md mx-auto overflow-hidden">
+      {/* Dark deadline header */}
+      <div className="bg-olive-700 px-8 py-5 text-center">
+        <p className="text-pearl-300/60 text-xs tracking-[0.35em] uppercase font-sans mb-1">
+          Kindly RSVP before
+        </p>
+        <p className="font-serif text-2xl text-pearl-100 font-light tracking-wide">
+          {ordinal(WEDDING.rsvpDeadline)}
+        </p>
+      </div>
+
+      <div className="px-8 py-7 text-center">
+        <h3 className="font-serif text-2xl text-ink font-light mb-2">Find Your Invitation</h3>
+        <p className="text-muted text-sm mb-6 leading-relaxed">
+          Start typing your name and select yourself from the list.
+        </p>
+
+        <div ref={boxRef} className="relative text-left">
+          <input
+            type="text"
+            placeholder="Start typing your name…"
+            value={query}
+            onChange={e => { setQuery(e.target.value); setTouched(true) }}
+            onFocus={() => { if (results.length) setOpen(true) }}
+            className="input-field text-center text-lg"
+            autoComplete="off"
+          />
+
+          {/* Dropdown */}
+          {open && (results.length > 0 || searching) && (
+            <ul className="absolute z-20 left-0 right-0 mt-1 bg-white border border-line shadow-lg max-h-64 overflow-y-auto">
+              {searching && results.length === 0 && (
+                <li className="px-4 py-3 text-muted text-sm font-sans text-center">Searching…</li>
+              )}
+              {results.map((g) => (
+                <li key={g.code}>
+                  <button
+                    type="button"
+                    onClick={() => handleSelect(g)}
+                    className="w-full flex items-center justify-between text-left px-4 py-3 hover:bg-olive-50 transition-colors duration-150 border-b border-line/60 last:border-b-0"
+                  >
+                    <span className="font-sans text-ink text-sm">{g.name}</span>
+                    <SideBadge side={g.side} />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        {showNoResults && (
+          <p className="text-muted text-xs mt-3">
+            No matching name found. Try a different spelling, or use your invitation code below.
+          </p>
+        )}
+
+        {loading && (
+          <p className="text-olive-600 text-xs mt-3 font-sans tracking-wide">Loading your invitation…</p>
+        )}
+      </div>
+    </div>
+  )
+}
 
 /* ── Code entry ─────────────────────────────────────── */
 function CodeEntry({ guestCode, setGuestCode, onLookup, loading }) {
@@ -347,8 +477,16 @@ export default function RSVPSection({
   guestCode, setGuestCode,
   guestData, lookupState, lookupError,
   rsvpState, rsvpError,
-  onLookup, onSubmit, onRetry, onEdit,
+  onLookup, onSearch, onSubmit, onRetry, onEdit,
 }) {
+  // 'name' = new name-search flow (default) · 'code' = original code entry
+  const [mode, setMode] = useState('name')
+
+  const handleSelectGuest = (guest) => {
+    setGuestCode(guest.code)
+    onLookup(guest.code)
+  }
+
   return (
     <section id="rsvp" className="py-24 px-6 bg-pearl-100">
       {/* Top floral stripe */}
@@ -369,12 +507,32 @@ export default function RSVPSection({
 
         {(lookupState === 'idle' || lookupState === 'error') && rsvpState === 'idle' && (
           <div className="space-y-4">
-            <CodeEntry
-              guestCode={guestCode}
-              setGuestCode={setGuestCode}
-              onLookup={onLookup}
-              loading={false}
-            />
+            {mode === 'name' ? (
+              <NameSearch
+                onSearch={onSearch}
+                onSelect={handleSelectGuest}
+                loading={lookupState === 'loading'}
+              />
+            ) : (
+              <CodeEntry
+                guestCode={guestCode}
+                setGuestCode={setGuestCode}
+                onLookup={onLookup}
+                loading={false}
+              />
+            )}
+
+            {/* Switch between the two lookup methods */}
+            <div className="text-center">
+              <button
+                type="button"
+                onClick={() => setMode(mode === 'name' ? 'code' : 'name')}
+                className="text-muted hover:text-ink text-xs font-sans tracking-widest uppercase transition-colors duration-200 underline underline-offset-4 decoration-line hover:decoration-olive-400"
+              >
+                {mode === 'name' ? 'Have an invitation code? Use it instead' : 'Prefer to search by name?'}
+              </button>
+            </div>
+
             {lookupError && (
               <p className="text-red-600 text-xs text-center bg-red-50 border border-red-200 p-3 max-w-md mx-auto">
                 {lookupError}
