@@ -131,8 +131,11 @@ function NameSearch({ onSearch, onLoadGuests, onSelect, loading }) {
 
       <div className="text-center">
         <h3 className="font-serif text-2xl text-ink font-light mb-2">Find Your Invitation</h3>
-        <p className="text-muted text-sm mb-5 leading-relaxed">
+        <p className="text-muted text-sm mb-2 leading-relaxed">
           Type your name below, then tap yourself in the list to RSVP.
+        </p>
+        <p className="text-olive-600 text-xs mb-5 leading-relaxed tracking-wide">
+          Tip: enter your name as it appears on your invitation card.
         </p>
 
         <input
