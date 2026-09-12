@@ -43,6 +43,14 @@ export const WEDDING = {
   // Format: https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec
   appsScriptUrl: "https://script.google.com/macros/s/AKfycbxXqQTa-M3sGzurc0Gny27JxhGFTrarEHvO3Qf0dphc1OkRjdOd1RZp-uddB__sRF_C/exec",
 
+  // Fast guest-list source (optional but recommended for mobile speed).
+  // Apps Script is slow (~3s+); a *published* Google Sheet CSV loads from
+  // Google's CDN in a fraction of a second. Create a helper tab exposing ONLY
+  // Code, Name, Side, AllowedAdults, AllowedChildren, publish that tab to the
+  // web as CSV, and paste its URL here. Leave blank to fall back to Apps Script.
+  // Format: https://docs.google.com/spreadsheets/d/e/<KEY>/pub?gid=<GID>&single=true&output=csv
+  guestsCsvUrl: "",
+
   // Photo upload page reveals at this time (morning of the wedding day)
   photoRevealTime: new Date("2025-12-02T07:00:00"),
 

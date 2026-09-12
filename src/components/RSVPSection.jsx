@@ -498,11 +498,12 @@ export default function RSVPSection({
   guestCode, setGuestCode,
   guestData, lookupState, lookupError,
   rsvpState, rsvpError,
-  onLookup, onSearch, onLoadGuests, onSubmit, onRetry, onEdit,
+  onLookup, onSearch, onLoadGuests, onSelectGuest, onSubmit, onRetry, onEdit,
 }) {
   const handleSelectGuest = (guest) => {
-    setGuestCode(guest.code)
-    onLookup(guest.code)
+    // Instant: build the RSVP form from the already-loaded list entry — no
+    // per-guest server round-trip.
+    onSelectGuest(guest)
   }
 
   return (

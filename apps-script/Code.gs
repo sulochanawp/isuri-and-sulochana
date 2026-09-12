@@ -183,7 +183,13 @@ function handleListGuests() {
       var row  = data[i];
       var name = String(cell(row, col, 'name') || '').trim();
       if (!name) continue;
-      guests.push({ code: cell(row, col, 'code'), name: name, side: cell(row, col, 'side') || '' });
+      guests.push({
+        code:            cell(row, col, 'code'),
+        name:            name,
+        side:            cell(row, col, 'side') || '',
+        allowedAdults:   Number(cell(row, col, 'allowedadults'))   || 1,
+        allowedChildren: Number(cell(row, col, 'allowedchildren')) || 0,
+      });
     }
   }
 
