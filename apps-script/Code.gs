@@ -158,6 +158,8 @@ function clearGuestCache() {
   CacheService.getScriptCache().remove(GUEST_LIST_CACHE_KEY);
   console.log('Guest list cache cleared.');
 }
+
+function handleSubmitRSVP(params) {
   var code      = params.code;
   var attending = params.attending;
   var adults    = parseInt(params.adults)   || 0;
