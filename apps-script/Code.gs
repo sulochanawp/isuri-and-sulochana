@@ -11,16 +11,16 @@ var GUESTS_SHEET   = 'Guests';
 // C(3)  Email
 // D(4)  Mobile1
 // E(5)  Mobile2
-// F(6)  InvitationURL      ← personal RSVP link (auto or manually set)
-// G(7)  AllowedAdults      ← you fill: your estimated / max adults
-// H(8)  AllowedChildren    ← you fill: your estimated / max children (0 if none)
+// F(6)  InvitationURL
+// G(7)  AllowedAdults
+// H(8)  AllowedChildren
 // I(9)  Attending          ← PENDING | YES | NO
-// J(10) AttendingAdults    ← latest confirmed adult count from guest
-// K(11) AttendingChildren  ← latest confirmed child count from guest
+// J(10) AttendingAdults
+// K(11) AttendingChildren
 // L(12) Dietary
-// M(13) Table              ← you fill
+// M(13) Table
 // N(14) Message
-// O(15) SubmittedAt        ← timestamp of latest submission (always overwritten)
+// O(15) SubmittedAt
 // P(16) Side               ← you fill: Groom | Bride (used to disambiguate name search)
 
 // ── Entry points ─────────────────────────────────────────────
@@ -28,10 +28,11 @@ var GUESTS_SHEET   = 'Guests';
 function doGet(e) {
   try {
     var action = e.parameter.action;
-    if (action === 'getGuest')        return handleGetGuest(e.parameter.code);
-    if (action === 'searchGuests')    return handleSearchGuests(e.parameter.q);
-    if (action === 'submitRSVP')      return handleSubmitRSVP(e.parameter);
+    if (action === 'getGuest')         return handleGetGuest(e.parameter.code);
+    if (action === 'searchGuests')     return handleSearchGuests(e.parameter.q);
+    if (action === 'submitRSVP')       return handleSubmitRSVP(e.parameter);
     if (action === 'getThankYouPhoto') return handleGetThankYouPhoto(e.parameter.folderId);
+    if (action === 'getUploadUrl')     return handleGetUploadUrl(e.parameter);
     return respond({ error: 'Unknown action' });
   } catch (err) {
     return respond({ error: err.message });
@@ -61,7 +62,7 @@ function handleGetGuest(code) {
   for (var i = 1; i < data.length; i++) {
     var row = data[i];
     if (String(row[0]).toUpperCase().trim() === code.toUpperCase().trim()) {
-      var attending = String(row[8]).toUpperCase().trim();
+      var attending   = String(row[8]).toUpperCase().trim();
       var isSubmitted = attending === 'YES' || attending === 'NO';
       return respond({
         success: true,
@@ -123,7 +124,7 @@ function handleSearchGuests(q) {
 
 function handleSubmitRSVP(params) {
   var code      = params.code;
-  var attending = params.attending;            // YES | NO
+  var attending = params.attending;
   var adults    = parseInt(params.adults)   || 0;
   var children  = parseInt(params.children) || 0;
   var dietary   = params.dietary  || '';
@@ -142,12 +143,12 @@ function handleSubmitRSVP(params) {
       var rowNum      = i + 1;
       var isAttending = attending === 'YES';
 
-      sheet.getRange(rowNum, 9).setValue(isAttending ? 'YES' : 'NO'); // I  Attending
-      sheet.getRange(rowNum, 10).setValue(isAttending ? adults    : 0); // J  AttendingAdults
-      sheet.getRange(rowNum, 11).setValue(isAttending ? children : 0); // K  AttendingChildren
-      sheet.getRange(rowNum, 12).setValue(dietary);                    // L  Dietary
-      sheet.getRange(rowNum, 14).setValue(message);                    // N  Message
-      sheet.getRange(rowNum, 15).setValue(now);                        // O  SubmittedAt
+      sheet.getRange(rowNum, 9).setValue(isAttending ? 'YES' : 'NO');
+      sheet.getRange(rowNum, 10).setValue(isAttending ? adults   : 0);
+      sheet.getRange(rowNum, 11).setValue(isAttending ? children : 0);
+      sheet.getRange(rowNum, 12).setValue(dietary);
+      sheet.getRange(rowNum, 14).setValue(message);
+      sheet.getRange(rowNum, 15).setValue(now);
 
       SpreadsheetApp.flush();
 
@@ -168,11 +169,10 @@ function handleSubmitRSVP(params) {
 function handleGetThankYouPhoto(folderId) {
   if (!folderId) return respond({ error: 'No folder ID provided' });
   var folder = DriveApp.getFolderById(folderId);
-  var files   = folder.getFiles();
+  var files  = folder.getFiles();
   while (files.hasNext()) {
     var file = files.next();
-    var mime = file.getMimeType();
-    if (mime.indexOf('image/') === 0) {
+    if (file.getMimeType().indexOf('image/') === 0) {
       return respond({
         success: true,
         fileId:  file.getId(),
@@ -183,10 +183,56 @@ function handleGetThankYouPhoto(folderId) {
   return respond({ error: 'No image found in folder' });
 }
 
+function handleGetUploadUrl(params) {
+  var folderId = params.folderId;
+  var filename = params.filename;
+  var mimeType = params.mimeType || 'application/octet-stream';
+  var fileSize = params.fileSize;
+
+  if (!folderId) return respond({ error: 'No folder ID provided' });
+  if (!filename) return respond({ error: 'No filename provided' });
+
+  var token    = ScriptApp.getOAuthToken();
+  var metadata = { name: filename, parents: [folderId] };
+
+  var headers = {
+    'Authorization':         'Bearer ' + token,
+    'Content-Type':          'application/json; charset=UTF-8',
+    'X-Upload-Content-Type': mimeType,
+    'Origin':                'https://sulochanawp.github.io',
+  };
+  if (fileSize) headers['X-Upload-Content-Length'] = fileSize;
+
+  var response = UrlFetchApp.fetch(
+    'https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable',
+    {
+      method:             'POST',
+      headers:            headers,
+      payload:            JSON.stringify(metadata),
+      muteHttpExceptions: true,
+    }
+  );
+
+  var uploadUrl = response.getHeaders()['Location'];
+  if (!uploadUrl) return respond({ error: 'Could not get upload URL from Drive' });
+
+  return respond({ success: true, uploadUrl: uploadUrl });
+}
+
 // ── Helper ────────────────────────────────────────────────────
 
 function respond(data) {
   return ContentService
     .createTextOutput(JSON.stringify(data))
     .setMimeType(ContentService.MimeType.JSON);
+}
+
+function authorizeUpload() {
+  ScriptApp.requireScopes(ScriptApp.AuthMode.FULL, [
+    'https://www.googleapis.com/auth/drive',
+    'https://www.googleapis.com/auth/spreadsheets',
+    'https://www.googleapis.com/auth/script.external_request'
+  ]);
+
+  console.log('Required permissions granted.');
 }
