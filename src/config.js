@@ -49,7 +49,7 @@ export const WEDDING = {
   // Code, Name, Side, AllowedAdults, AllowedChildren, publish that tab to the
   // web as CSV, and paste its URL here. Leave blank to fall back to Apps Script.
   // Format: https://docs.google.com/spreadsheets/d/e/<KEY>/pub?gid=<GID>&single=true&output=csv
-  guestsCsvUrl: "",
+  guestsCsvUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSv_AdZAXoSZid0AhUv7HqfhIbOvdJIj9CPZMyGqw8U14hi_CWKfg5On9nrHFMKvAWwkNaJU0mMbhfD/pub?gid=1007395640&single=true&output=csv",
 
   // Photo upload page reveals at this time (morning of the wedding day)
   photoRevealTime: new Date("2025-12-02T07:00:00"),
