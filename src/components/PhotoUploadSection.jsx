@@ -1,29 +1,8 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import { WEDDING } from '../config'
-import { LotusDivider, FloralStripe } from './Hero'
+import { LotusDivider, FloralStripe, Lotus, DiamondRule } from './Ornaments'
+import { useIsRevealed } from '../utils.jsx'
 import Footer from './Footer'
-import lotusLight from '../assets/lotus-light.svg?raw'
-
-function useIsRevealed(revealTime) {
-  const [revealed, setRevealed] = useState(() => Date.now() >= revealTime.getTime())
-  useEffect(() => {
-    if (revealed) return
-    const id = setInterval(() => {
-      if (Date.now() >= revealTime.getTime()) { setRevealed(true); clearInterval(id) }
-    }, 30_000)
-    return () => clearInterval(id)
-  }, [revealTime, revealed])
-  return revealed
-}
-
-function SmallLotus() {
-  return (
-    <span
-      className="inline-block w-[120px] [&>svg]:w-full [&>svg]:h-auto"
-      dangerouslySetInnerHTML={{ __html: lotusLight }}
-    />
-  )
-}
 
 const ACCEPTED_TYPES = [
   'image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif',
@@ -127,8 +106,9 @@ function Thumbnail({ item, onRemove }) {
         <button
           onClick={(e) => { e.stopPropagation(); onRemove(item.id) }}
           className="absolute top-1 right-1 w-5 h-5 bg-pearl-100 text-ink flex items-center justify-center
-                     opacity-0 group-hover:opacity-100 transition-opacity text-xs leading-none z-10"
-          aria-label="Remove"
+                     opacity-100 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100
+                     focus-visible:opacity-100 transition-opacity text-xs leading-none z-10"
+          aria-label={`Remove ${item.file.name}`}
         >✕</button>
       )}
 
@@ -232,16 +212,12 @@ export function PhotoUploadPage() {
   if (!revealed) {
     return (
       <div className="min-h-screen bg-pearl-100 flex flex-col items-center justify-center px-6 text-center">
-        <div className="mb-6"><SmallLotus /></div>
+        <div className="mb-6"><Lotus /></div>
         <p className="text-olive-500 text-xs tracking-[0.4em] uppercase font-sans mb-3">
           {WEDDING.date}
         </p>
         <h2 className="font-serif text-3xl text-ink font-light mb-4">Photos Open on the Day</h2>
-        <div className="flex items-center gap-4 my-4 opacity-20 w-32">
-          <div className="flex-1 border-t border-ink" />
-          <div className="w-1.5 h-1.5 rotate-45 bg-ink" />
-          <div className="flex-1 border-t border-ink" />
-        </div>
+        <DiamondRule className="my-4 opacity-20 w-32" />
         <p className="text-muted text-sm max-w-xs leading-relaxed">
           The photo upload will open on the morning of the wedding.
           Please come back then to share your memories with us.

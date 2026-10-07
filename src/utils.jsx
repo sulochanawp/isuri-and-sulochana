@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react'
+
 /**
  * Wraps ordinal suffixes (st, nd, rd, th) in <sup> tags.
  * Returns an array of strings/elements suitable for React rendering.
@@ -14,4 +16,19 @@ export function ordinal(str) {
       </span>
     )
   })
+}
+
+/**
+ * True once `revealTime` has passed; re-checks every 30s until then.
+ */
+export function useIsRevealed(revealTime) {
+  const [revealed, setRevealed] = useState(() => Date.now() >= revealTime.getTime())
+  useEffect(() => {
+    if (revealed) return
+    const id = setInterval(() => {
+      if (Date.now() >= revealTime.getTime()) { setRevealed(true); clearInterval(id) }
+    }, 30_000)
+    return () => clearInterval(id)
+  }, [revealTime, revealed])
+  return revealed
 }

@@ -1,16 +1,6 @@
 import { WEDDING } from '../config'
 import { ordinal } from '../utils.jsx'
-import lotusDark from '../assets/lotus-dark.svg?raw'
-
-/* Full lotus for footer */
-function FooterLotus() {
-  return (
-    <span
-      className="inline-block w-[100px] [&>svg]:w-full [&>svg]:h-auto"
-      dangerouslySetInnerHTML={{ __html: lotusDark }}
-    />
-  )
-}
+import { Lotus, DiamondRule } from './Ornaments'
 
 export default function Footer({ showMap = true, showWhatsApp = true, showRsvpButton = true }) {
   return (
@@ -22,23 +12,19 @@ export default function Footer({ showMap = true, showWhatsApp = true, showRsvpBu
 
         {/* Lotus */}
         <div className="flex justify-center mb-6">
-          <FooterLotus />
+          <Lotus dark className="w-[100px]" />
         </div>
 
         {/* Names */}
         <h2 className="font-serif text-4xl md:text-5xl font-light text-pearl-100 tracking-wide mb-2">
           {WEDDING.bride} & {WEDDING.groom}
         </h2>
-        <p className="text-pearl-300/40 text-xs tracking-[0.4em] uppercase font-sans mb-8">
+        <p className="text-pearl-300/70 text-xs tracking-[0.4em] uppercase font-sans mb-8">
           {ordinal(WEDDING.date)}
         </p>
 
         {/* Thin divider — only shown alongside the RSVP button */}
-        {showRsvpButton && <div className="flex items-center gap-4 mb-8 opacity-20 max-w-xs mx-auto">
-          <div className="flex-1 border-t border-pearl-100" />
-          <div className="w-1.5 h-1.5 rotate-45 bg-olive-300" />
-          <div className="flex-1 border-t border-pearl-100" />
-        </div>}
+        {showRsvpButton && <DiamondRule className="mb-8 opacity-20 max-w-xs mx-auto" lineClass="border-pearl-100" diamondClass="bg-olive-300" />}
 
         {/* RSVP jump button */}
         {showRsvpButton && <a
@@ -53,21 +39,17 @@ export default function Footer({ showMap = true, showWhatsApp = true, showRsvpBu
           </span>
           <span className="w-px self-center flex-shrink-0" style={{ height: 44, background: 'rgba(245,242,234,0.2)' }} />
           <span className="flex flex-col items-start gap-1 px-8 py-4">
-            <span className="font-sans text-xs tracking-[0.3em] uppercase text-pearl-300/60 group-hover:text-pearl-200/80 transition-colors">Kindly RSVP before</span>
+            <span className="font-sans text-xs tracking-[0.3em] uppercase text-pearl-300/70 group-hover:text-pearl-200/80 transition-colors">Kindly RSVP before</span>
             <span className="font-serif text-xl font-light tracking-wide text-pearl-100 group-hover:text-white transition-colors">{ordinal(WEDDING.rsvpDeadline)}</span>
           </span>
         </a>}
 
         {/* Thin olive rule */}
-        <div className="flex items-center gap-4 mb-10 opacity-20">
-          <div className="flex-1 border-t border-pearl-100" />
-          <div className="w-1.5 h-1.5 rotate-45 bg-olive-300" />
-          <div className="flex-1 border-t border-pearl-100" />
-        </div>
+        <DiamondRule className="mb-10 opacity-20" lineClass="border-pearl-100" diamondClass="bg-olive-300" />
 
         {/* Venue details */}
-        <div className="text-sm text-pearl-300/50 mb-12">
-          <p className="text-pearl-300/25 text-xs tracking-[0.3em] uppercase font-sans mb-2">Venue</p>
+        <div className="text-sm text-pearl-300/70 mb-12">
+          <p className="text-pearl-300/70 text-xs tracking-[0.3em] uppercase font-sans mb-2">Venue</p>
           <p className="font-serif text-xl text-pearl-200/70 font-light mb-2">{WEDDING.venue.name}</p>
           <p className="text-xs">{WEDDING.venue.address}</p>
           <div className="flex flex-wrap items-center justify-center gap-4 mt-3 text-xs tracking-widest uppercase">
@@ -78,7 +60,7 @@ export default function Footer({ showMap = true, showWhatsApp = true, showRsvpBu
         {/* Google Maps embed */}
         {showMap && WEDDING.venue.mapsEmbed && (
           <div className="mb-10 w-full max-w-2xl mx-auto">
-            <p className="text-pearl-300/25 text-xs tracking-[0.3em] uppercase font-sans mb-3">Find Us</p>
+            <p className="text-pearl-300/70 text-xs tracking-[0.3em] uppercase font-sans mb-3">Find Us</p>
             <div className="relative w-full overflow-hidden" style={{ height: 240 }}>
               <iframe
                 src={WEDDING.venue.mapsEmbed}
@@ -96,7 +78,7 @@ export default function Footer({ showMap = true, showWhatsApp = true, showRsvpBu
                 href={WEDDING.venue.mapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 mt-3 text-pearl-300/40 hover:text-pearl-200 text-xs font-sans tracking-widest uppercase transition-colors duration-200"
+                className="inline-flex items-center gap-1.5 mt-3 text-pearl-300/70 hover:text-pearl-200 text-xs font-sans tracking-widest uppercase transition-colors duration-200"
               >
                 <svg viewBox="0 0 20 20" width="12" height="12" fill="currentColor">
                   <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd"/>
@@ -110,7 +92,7 @@ export default function Footer({ showMap = true, showWhatsApp = true, showRsvpBu
         {/* WhatsApp contacts */}
         {showWhatsApp && WEDDING.contacts?.length > 0 && (
           <div className="mb-10">
-            <p className="text-pearl-300/25 text-xs tracking-[0.3em] uppercase font-sans mb-4">Questions?</p>
+            <p className="text-pearl-300/70 text-xs tracking-[0.3em] uppercase font-sans mb-4">Questions?</p>
             <div className="flex flex-wrap justify-center gap-3">
               {WEDDING.contacts.map(c => (
                 <a key={c.name}
@@ -130,7 +112,7 @@ export default function Footer({ showMap = true, showWhatsApp = true, showRsvpBu
           </div>
         )}
 
-        <p className="text-pearl-300/20 text-xs font-sans tracking-widest mt-6">
+        <p className="text-pearl-300/70 text-xs font-sans tracking-widest mt-6">
           Made with love · {new Date().getFullYear()}
         </p>
       </div>

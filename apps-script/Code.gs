@@ -82,6 +82,13 @@ function writeCell(sheet, rowNum, col, key, value) {
   if (col[key] !== undefined) sheet.getRange(rowNum, col[key] + 1).setValue(value);
 }
 
+// Guest-typed text is written with setValue, which would evaluate a leading
+// = + - @ as a formula. Prefixing an apostrophe stores it as plain text.
+function safeText(v) {
+  var s = String(v == null ? '' : v);
+  return /^[=+\-@\t\r]/.test(s) ? "'" + s : s;
+}
+
 // ── Handlers ──────────────────────────────────────────────────
 
 function handleGetGuest(code) {
@@ -209,8 +216,8 @@ function handleSubmitRSVP(params) {
   var attending = params.attending;
   var adults    = parseInt(params.adults)   || 0;
   var children  = parseInt(params.children) || 0;
-  var dietary   = params.dietary  || '';
-  var message   = params.message  || '';
+  var dietary   = safeText(params.dietary);
+  var message   = safeText(params.message);
 
   if (!code) return respond({ error: 'No code provided' });
 

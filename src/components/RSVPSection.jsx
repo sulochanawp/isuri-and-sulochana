@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { WEDDING } from '../config'
-import { LotusDivider, FloralStripe } from './Hero'
+import { LotusDivider, FloralStripe, DiamondCorners } from './Ornaments'
 import { ordinal } from '../utils.jsx'
 
 /* ── Side badge (Groom / Bride) ─────────────────────── */
@@ -121,7 +121,7 @@ function NameSearch({ onSearch, onLoadGuests, onSelect, loading }) {
     <div className="card corner-ornament max-w-md mx-auto">
       {/* Dark deadline header */}
       <div className="bg-olive-700 px-8 py-5 text-center -mx-6 md:-mx-8 -mt-6 md:-mt-8 mb-7 overflow-hidden">
-        <p className="text-pearl-300/60 text-xs tracking-[0.35em] uppercase font-sans mb-1">
+        <p className="text-pearl-300/70 text-xs tracking-[0.35em] uppercase font-sans mb-1">
           Kindly RSVP before
         </p>
         <p className="font-serif text-2xl text-pearl-100 font-light tracking-wide">
@@ -442,10 +442,7 @@ function RSVPConfirmation({ guestData, onEdit }) {
 
           {guestData?.table && (
             <div className="border border-olive-200 bg-olive-50 p-6 mb-6 relative">
-              <span className="absolute -top-1 -left-1  w-2 h-2 rotate-45 bg-olive-400" />
-              <span className="absolute -top-1 -right-1 w-2 h-2 rotate-45 bg-olive-400" />
-              <span className="absolute -bottom-1 -left-1  w-2 h-2 rotate-45 bg-olive-400" />
-              <span className="absolute -bottom-1 -right-1 w-2 h-2 rotate-45 bg-olive-400" />
+              <DiamondCorners className="w-2 h-2 bg-olive-400" />
               <p className="text-olive-500 text-xs tracking-[0.3em] uppercase font-sans mb-1">Your Seat</p>
               <p className="font-serif text-3xl text-ink font-light">Table {guestData.table}</p>
               <p className="text-muted text-xs mt-2">Please collect your table card at the venue entrance.</p>

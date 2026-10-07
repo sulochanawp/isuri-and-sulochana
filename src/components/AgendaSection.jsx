@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react'
 import { AGENDA, WEDDING } from '../config'
-import { LotusDivider, FloralStripe } from './Hero'
+import { LotusDivider, FloralStripe } from './Ornaments'
 import { ordinal } from '../utils.jsx'
 
 export default function AgendaSection() {

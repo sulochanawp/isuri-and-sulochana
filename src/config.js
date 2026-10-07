@@ -5,8 +5,6 @@
 export const WEDDING = {
   bride: "Isuri",
   groom: "Sulochana",
-  // Used in hero headline: "Sarah & James"
-  coupleInitials: "I & S",
 
   // Date shown to guests
   date: "Wednesday, 2nd December 2026",
@@ -69,61 +67,51 @@ export const AGENDA = [
     time: "3:30 PM",
     title: "Guest Arrival",
     description: "Please be seated before the ceremony begins. Ushers will guide you to your seats.",
-    icon: "🌸",
   },
   {
     time: "4:00 PM",
     title: "Wedding Ceremony",
     description: "The ceremony will begin promptly. We kindly ask guests to silence their phones.",
-    icon: "💍",
   },
   {
     time: "4:45 PM",
     title: "Ceremony Concludes",
     description: "Congratulations to the newlyweds! Confetti will be provided for the send-off.",
-    icon: "🎊",
   },
   {
     time: "5:00 PM",
     title: "Cocktail Hour",
     description: "Enjoy welcome drinks and canapés while the couple takes photographs.",
-    icon: "🥂",
   },
   {
     time: "6:30 PM",
     title: "Reception Doors Open",
     description: "Please make your way to the ballroom and find your assigned seats.",
-    icon: "✨",
   },
   {
     time: "7:00 PM",
     title: "Dinner is Served",
     description: "A three-course dinner will be served at your table.",
-    icon: "🍽️",
   },
   {
     time: "8:30 PM",
     title: "First Dance & Speeches",
     description: "The couple's first dance, followed by heartfelt speeches from the wedding party.",
-    icon: "💃",
   },
   {
     time: "9:00 PM",
     title: "Dancing & Celebrations",
     description: "The dance floor opens! Join us for a night of music and celebration.",
-    icon: "🎶",
   },
   {
     time: "11:30 PM",
     title: "Last Dance",
     description: "One final dance before we bid the evening farewell.",
-    icon: "🌙",
   },
   {
     time: "12:00 AM",
     title: "Send-Off",
     description: "Help us send the newlyweds off with sparklers as they begin their journey together.",
-    icon: "🎇",
   },
 ];
 

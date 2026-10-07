@@ -113,7 +113,7 @@ Tiny diamond accents (1.5×1.5 px squares rotated 45°) pinned to each corner of
 
 - Background: olive-800 (`#2B3B18`) with the Kandyan light SVG pattern overlaid at 7% opacity
 - Vignette gradient: `linear-gradient(to bottom, rgba(28,39,16,0.60) 0%, transparent 50%, rgba(28,39,16,0.80) 100%)`
-- Text: pearl-100 (`#F5F2EA`) for headings · pearl-300 at 55% opacity for subtext
+- Text: pearl-100 (`#F5F2EA`) for headings · pearl-300 at 70% opacity for subtext (lower fails text contrast on olive-800)
 - Frosted inset panels: `background: rgba(255,255,255,0.05)` · `backdrop-filter: blur(8px)` · border `rgba(221,216,200,0.20)`
 
 ---

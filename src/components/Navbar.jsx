@@ -53,6 +53,8 @@ export default function Navbar() {
           onClick={() => setMenuOpen(!menuOpen)}
           className={`md:hidden flex flex-col gap-1.5 ${scrolled ? 'text-ink' : 'text-pearl-100'}`}
           aria-label="Toggle menu"
+          aria-expanded={menuOpen}
+          aria-controls="mobile-nav"
         >
           <span className={`block h-px w-5 bg-current transition-all duration-300 ${menuOpen ? 'rotate-45 translate-y-2' : ''}`} />
           <span className={`block h-px w-5 bg-current transition-all duration-300 ${menuOpen ? 'opacity-0' : ''}`} />
@@ -61,7 +63,7 @@ export default function Navbar() {
       </div>
 
       {/* Mobile drawer */}
-      <div className={`md:hidden overflow-hidden transition-all duration-300 ${
+      <div id="mobile-nav" className={`md:hidden overflow-hidden transition-all duration-300 ${
         menuOpen ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'
       } bg-pearl-100 border-b border-line`}>
         <ul className="flex flex-col items-center gap-5 py-7">

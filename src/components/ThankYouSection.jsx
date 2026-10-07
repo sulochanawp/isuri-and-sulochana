@@ -1,29 +1,8 @@
 import { useState, useEffect } from 'react'
 import { WEDDING } from '../config'
-import { LotusDivider, FloralStripe } from './Hero'
+import { LotusDivider, FloralStripe, Lotus, DiamondCorners, DiamondRule } from './Ornaments'
+import { useIsRevealed } from '../utils.jsx'
 import Footer from './Footer'
-import lotusLight from '../assets/lotus-light.svg?raw'
-
-function useIsRevealed(revealTime) {
-  const [revealed, setRevealed] = useState(() => Date.now() >= revealTime.getTime())
-  useEffect(() => {
-    if (revealed) return
-    const id = setInterval(() => {
-      if (Date.now() >= revealTime.getTime()) { setRevealed(true); clearInterval(id) }
-    }, 30_000)
-    return () => clearInterval(id)
-  }, [revealTime, revealed])
-  return revealed
-}
-
-function SmallLotus() {
-  return (
-    <span
-      className="inline-block w-[120px] [&>svg]:w-full [&>svg]:h-auto"
-      dangerouslySetInnerHTML={{ __html: lotusLight }}
-    />
-  )
-}
 
 /* ── Standalone full-page (used when ?view=thankyou) ── */
 export function ThankYouPage() {
@@ -53,16 +32,12 @@ export function ThankYouPage() {
   if (!revealed) {
     return (
       <div className="min-h-screen bg-pearl-100 flex flex-col items-center justify-center px-6 text-center">
-        <div className="mb-6"><SmallLotus /></div>
+        <div className="mb-6"><Lotus /></div>
         <p className="text-olive-500 text-xs tracking-[0.4em] uppercase font-sans mb-3">
           {WEDDING.date}
         </p>
         <h2 className="font-serif text-3xl text-ink font-light mb-4">A Message Is Coming</h2>
-        <div className="flex items-center gap-4 my-4 opacity-20 w-32">
-          <div className="flex-1 border-t border-ink" />
-          <div className="w-1.5 h-1.5 rotate-45 bg-ink" />
-          <div className="flex-1 border-t border-ink" />
-        </div>
+        <DiamondRule className="my-4 opacity-20 w-32" />
         <p className="text-muted text-sm max-w-xs leading-relaxed">
           Our heartfelt thank you card will appear here on the day of the wedding.
           Please check back then.
@@ -90,10 +65,7 @@ export function ThankYouPage() {
 
         {/* Photo frame */}
         <div className="relative w-full max-w-2xl mb-8">
-          <span className="absolute -top-1 -left-1  w-1.5 h-1.5 rotate-45 bg-olive-500 z-10" />
-          <span className="absolute -top-1 -right-1 w-1.5 h-1.5 rotate-45 bg-olive-500 z-10" />
-          <span className="absolute -bottom-1 -left-1  w-1.5 h-1.5 rotate-45 bg-olive-500 z-10" />
-          <span className="absolute -bottom-1 -right-1 w-1.5 h-1.5 rotate-45 bg-olive-500 z-10" />
+          <DiamondCorners className="w-1.5 h-1.5 bg-olive-500 z-10" />
 
           <div className="border-2 border-olive-200 p-2">
             <div className="border border-olive-100">
@@ -110,7 +82,7 @@ export function ThankYouPage() {
               ) : (
                 <div className="w-full flex items-center justify-center bg-pearl-50" style={{ height: 400 }}>
                   <div className="text-center text-olive-300">
-                    <SmallLotus />
+                    <Lotus />
                     <p className="text-xs font-sans tracking-widest uppercase mt-3">Loading…</p>
                   </div>
                 </div>
