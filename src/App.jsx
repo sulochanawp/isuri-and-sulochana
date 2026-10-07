@@ -8,6 +8,7 @@ import MenuSection from './components/MenuSection'
 import Footer from './components/Footer'
 import { ThankYouPage } from './components/ThankYouSection'
 import { PhotoUploadPage } from './components/PhotoUploadSection'
+import { SaveTheDatePage } from './components/SaveTheDate'
 
 /* ── Published-CSV guest list (fast path) ─────────────────────── */
 
@@ -256,5 +257,8 @@ export default function App() {
   const view = new URLSearchParams(window.location.search).get('view')
   if (view === 'thankyou') return <ThankYouPage />
   if (view === 'photos')   return <PhotoUploadPage />
+  if (view === 'savethedate') return <SaveTheDatePage />
+  // Save the Date until the site opens; ?view=site previews the full site early
+  if (view !== 'site' && Date.now() < WEDDING.siteOpenTime.getTime()) return <SaveTheDatePage />
   return <MainSite />
 }

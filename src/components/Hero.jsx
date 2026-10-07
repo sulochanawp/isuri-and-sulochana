@@ -6,7 +6,7 @@ import { Lotus, HeroCorner, DiamondCorners } from './Ornaments'
 /* ════════════════════════════════════════════════════════════
    COUNTDOWN
    ════════════════════════════════════════════════════════════ */
-function Countdown({ target }) {
+export function Countdown({ target }) {
   const calc = d => {
     const diff = d - Date.now()
     if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 }
@@ -43,7 +43,7 @@ function Countdown({ target }) {
 /* ════════════════════════════════════════════════════════════
    HERO
    ════════════════════════════════════════════════════════════ */
-export default function Hero() {
+export default function Hero({ eyebrow = 'You are cordially invited to the wedding of', children }) {
   return (
     <section
       id="home"
@@ -56,7 +56,7 @@ export default function Hero() {
       {/* Main content */}
       <div className="relative z-10 px-6 pt-24 pb-16 animate-fade-up">
         <p className="text-pearl-300/70 text-xs tracking-[0.5em] uppercase font-sans mb-7">
-          You are cordially invited to the wedding of
+          {eyebrow}
         </p>
 
         {/* Framed couple names */}
@@ -108,6 +108,7 @@ export default function Hero() {
           )}
         </div>
 
+        {children}
       </div>
 
     </section>

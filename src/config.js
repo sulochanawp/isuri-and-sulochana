@@ -11,6 +11,12 @@ export const WEDDING = {
   // JavaScript Date for the live countdown timer
   weddingDate: new Date("2026-12-02T09:00:00"),
 
+  // Until this moment the whole site shows only the Save the Date page.
+  // After it passes, the full site (RSVP, agenda, menu) opens automatically.
+  // Add ?view=site to preview the full site before then, or ?view=savethedate
+  // to preview the Save the Date page at any time.
+  siteOpenTime: new Date("2025-11-01T09:00:00"),   // ← set your date
+
   // Thank You section reveals at this moment (noon on the wedding day)
   thankYouRevealTime: new Date("2025-12-20T12:00:00"),
 
