@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { WEDDING } from './config'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
+import SeatingSection, { SeatingPage } from './components/SeatingSection'
 import RSVPSection from './components/RSVPSection'
 import AgendaSection from './components/AgendaSection'
 import MenuSection from './components/MenuSection'
@@ -215,6 +216,7 @@ function MainSite() {
     <div className="bg-pearl-100 min-h-screen font-sans text-ink">
       <Navbar />
       <Hero />
+      <SeatingSection />
       <RSVPSection
         guestCode={guestCode}
         setGuestCode={setGuestCode}
@@ -258,6 +260,7 @@ export default function App() {
   if (view === 'thankyou') return <ThankYouPage />
   if (view === 'photos')   return <PhotoUploadPage />
   if (view === 'savethedate') return <SaveTheDatePage />
+  if (view === 'seating')  return <SeatingPage />
   // Save the Date until the site opens; ?view=site previews the full site early
   if (view !== 'site' && Date.now() < WEDDING.siteOpenTime.getTime()) return <SaveTheDatePage />
   return <MainSite />

@@ -3,6 +3,7 @@ import { WEDDING } from '../config'
 
 const LINKS = [
   { label: 'Home',   href: '#' },
+  { label: 'Seating', href: '#seating' },
   { label: 'RSVP',   href: '#rsvp' },
   { label: 'Agenda', href: '#agenda' },
   { label: 'Menu',   href: '#menu' },
