@@ -12,16 +12,13 @@ export const WEDDING = {
   weddingDate: new Date("2026-12-02T09:00:00"),
 
   // Until this moment the whole site shows only the Save the Date page.
-  // After it passes, the full site (RSVP, agenda, menu) opens automatically.
+  // After it passes, the full site (seating, agenda, menu) opens automatically.
   // Add ?view=site to preview the full site before then, or ?view=savethedate
   // to preview the Save the Date page at any time.
   siteOpenTime: new Date("2026-10-01T09:00:00"),   // ← set your date
 
   // Thank You section reveals at this moment (noon on the wedding day)
   thankYouRevealTime: new Date("2025-12-20T12:00:00"),
-
-  // RSVP deadline shown to guests
-  rsvpDeadline: "1st November 2025",
 
   venue: {
     name: "The Grand Walawwa",
@@ -47,13 +44,6 @@ export const WEDDING = {
   // Format: https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec
   appsScriptUrl: "https://script.google.com/macros/s/AKfycbxXqQTa-M3sGzurc0Gny27JxhGFTrarEHvO3Qf0dphc1OkRjdOd1RZp-uddB__sRF_C/exec",
 
-  // Fast guest-list source (optional but recommended for mobile speed).
-  // Apps Script is slow (~3s+); a *published* Google Sheet CSV loads from
-  // Google's CDN in a fraction of a second. Create a helper tab exposing ONLY
-  // Code, Name, Side, AllowedAdults, AllowedChildren, publish that tab to the
-  // web as CSV, and paste its URL here. Leave blank to fall back to Apps Script.
-  // Format: https://docs.google.com/spreadsheets/d/e/<KEY>/pub?gid=<GID>&single=true&output=csv
-  guestsCsvUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSv_AdZAXoSZid0AhUv7HqfhIbOvdJIj9CPZMyGqw8U14hi_CWKfg5On9nrHFMKvAWwkNaJU0mMbhfD/pub?gid=1007395640&single=true&output=csv",
 
   // Photo upload page reveals at this time (morning of the wedding day)
   photoRevealTime: new Date("2025-12-02T07:00:00"),
@@ -125,7 +115,7 @@ export const AGENDA = [
 //  MENU
 // ============================================================
 export const MENU = {
-  note: "Please indicate any dietary requirements when you RSVP. All dishes are prepared fresh on the day.",
+  note: "All dishes are prepared fresh on the day.",
 
 starters: [
   {

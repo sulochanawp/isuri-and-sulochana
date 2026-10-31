@@ -1,9 +1,8 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { WEDDING } from './config'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import SeatingSection, { SeatingPage } from './components/SeatingSection'
-import RSVPSection from './components/RSVPSection'
 import AgendaSection from './components/AgendaSection'
 import MenuSection from './components/MenuSection'
 import Footer from './components/Footer'
@@ -11,144 +10,9 @@ import { ThankYouPage } from './components/ThankYouSection'
 import { PhotoUploadPage } from './components/PhotoUploadSection'
 import { SaveTheDatePage } from './components/SaveTheDate'
 
-/* ── Published-CSV guest list (fast path) ─────────────────────── */
-
-// Minimal RFC-4180-ish CSV parser (handles quoted fields, embedded commas,
-// escaped "" quotes, and \r\n). Google's published CSV is well-formed.
-function parseCsv(text) {
-  const rows = []
-  let row = [], field = '', inQuotes = false
-  for (let i = 0; i < text.length; i++) {
-    const c = text[i]
-    if (inQuotes) {
-      if (c === '"') {
-        if (text[i + 1] === '"') { field += '"'; i++ } else inQuotes = false
-      } else field += c
-    } else if (c === '"') {
-      inQuotes = true
-    } else if (c === ',') {
-      row.push(field); field = ''
-    } else if (c === '\n') {
-      row.push(field); rows.push(row); row = []; field = ''
-    } else if (c !== '\r') {
-      field += c
-    }
-  }
-  if (field.length || row.length) { row.push(field); rows.push(row) }
-  return rows
-}
-
-const normKey = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '')
-
-// Fetch + parse the published guest CSV into { code, name, side, allowed… }.
-// Columns are matched by header name, so their order in the sheet doesn't matter.
-async function loadGuestsFromCsv(url) {
-  try {
-    const res = await fetch(url, { cache: 'no-store' })
-    if (!res.ok) return null
-    const rows = parseCsv(await res.text())
-    if (rows.length < 2) return []
-    const idx = {}
-    rows[0].forEach((h, i) => { const k = normKey(h); if (k && idx[k] === undefined) idx[k] = i })
-    const at = (r, k) => (idx[k] === undefined ? '' : (r[idx[k]] ?? '').trim())
-    const guests = []
-    for (let i = 1; i < rows.length; i++) {
-      const name = at(rows[i], 'name')
-      if (!name) continue
-      guests.push({
-        code:            at(rows[i], 'code'),
-        name,
-        side:            at(rows[i], 'side'),
-        allowedAdults:   Number(at(rows[i], 'allowedadults'))   || 1,
-        allowedChildren: Number(at(rows[i], 'allowedchildren')) || 0,
-      })
-    }
-    return guests
-  } catch {
-    return null
-  }
-}
-
 /* ── Main site (all hooks live here, called unconditionally) ── */
 function MainSite() {
-  const [guestCode, setGuestCode] = useState('')
-  const [guestData, setGuestData] = useState(null)
-  const [lookupState, setLookupState] = useState('idle')
-  const [lookupError, setLookupError] = useState('')
-  const [rsvpState, setRsvpState] = useState('idle')
-  const [rsvpError, setRsvpError] = useState('')
   const [showScrollTop, setShowScrollTop] = useState(false)
-
-  const lookupGuest = useCallback(async (code) => {
-    if (!code?.trim()) return
-    setLookupState('loading')
-    setLookupError('')
-    try {
-      const url = `${WEDDING.appsScriptUrl}?action=getGuest&code=${encodeURIComponent(code.trim())}`
-      const res = await fetch(url)
-      const data = await res.json()
-      if (data.success) {
-        setGuestData(data.guest)
-        setLookupState('found')
-        if (data.guest.alreadySubmitted) setRsvpState('confirmed')
-      } else {
-        setLookupError(data.error || 'Guest not found. Please check your code.')
-        setLookupState('error')
-      }
-    } catch {
-      setLookupError('Unable to connect. Please check your internet connection and try again.')
-      setLookupState('error')
-    }
-  }, [])
-
-  // Load the guest list. Prefer the fast published-CSV source (Google CDN) when
-  // configured; otherwise fall back to the slower Apps Script listGuests. Both
-  // return the same shape: { code, name, side, allowedAdults, allowedChildren }.
-  const loadGuests = useCallback(async () => {
-    if (WEDDING.guestsCsvUrl) {
-      const fromCsv = await loadGuestsFromCsv(WEDDING.guestsCsvUrl)
-      if (fromCsv && fromCsv.length) return fromCsv
-      // CSV failed/empty → fall through to Apps Script
-    }
-    try {
-      const res  = await fetch(`${WEDDING.appsScriptUrl}?action=listGuests`)
-      const data = await res.json()
-      return data.success ? (data.guests || []) : null
-    } catch {
-      return null
-    }
-  }, [])
-
-  // Build a guest's data straight from the already-loaded list entry — no
-  // per-guest server round-trip. This is what makes tapping a name instant.
-  const selectGuest = useCallback((entry) => {
-    setGuestCode(entry.code || '')
-    setGuestData({
-      code:              entry.code,
-      name:              entry.name,
-      side:              entry.side || '',
-      allowedAdults:     Number(entry.allowedAdults)   || 1,
-      allowedChildren:   Number(entry.allowedChildren) || 0,
-      attending:         'PENDING',
-      alreadySubmitted:  false,
-    })
-    setLookupError('')
-    setRsvpState('idle')
-    setLookupState('found')
-  }, [])
-
-  const searchGuests = useCallback(async (query) => {
-    const q = query?.trim()
-    if (!q || q.length < 2) return []
-    try {
-      const url = `${WEDDING.appsScriptUrl}?action=searchGuests&q=${encodeURIComponent(q)}`
-      const res = await fetch(url)
-      const data = await res.json()
-      return data.success ? (data.guests || []) : []
-    } catch {
-      return []
-    }
-  }, [])
 
   useEffect(() => {
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual'
@@ -156,16 +20,8 @@ function MainSite() {
     if (window.location.hash === '#home') {
       history.replaceState(null, '', window.location.pathname + window.location.search)
     }
-    const params = new URLSearchParams(window.location.search)
-    const code = params.get('code')
-    if (code) {
-      setGuestCode(code)
-      lookupGuest(code)
-      window.scrollTo(0, 0)
-    } else {
-      window.scrollTo(0, 0)
-    }
-  }, [lookupGuest])
+    window.scrollTo(0, 0)
+  }, [])
 
   useEffect(() => {
     const onScroll = () => {
@@ -177,62 +33,11 @@ function MainSite() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const handleSubmitRSVP = async (formData) => {
-    setRsvpState('submitting')
-    setRsvpError('')
-    try {
-      const params = new URLSearchParams({
-        action:    'submitRSVP',
-        code:      guestCode.trim(),
-        attending: formData.attending ? 'YES' : 'NO',
-        adults:    formData.attendingAdults,
-        children:  formData.attendingChildren,
-        dietary:   formData.dietary,
-        message:   formData.message,
-      })
-      const res = await fetch(`${WEDDING.appsScriptUrl}?${params.toString()}`)
-      const data = await res.json()
-      if (data.success) {
-        setGuestData(prev => ({
-          ...prev,
-          table:             data.table,
-          attending:         data.attending,
-          attendingAdults:   data.adults,
-          attendingChildren: data.children,
-          alreadySubmitted:  true,
-        }))
-        setRsvpState('confirmed')
-      } else {
-        setRsvpError(data.error || 'Submission failed. Please try again.')
-        setRsvpState('error')
-      }
-    } catch {
-      setRsvpError('Unable to submit. Please check your connection and try again.')
-      setRsvpState('error')
-    }
-  }
-
   return (
     <div className="bg-pearl-100 min-h-screen font-sans text-ink">
       <Navbar />
       <Hero />
       <SeatingSection />
-      <RSVPSection
-        guestCode={guestCode}
-        setGuestCode={setGuestCode}
-        guestData={guestData}
-        lookupState={lookupState}
-        lookupError={lookupError}
-        rsvpState={rsvpState}
-        rsvpError={rsvpError}
-        onLookup={lookupGuest}
-        onSearch={searchGuests}
-        onLoadGuests={loadGuests}
-        onSelectGuest={selectGuest}
-        onSubmit={handleSubmitRSVP}
-        onRetry={() => { setRsvpState('idle'); setRsvpError('') }}
-        onEdit={() => { setRsvpState('idle'); setRsvpError('') }}
-      />
       <AgendaSection />
       <MenuSection />
       <Footer />

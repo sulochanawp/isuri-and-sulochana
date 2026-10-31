@@ -338,7 +338,7 @@ export function PhotoUploadPage() {
         </div>
       </div>
 
-      <Footer showMap={false} showWhatsApp={false} showRsvpButton={false} />
+      <Footer showMap={false} showWhatsApp={false} />
     </div>
   )
 }

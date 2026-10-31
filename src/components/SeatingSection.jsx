@@ -14,24 +14,15 @@ const SIDES = [
 
 /* ── Guest-list parsing ─────────────────────────────── */
 
-// "Mr & Mrs …" / "Mr and Mrs …" — kept as written
-const COUPLE_TITLE = /^(mr|mrs|ms|dr)\.?\s*(&|and)\s*(mr|mrs|ms|dr)\.?\s+/i
-// Everyday titles — hidden on the site
-const DROP_TITLE   = /^(mr|mrs|ms|miss|master)\.?\s+/i
-// Clergy / honorific titles — kept, but ignored for A–Z sorting
-const KEEP_TITLE   = /^(ven|rev|dr|prof|hon)\.?\s+/i
+// Leading titles ("Mr", "Mrs", "Ven.", "Mr & Mrs" …) — shown as written,
+// but ignored when sorting A–Z by first name
+const TITLES = /^((mr|mrs|ms|miss|master|dr|ven|rev|prof|hon)\.?\s*(&|and)\s*)?(mr|mrs|ms|miss|master|dr|ven|rev|prof|hon)\.?\s+/i
 // "and Family", "& Partner", "with Kids" … — shown in a lighter colour
-const SUFFIX       = /\s+((?:and|&|with)\s+(?:family|partner|wife|husband|spouse|kids|children|son|daughter|sons|daughters))\s*$/i
+const SUFFIX = /\s+((?:and|&|with)\s+(?:family|partner|wife|husband|spouse|kids|children|son|daughter|sons|daughters))\s*$/i
 
 function parseGuest(table, raw) {
-  let name = raw.replace(/\s+/g, ' ').trim()
-  let sortName
-  if (COUPLE_TITLE.test(name)) {
-    sortName = name.replace(COUPLE_TITLE, '')
-  } else {
-    name = name.replace(DROP_TITLE, '')
-    sortName = name.replace(KEEP_TITLE, '')
-  }
+  const name     = raw.replace(/\s+/g, ' ').trim()
+  const sortName = name.replace(TITLES, '')
   const m = name.match(SUFFIX)
   const main   = m ? name.slice(0, m.index) : name
   const suffix = m ? m[1] : ''
@@ -60,22 +51,27 @@ function Highlight({ text, terms }) {
   )
 }
 
-/* ── Section on the main site (sits above RSVP) ─────── */
+/* ── Section on the main site (between the hero and the agenda) ── */
 export default function SeatingSection() {
   return (
-    <section id="seating" className="py-24 px-6 bg-white">
-      <div className="max-w-2xl mx-auto text-center">
-        <p className="text-olive-500 text-xs tracking-[0.4em] uppercase font-sans mb-3">
-          Find Your Seat
-        </p>
-        <h2 className="section-heading">Seating Arrangement</h2>
-        <LotusDivider />
-        <p className="text-muted text-sm mt-4 mb-8 leading-relaxed max-w-md mx-auto">
-          Look up your name to find your table, and view the floor plan of the hall.
-        </p>
-        <a href={SEATING_PAGE} target="_blank" rel="noopener" className="btn-primary">
-          View Seating Arrangement
-        </a>
+    <section id="seating" className="py-24 px-6 bg-pearl-100">
+      {/* Top floral stripe */}
+      <FloralStripe className="mb-10" />
+
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center">
+          <p className="text-olive-500 text-xs tracking-[0.4em] uppercase font-sans mb-3">
+            Find Your Seat
+          </p>
+          <h2 className="section-heading">Seating Arrangement</h2>
+          <LotusDivider />
+          <p className="text-muted text-sm max-w-sm mx-auto mt-4 mb-8 leading-relaxed">
+            Look up your name to find your table, and view the floor plan of the hall.
+          </p>
+          <a href={SEATING_PAGE} target="_blank" rel="noopener" className="btn-primary">
+            View Seating Arrangement
+          </a>
+        </div>
       </div>
     </section>
   )
@@ -123,21 +119,8 @@ export function SeatingPage() {
 
         <div className="max-w-xl mx-auto">
 
-          {/* Floor plan — embedded on desktop; phones can't show a PDF inside a page */}
-          <div className="hidden md:block border border-line bg-white">
-            <object
-              data={`${FLOOR_PLAN}#view=FitH&toolbar=0`}
-              type="application/pdf"
-              className="block w-full"
-              style={{ height: '70vh' }}
-              aria-label="Floor plan"
-            >
-              <p className="p-6 text-center text-muted text-sm">
-                The floor plan can't be shown here. Use the button below to open it.
-              </p>
-            </object>
-          </div>
-          <div className="text-center mt-4">
+          {/* Floor plan — opens the PDF in a new tab */}
+          <div className="text-center">
             <a href={FLOOR_PLAN} target="_blank" rel="noopener" className="btn-primary inline-flex items-center gap-2">
               <svg viewBox="0 0 20 20" width="13" height="13" fill="currentColor" aria-hidden="true">
                 <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/>
@@ -202,8 +185,8 @@ export function SeatingPage() {
                     {g.suffix && <span className="text-muted"> <Highlight text={g.suffix} terms={terms} /></span>}
                   </span>
                   <span className="flex-1 min-w-4 border-b border-dotted border-olive-300 -translate-y-1" aria-hidden="true" />
-                  <span className="whitespace-nowrap text-[11px] tracking-[0.2em] uppercase text-muted">
-                    Table <span className="font-serif text-lg tracking-normal normal-case text-olive-700">{g.table}</span>
+                  <span className="whitespace-nowrap font-semibold text-olive-700">
+                    Table {g.table}
                   </span>
                 </div>
               ))}
@@ -218,7 +201,7 @@ export function SeatingPage() {
         </div>
       </div>
 
-      <Footer showMap={false} showWhatsApp={false} showRsvpButton={false} />
+      <Footer showMap={false} showWhatsApp={false} />
     </div>
   )
 }

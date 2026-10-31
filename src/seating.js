@@ -9,10 +9,9 @@
 //   32 / 33	Mr Saman Jayasinghe
 //   12	Mr Wijesiri Dassanayaka and Family
 //
-// On the site, Mr / Mrs / Ms / Miss / Master are hidden and the list is
-// sorted A–Z by first name. Ven., Rev., Dr and Prof. are kept, and so are
-// couple titles like "Mr & Mrs". Endings like "and Family" are shown in a
-// lighter colour.
+// Names are shown exactly as written (titles included) and sorted A–Z by
+// first name, ignoring titles like Mr, Mrs, Ven. or "Mr & Mrs". Endings like
+// "and Family" are shown in a lighter colour.
 
 export const SEATING = {
   bride: `

@@ -12,7 +12,7 @@ export function SaveTheDatePage() {
         diamondClass="bg-olive-300"
       />
       <p className="text-pearl-300/70 text-xs tracking-[0.35em] uppercase font-sans">
-        Formal invitation &amp; RSVP to follow
+        Formal invitation to follow
       </p>
     </Hero>
   )

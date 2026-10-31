@@ -3,8 +3,7 @@ import { WEDDING } from '../config'
 
 const LINKS = [
   { label: 'Home',   href: '#' },
-  { label: 'Seating', href: '#seating' },
-  { label: 'RSVP',   href: '#rsvp' },
+  { label: 'Seating', href: `${import.meta.env.BASE_URL}?view=seating`, newTab: true },
   { label: 'Agenda', href: '#agenda' },
   { label: 'Menu',   href: '#menu' },
 ]
@@ -40,7 +39,7 @@ export default function Navbar() {
         <ul className="hidden md:flex items-center gap-10">
           {LINKS.map(link => (
             <li key={link.label}>
-              <a href={link.href} className={`font-sans text-xs tracking-[0.25em] uppercase transition-all duration-300 hover:opacity-60 ${
+              <a href={link.href} {...(link.newTab && { target: '_blank', rel: 'noopener' })} className={`font-sans text-xs tracking-[0.25em] uppercase transition-all duration-300 hover:opacity-60 ${
                 scrolled ? 'text-ink' : 'text-pearl-100'
               }`}>
                 {link.label}
@@ -72,6 +71,7 @@ export default function Navbar() {
             <li key={link.label}>
               <a
                 href={link.href}
+                {...(link.newTab && { target: '_blank', rel: 'noopener' })}
                 onClick={() => setMenuOpen(false)}
                 className="font-sans text-xs tracking-[0.25em] uppercase text-ink hover:text-olive-600 transition-colors"
               >
