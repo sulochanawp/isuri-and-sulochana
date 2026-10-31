@@ -185,7 +185,7 @@ export function SeatingPage() {
                     {g.suffix && <span className="text-muted"> <Highlight text={g.suffix} terms={terms} /></span>}
                   </span>
                   <span className="flex-1 min-w-4 border-b border-dotted border-olive-300 -translate-y-1" aria-hidden="true" />
-                  <span className="whitespace-nowrap font-serif text-base text-olive-700">
+                  <span className="whitespace-nowrap text-olive-700">
                     Table {g.table}
                   </span>
                 </div>
