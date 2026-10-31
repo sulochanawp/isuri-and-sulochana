@@ -29,14 +29,11 @@ function parseGuest(table, raw) {
   return { table, raw, main, suffix, sortName, letter: sortName.charAt(0).toUpperCase() }
 }
 
-// Rows are "table<TAB>name" as pasted from a spreadsheet (2+ spaces also work,
-// in case an editor turned the tab into spaces). A header row is skipped.
-function parseList(text) {
-  return String(text || '')
-    .split(/\r?\n/)
-    .map(line => line.split(/\t+| {2,}/).map(s => s.trim()).filter(Boolean))
-    .filter(cells => cells.length >= 2 && !/^tables?$/i.test(cells[0]))
-    .map(([table, ...rest]) => parseGuest(table, rest.join(' ')))
+// Rows are { table, name } objects; rows missing either are skipped
+function parseList(rows) {
+  return (rows || [])
+    .filter(r => r && String(r.table ?? '').trim() && String(r.name ?? '').trim())
+    .map(r => parseGuest(String(r.table).trim(), String(r.name)))
     .sort((a, b) => a.sortName.localeCompare(b.sortName))
 }
 
