@@ -15,7 +15,7 @@ export const WEDDING = {
   // After it passes, the full site (seating, agenda, menu) opens automatically.
   // Add ?view=site to preview the full site before then, or ?view=savethedate
   // to preview the Save the Date page at any time.
-  siteOpenTime: new Date("2026-11-02T09:00:00"),   // ← set your date
+  siteOpenTime: new Date("2026-11-01T09:00:00"),   // ← set your date
 
   // Thank You section reveals at this moment (noon on the wedding day)
   thankYouRevealTime: new Date("2025-12-20T12:00:00"),
@@ -60,54 +60,34 @@ export const WEDDING = {
 // ============================================================
 export const AGENDA = [
   {
-    time: "3:30 PM",
+    time: "9:00 AM",
     title: "Guest Arrival",
-    description: "Please be seated before the ceremony begins. Ushers will guide you to your seats.",
+    description: "Welcome! Please be seated before the ceremony begins. Ushers will guide you to your seats.",
+  },
+  {
+    time: "9:30 AM",
+    title: "Poruwa Ceremony",
+    description: "The traditional Sri Lankan Poruwa ceremony. Join us as we exchange vows and blessings on the Poruwa.",
+  },
+  {
+    time: "11:00 AM",
+    title: "Open Bar",
+    description: "Raise a glass with the newlyweds! A selection of cocktails and mocktails will be available while the couple takes photographs. See the Menu section for the full drinks list.",
+  },
+  {
+    time: "1:00 PM",
+    title: "Lunch Buffet",
+    description: "The buffet opens. Please help yourself to a selection of Sri Lankan and international dishes. See the Menu section for the full list of dishes.",
+  },
+  {
+    time: "3:00 PM",
+    title: "Dancing & Celebrations",
+    description: "The dance floor opens! Join us for music, dancing, and celebration.",
   },
   {
     time: "4:00 PM",
-    title: "Wedding Ceremony",
-    description: "The ceremony will begin promptly. We kindly ask guests to silence their phones.",
-  },
-  {
-    time: "4:45 PM",
-    title: "Ceremony Concludes",
-    description: "Congratulations to the newlyweds! Confetti will be provided for the send-off.",
-  },
-  {
-    time: "5:00 PM",
-    title: "Cocktail Hour",
-    description: "Enjoy welcome drinks and canapés while the couple takes photographs.",
-  },
-  {
-    time: "6:30 PM",
-    title: "Reception Doors Open",
-    description: "Please make your way to the ballroom and find your assigned seats.",
-  },
-  {
-    time: "7:00 PM",
-    title: "Dinner is Served",
-    description: "A three-course dinner will be served at your table.",
-  },
-  {
-    time: "8:30 PM",
-    title: "First Dance & Speeches",
-    description: "The couple's first dance, followed by heartfelt speeches from the wedding party.",
-  },
-  {
-    time: "9:00 PM",
-    title: "Dancing & Celebrations",
-    description: "The dance floor opens! Join us for a night of music and celebration.",
-  },
-  {
-    time: "11:30 PM",
-    title: "Last Dance",
-    description: "One final dance before we bid the evening farewell.",
-  },
-  {
-    time: "12:00 AM",
-    title: "Send-Off",
-    description: "Help us send the newlyweds off with sparklers as they begin their journey together.",
+    title: "Going Away",
+    description: "Help us send off the newlyweds as they leave the hotel and begin their journey together.",
   },
 ];
 
@@ -116,116 +96,146 @@ export const AGENDA = [
 // ============================================================
 export const MENU = {
   note: "All dishes are prepared fresh on the day.",
-
-starters: [
-  {
-    name: "Black Currant Welcome Drink",
-    description: "Refreshing chilled black currant drink served as a welcome beverage",
-    badges: ["V"],
-  },
-  {
-    name: "Thai Chicken on Baked Vegetables",
-    description: "Tender Thai-style chicken served over seasoned baked vegetables",
-    badges: [],
-  },
-  {
-    name: "Grilled Vegetable Salad",
-    description: "Char-grilled seasonal vegetables tossed with light herbs and dressing",
-    badges: ["V"],
-  },
-  {
-    name: "Chicken Hawaiian Salad",
-    description: "Chicken salad with tropical pineapple, vegetables, and creamy dressing",
-    badges: [],
-  },
-  {
-    name: "Tuna Salad with Green Papaya",
-    description: "Flaked tuna with crisp green papaya, fresh vegetables, and tangy dressing",
-    badges: [],
-  },
-  {
-    name: "Garlic Mayo",
-    description: "Creamy garlic mayonnaise served as a dipping sauce",
-    badges: [],
-  },
-  {
-    name: "Noodles & Seafood Red Soup",
-    description: "Spicy red soup with noodles, seafood, vegetables, and aromatic spices",
-    badges: [],
-  },
-],
-
-mains: [
-  {
-    name: "Steamed Basmati Rice",
-    description: "Fragrant long-grain basmati rice, lightly steamed until fluffy",
-    badges: ["V"],
-  },
-  {
-    name: "Vegetable and Tofu Noodles",
-    description: "Stir-fried noodles with mixed vegetables, tofu, and savory seasoning",
-    badges: ["V"],
-  },
-  {
-    name: "Chicken Fried Noodles",
-    description: "Wok-fried noodles with chicken, vegetables, and flavorful Asian seasoning",
-    badges: [],
-  },
-  {
-    name: "Chicken Black Curry",
-    description: "Sri Lankan-style chicken curry cooked with roasted spices and rich curry gravy",
-    badges: [],
-  },
-  {
-    name: "Fish Stew with Vegetables",
-    description: "Tender fish simmered with vegetables in a light, mildly spiced stew",
-    badges: [],
-  },
-  {
-    name: "Dhal Tempered",
-    description: "Sri Lankan lentil curry tempered with onions, curry leaves, and spices",
-    badges: ["V"],
-  },
-  {
-    name: "Green Bean Curry",
-    description: "Sri Lankan-style green beans cooked in coconut curry with aromatic spices",
-    badges: ["V"],
-  },
-  {
-    name: "Cauliflower & Potato White Curry",
-    description: "Cauliflower and potatoes simmered in a mild coconut-based white curry",
-    badges: ["V"],
-  },
-  {
-    name: "Batu Moju",
-    description: "Sri Lankan sweet and sour eggplant pickle with onions, spices, and gentle heat",
-    badges: ["V"],
-  },
-],
-
-desserts: [
-  {
-    name: "Sri Lankan Cut Fruits",
-    description: "Selection of fresh seasonal Sri Lankan fruits, sliced and served chilled",
-    badges: ["V"],
-  },
-  {
-    name: "Broken Jelly",
-    description: "Colorful jelly pieces served as a light and refreshing dessert",
-    badges: [],
-  },
-  {
-    name: "Watalappam",
-    description: "Traditional Sri Lankan coconut and jaggery custard flavored with warm spices",
-    badges: [],
-  },
-  {
-    name: "Ice Cream",
-    description: "Classic chilled ice cream served as a creamy dessert option",
-    badges: ["V"],
-  },
-],
-
+ 
+  starters: [
+    {
+      name: "Apple Welcome Drink",
+      description: "Refreshing chilled apple juice served as a welcome beverage",
+      badges: ["V"],
+    },
+    {
+      name: "Beetroot Orange Salad",
+      description: "Roasted beetroot with fresh orange segments and a light citrus dressing",
+      badges: ["V"],
+    },
+    {
+      name: "Greek Salad",
+      description: "Crisp cucumber, tomatoes, onions, olives, and feta cheese with oregano and olive oil",
+      badges: ["V"],
+    },
+    {
+      name: "Tuna Green Beans and Egg Salad",
+      description: "Flaked tuna with tender green beans, boiled egg, and fresh vegetables",
+      badges: [],
+    },
+    {
+      name: "Cream of Mushroom Soup",
+      description: "Smooth, velvety soup of sautéed mushrooms finished with fresh cream",
+      badges: ["V"],
+    },
+    {
+      name: "Curry Flavored Mayo",
+      description: "Creamy mayonnaise blended with mild curry spices",
+      badges: [],
+    },
+    {
+      name: "Garlic Mayo",
+      description: "Creamy garlic mayonnaise served as a dipping sauce",
+      badges: [],
+    },
+    {
+      name: "French Vinaigrette",
+      description: "Classic dressing of olive oil, vinegar, and Dijon mustard",
+      badges: ["V"],
+    },
+    {
+      name: "Passion Fruit Dressing",
+      description: "Sweet and tangy dressing made with fresh passion fruit",
+      badges: ["V"],
+    },
+    {
+      name: "Lemon Ginger Dressing",
+      description: "Zesty dressing of fresh lemon and ginger with a light, refreshing kick",
+      badges: ["V"],
+    },
+  ],
+ 
+  mains: [
+    {
+      name: "Vegetable Fried Rice",
+      description: "Wok-fried rice with mixed vegetables and light savory seasoning",
+      badges: ["V"],
+    },
+    {
+      name: "Steamed Basmati Rice",
+      description: "Fragrant long-grain basmati rice, lightly steamed until fluffy",
+      badges: ["V"],
+    },
+    {
+      name: "Yellow Ghee Rice with Fried Cashew",
+      description: "Aromatic turmeric rice cooked in ghee with whole spices, topped with golden fried cashews",
+      badges: ["V"],
+    },
+    {
+      name: "Baked Macaroni",
+      description: "Macaroni baked in a creamy cheese sauce with a golden, crispy top",
+      badges: ["V"],
+    },
+    {
+      name: "Chicken Black Curry",
+      description: "Sri Lankan-style chicken curry cooked with roasted spices and rich curry gravy",
+      badges: [],
+    },
+    {
+      name: "Fried Calamari",
+      description: "Tender calamari rings, lightly battered and fried until crisp",
+      badges: [],
+    },
+    {
+      name: "Dhal Tempered",
+      description: "Sri Lankan lentil curry tempered with onions, curry leaves, and spices",
+      badges: ["V"],
+    },
+    {
+      name: "Cashew and Green Pea Curry",
+      description: "Creamy Sri Lankan curry of tender cashews and green peas in spiced coconut milk",
+      badges: ["V"],
+    },
+    {
+      name: "Oven Roast Rosemary Potato",
+      description: "Potatoes roasted with rosemary, garlic, and olive oil until golden and crisp",
+      badges: ["V"],
+    },
+    {
+      name: "Batu Moju",
+      description: "Sri Lankan sweet and sour eggplant pickle with onions, spices, and gentle heat",
+      badges: ["V"],
+    },
+    {
+      name: "Stir Fried Vegetable",
+      description: "Seasonal vegetables tossed in a hot wok with garlic and light seasoning",
+      badges: ["V"],
+    },
+  ],
+ 
+  desserts: [
+    {
+      name: "Sri Lankan Cut Fruits",
+      description: "Selection of fresh seasonal Sri Lankan fruits, sliced and served chilled",
+      badges: ["V"],
+    },
+    {
+      name: "Crème Brûlée",
+      description: "Rich vanilla custard topped with a crisp layer of caramelized sugar",
+      badges: [],
+    },
+    {
+      name: "Fruit Trifle",
+      description: "Layers of sponge cake, fruit, jelly, custard, and cream",
+      badges: [],
+    },
+    {
+      name: "Assorted Mousse",
+      description: "A selection of light, airy mousses in a variety of flavors",
+      badges: [],
+    },
+    {
+      name: "Vanilla Ice Cream",
+      description: "Classic creamy vanilla ice cream served chilled",
+      badges: ["V"],
+    },
+  ],
+ 
   dietaryKey: [
     { code: "V", label: "Vegetarian", color: "bg-olive-50 text-olive-600 border border-olive-200" },
   ],
