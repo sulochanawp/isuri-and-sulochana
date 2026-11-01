@@ -14,9 +14,19 @@ function DietaryBadge({ code }) {
   if (!key) return null
   return (
     <span className={`inline-flex items-center gap-1 text-xs font-sans font-medium px-2 py-0.5 tracking-wide ${key.color}`}>
-      {key.icon === 'glass' ? (
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
-          <path d="M3 4h18l-8 9v6h4v2H7v-2h4v-6L3 4z"/>
+      {key.icon === 'cocktail' ? (
+        // Martini glass with an olive on a pick
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="none"
+             stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M3 5h18l-9 9z M12 14v6 M8 20h8 M8.5 2.5l5 6"/>
+          <circle cx="13.5" cy="8.5" r="1.5" fill="currentColor"/>
+        </svg>
+      ) : key.icon === 'mocktail' ? (
+        // Tall glass with a straw and a lemon slice
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="none"
+             stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M6 8h11l-1.5 13h-8z M13 8l2-6h3 M6.5 12h10"/>
+          <path d="M17 8a3 3 0 0 1 3-3" />
         </svg>
       ) : (
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" width="13" height="13" fill="currentColor">

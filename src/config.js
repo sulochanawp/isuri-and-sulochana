@@ -277,10 +277,10 @@ export const MENU = {
     },
   ],
 
-  // icon: "leaf" for food, "glass" for drinks
+  // icon: "leaf", "cocktail" or "mocktail"
   dietaryKey: [
     { code: "V", label: "Vegetarian", icon: "leaf",  color: "bg-olive-50 text-olive-600 border border-olive-200" },
-    { code: "C", label: "Cocktail",   icon: "glass", color: "bg-pearl-200 text-earth border border-pearl-400" },
-    { code: "M", label: "Mocktail",   icon: "glass", color: "bg-olive-50 text-olive-600 border border-olive-200" },
+    { code: "C", label: "Cocktail",   icon: "cocktail", color: "bg-pearl-200 text-earth border border-pearl-400" },
+    { code: "M", label: "Mocktail",   icon: "mocktail", color: "bg-olive-50 text-olive-600 border border-olive-200" },
   ],
 };
