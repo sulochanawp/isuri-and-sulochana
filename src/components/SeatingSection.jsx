@@ -135,7 +135,7 @@ export function SeatingPage() {
           {/* Divider */}
           <div className="flex items-center gap-4 mt-12 mb-6 text-olive-400 text-xs tracking-[0.3em] uppercase font-sans">
             <span className="flex-1 border-t border-line" />
-            Find Your Name
+            Find Your Table
             <span className="flex-1 border-t border-line" />
           </div>
 
