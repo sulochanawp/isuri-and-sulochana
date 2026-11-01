@@ -237,7 +237,7 @@ export const MENU = {
   ],
 
   // Shown under the drinks list
-  drinksNote: "Cocktails are subject to the availability of liquor. Mocktails are unlimited.",
+  drinksNote: "Cocktails will be available while liquor supplies last. Mocktails will be available without any limit.",
 
   drinks: [
     {
