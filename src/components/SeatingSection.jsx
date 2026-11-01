@@ -14,19 +14,19 @@ const SIDES = [
 
 /* ── Guest-list parsing ─────────────────────────────── */
 
-// Leading titles ("Mr", "Mrs", "Ven.", "Mr & Mrs" …) — shown as written,
+// Leading titles ("Mr", "Mrs", "Ven.", "Mr and Mrs" …) — shown as written,
 // but ignored when sorting A–Z by first name
 const TITLES = /^((mr|mrs|ms|miss|master|dr|ven|rev|prof|hon)\.?\s*(&|and)\s*)?(mr|mrs|ms|miss|master|dr|ven|rev|prof|hon)\.?\s+/i
-// "and Family", "& Partner", "with Kids" … — shown in a lighter colour
-const SUFFIX = /\s+((?:and|&|with)\s+(?:family|partner|wife|husband|spouse|kids|children|son|daughter|sons|daughters))\s*$/i
 
 function parseGuest(table, raw) {
-  const name     = raw.replace(/\s+/g, ' ').trim()
+  const name     = raw.replace(/\s*&\s*/g, ' and ').replace(/\s+/g, ' ').trim()
   const sortName = name.replace(TITLES, '')
-  const m = name.match(SUFFIX)
-  const main   = m ? name.slice(0, m.index) : name
-  const suffix = m ? m[1] : ''
-  return { table, raw, main, suffix, sortName, letter: sortName.charAt(0).toUpperCase() }
+  return {
+    table: table.replace(/\b(\d)\b/g, '0$1'),   // 4 → 04, "1 / 2 / 4" → "01 / 02 / 04"
+    raw: name,
+    sortName,
+    letter: sortName.charAt(0).toUpperCase(),
+  }
 }
 
 // Rows are { table, name } objects; rows missing either are skipped
@@ -176,10 +176,9 @@ export function SeatingPage() {
                 {grp.letter}
               </p>
               {grp.guests.map((g, i) => (
-                <div key={i} className="flex items-baseline gap-2 py-1.5 text-sm">
+                <div key={i} className="flex items-baseline gap-2 py-2.5 text-sm">
                   <span className="min-w-0">
-                    <Highlight text={g.main} terms={terms} />
-                    {g.suffix && <span className="text-muted"> <Highlight text={g.suffix} terms={terms} /></span>}
+                    <Highlight text={g.raw} terms={terms} />
                   </span>
                   <span className="flex-1 min-w-4 border-b border-dotted border-olive-300 -translate-y-1" aria-hidden="true" />
                   <span className="whitespace-nowrap text-olive-700">
