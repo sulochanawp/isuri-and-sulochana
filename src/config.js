@@ -261,7 +261,7 @@ export const MENU = {
       badges: ["C"],
     },
     {
-      name: "G & T",
+      name: "Gin and Tonic",
       description: "Gin and tonic over ice with a slice of lime",
       badges: ["C"],
     },
