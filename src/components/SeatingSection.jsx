@@ -37,6 +37,8 @@ function parseList(rows) {
     .sort((a, b) => a.sortName.localeCompare(b.sortName))
 }
 
+const SEARCH_IGNORE = new Set(['mr', 'mrs', 'ms', 'miss', 'master', 'dr', 'and', '&', 'family'])
+
 // Match every whitespace-separated term, in any order, against the name as written
 const matches = (g, terms) => terms.every(t => g.raw.toLowerCase().includes(t))
 
@@ -83,7 +85,10 @@ export function SeatingPage() {
   const [tab, setTab]     = useState(() => (lists.bride.length || !lists.groom.length ? 'bride' : 'groom'))
   const [query, setQuery] = useState('')
 
-  const terms = query.trim().toLowerCase().split(/\s+/).filter(Boolean)
+  // Titles, "and"/"&" and "family" are ignored, so the full name from the
+  // invitation ("Mr & Mrs Wijesiri Dassanayaka and Family") still matches
+  const terms = query.toLowerCase().replace(/[.,]/g, ' ').split(/\s+/)
+    .filter(t => t && !SEARCH_IGNORE.has(t))
 
   // If the name is only on the other side, show that side instead
   let side = tab
@@ -135,7 +140,7 @@ export function SeatingPage() {
           </div>
 
           {/* Search */}
-          <div className="relative mb-4">
+          <div className="relative mb-2">
             <svg viewBox="0 0 20 20" width="16" height="16" fill="currentColor" aria-hidden="true"
                  className="absolute left-4 top-1/2 -translate-y-1/2 text-muted">
               <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd"/>
@@ -146,9 +151,13 @@ export function SeatingPage() {
               onChange={e => setQuery(e.target.value)}
               placeholder="Search your name"
               aria-label="Search your name"
+              aria-describedby="search-help"
               className="input-field pl-11"
             />
           </div>
+          <p id="search-help" className="text-muted text-xs text-center mb-6 leading-relaxed">
+            Search with the name shown on your invitation, or just your first or last name.
+          </p>
 
           {/* Bride / Groom tabs */}
           <div className="flex justify-center mb-6">
