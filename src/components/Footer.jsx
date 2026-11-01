@@ -39,7 +39,6 @@ export default function Footer({ showMap = true, showWhatsApp = true }) {
         {/* Google Maps embed */}
         {showMap && WEDDING.venue.mapsEmbed && (
           <div className="mb-10 w-full max-w-2xl mx-auto">
-            <p className="text-pearl-300/70 text-xs tracking-[0.3em] uppercase font-sans mb-3">Find Us</p>
             <div className="relative w-full overflow-hidden" style={{ height: 240 }}>
               <iframe
                 src={WEDDING.venue.mapsEmbed}
