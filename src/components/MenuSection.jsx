@@ -6,6 +6,7 @@ const TABS = [
   { id: 'starters', label: 'Starters' },
   { id: 'mains',    label: 'Mains'    },
   { id: 'desserts', label: 'Desserts' },
+  { id: 'drinks',   label: 'Drinks'   },
 ]
 
 function DietaryBadge({ code }) {
@@ -13,9 +14,15 @@ function DietaryBadge({ code }) {
   if (!key) return null
   return (
     <span className={`inline-flex items-center gap-1 text-xs font-sans font-medium px-2 py-0.5 tracking-wide ${key.color}`}>
+      {key.icon === 'glass' ? (
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+          <path d="M3 4h18l-8 9v6h4v2H7v-2h4v-6L3 4z"/>
+        </svg>
+      ) : (
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" width="13" height="13" fill="currentColor">
         <path d="M216-176q-45-45-70.5-104T120-402q0-63 24-124.5T222-642q35-35 86.5-60t122-39.5Q501-756 591.5-759t202.5 7q8 106 5 195t-16.5 160.5q-13.5 71.5-38 125T684-182q-53 53-112.5 77.5T450-80q-65 0-127-25.5T216-176Zm112-16q29 17 59.5 24.5T450-160q46 0 91-18.5t86-59.5q18-18 36.5-50.5t32-85Q709-426 716-500.5t2-177.5q-49-2-110.5-1.5T485-670q-61 9-116 29t-90 55q-45 45-62 89t-17 85q0 59 22.5 103.5T262-246q42-80 111-153.5T534-520q-72 63-125.5 142.5T328-192Zm0 0Zm0 0Z"/>
       </svg>
+      )}
       {key.label}
     </span>
   )
@@ -44,7 +51,7 @@ function MenuCard({ item }) {
 export default function MenuSection() {
   const [activeTab, setActiveTab] = useState('starters')
 
-  const items = { starters: MENU.starters, mains: MENU.mains, desserts: MENU.desserts }
+  const items = { starters: MENU.starters, mains: MENU.mains, desserts: MENU.desserts, drinks: MENU.drinks || [] }
 
   return (
     <section id="menu" className="py-24 px-6 bg-pearl-100">
@@ -74,7 +81,7 @@ export default function MenuSection() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`relative px-7 py-2.5 font-sans text-xs font-medium tracking-[0.2em] uppercase transition-all duration-200
+                className={`relative px-3.5 sm:px-7 py-2.5 font-sans text-xs font-medium tracking-[0.1em] sm:tracking-[0.2em] uppercase transition-all duration-200
                   ${i > 0 ? 'border-l border-line' : ''}
                   ${activeTab === tab.id
                     ? 'bg-olive-700 text-pearl-100'
@@ -93,6 +100,12 @@ export default function MenuSection() {
             <MenuCard key={i} item={item} />
           ))}
         </div>
+
+        {activeTab === 'drinks' && MENU.drinksNote && (
+          <p className="text-muted mt-6 max-w-md mx-auto text-center text-sm leading-relaxed italic font-serif">
+            {MENU.drinksNote}
+          </p>
+        )}
 
       </div>
 

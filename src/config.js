@@ -235,8 +235,52 @@ export const MENU = {
       badges: ["V"],
     },
   ],
- 
+
+  // Shown under the drinks list
+  drinksNote: "Cocktails are subject to the availability of liquor. Mocktails are unlimited.",
+
+  drinks: [
+    {
+      name: "Old Fashioned",
+      description: "Whisky stirred with sugar and bitters, finished with an orange twist",
+      badges: ["C"],
+    },
+    {
+      name: "Whisky Flip",
+      description: "Whisky shaken with egg and sugar, topped with a dusting of nutmeg",
+      badges: ["C"],
+    },
+    {
+      name: "Vodka Lemonade",
+      description: "Vodka topped with fresh lemonade over ice",
+      badges: ["C"],
+    },
+    {
+      name: "Moscow Mule",
+      description: "Vodka with ginger beer and fresh lime",
+      badges: ["C"],
+    },
+    {
+      name: "G & T",
+      description: "Gin and tonic over ice with a slice of lime",
+      badges: ["C"],
+    },
+    {
+      name: "Mojito Collection",
+      description: "Alcohol-free mojitos of fresh mint and lime in a selection of flavors",
+      badges: ["M"],
+    },
+    {
+      name: "Man-Go Colada",
+      description: "Alcohol-free blend of mango, pineapple, and coconut",
+      badges: ["M"],
+    },
+  ],
+
+  // icon: "leaf" for food, "glass" for drinks
   dietaryKey: [
-    { code: "V", label: "Vegetarian", color: "bg-olive-50 text-olive-600 border border-olive-200" },
+    { code: "V", label: "Vegetarian", icon: "leaf",  color: "bg-olive-50 text-olive-600 border border-olive-200" },
+    { code: "C", label: "Cocktail",   icon: "glass", color: "bg-pearl-200 text-earth border border-pearl-400" },
+    { code: "M", label: "Mocktail",   icon: "glass", color: "bg-olive-50 text-olive-600 border border-olive-200" },
   ],
 };
