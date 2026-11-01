@@ -6,7 +6,7 @@ const TABS = [
   { id: 'starters', label: 'Starters' },
   { id: 'mains',    label: 'Mains'    },
   { id: 'desserts', label: 'Desserts' },
-  { id: 'drinks',   label: 'Drinks'   },
+  { id: 'drinks',   label: 'Drinks', star: true },   // * points to the drinks note
 ]
 
 function DietaryBadge({ code }) {
@@ -78,7 +78,7 @@ export default function MenuSection() {
           <h2 className="section-heading">The Menu</h2>
           <LotusDivider />
           {MENU.note && (
-            <p className="text-muted mt-4 max-w-md mx-auto text-sm leading-relaxed italic font-serif">
+            <p className="text-muted mt-4 max-w-md mx-auto text-sm leading-relaxed">
               &ldquo;{MENU.note}&rdquo;
             </p>
           )}
@@ -98,7 +98,7 @@ export default function MenuSection() {
                     : 'text-muted hover:text-ink hover:bg-pearl-50'
                   }`}
               >
-                {tab.label}
+                {tab.label}{tab.star && <span aria-hidden="true">*</span>}
               </button>
             ))}
           </div>
@@ -112,8 +112,8 @@ export default function MenuSection() {
         </div>
 
         {activeTab === 'drinks' && MENU.drinksNote && (
-          <p className="text-muted mt-6 max-w-md mx-auto text-center text-sm leading-relaxed italic font-serif">
-            {MENU.drinksNote}
+          <p className="text-muted mt-6 max-w-md mx-auto text-center text-sm leading-relaxed italic">
+            * {MENU.drinksNote}
           </p>
         )}
 
