@@ -30,8 +30,8 @@ export const WEDDING = {
 
   // Contact numbers for guests (include country code, no + or spaces)
   contacts: [
-    { name: "Isuri",     whatsapp: "94771234567" },   // ← replace
-    { name: "Sulochana", whatsapp: "94777654321" },   // ← replace
+    { name: "Isuri",     whatsapp: "94762899766" },
+    { name: "Sulochana", whatsapp: "94714080210" },
   ],
 
   // Google Drive folder ID for the thank you card photo.
