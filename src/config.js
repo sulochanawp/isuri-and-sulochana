@@ -95,7 +95,7 @@ export const AGENDA = [
 //  MENU
 // ============================================================
 export const MENU = {
-  note: "All dishes are prepared fresh on the day.",
+  note: "Here's a taste of what we'll be serving. Every dish is prepared fresh on the day, just for you.",
  
   starters: [
     {

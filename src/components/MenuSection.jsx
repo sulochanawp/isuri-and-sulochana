@@ -79,7 +79,7 @@ export default function MenuSection() {
           <LotusDivider />
           {MENU.note && (
             <p className="text-muted mt-4 max-w-md mx-auto text-sm leading-relaxed">
-              &ldquo;{MENU.note}&rdquo;
+              {MENU.note}
             </p>
           )}
         </div>
