@@ -22,6 +22,7 @@ export const WEDDING = {
 
   venue: {
     name: "The Grand Walawwa",
+    hall: "Glass Wedding Hall",   // shown above the venue name; leave empty to show "Venue"
     address: "No 190/8, Kandy Road, Kegalle, Sri Lanka",
     ceremonyTime: "9:00 AM",
     mapsUrl: "https://maps.google.com/?q=The+Grand+Walawwa",

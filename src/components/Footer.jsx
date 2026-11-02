@@ -28,7 +28,11 @@ export default function Footer({ showMap = true, showWhatsApp = true }) {
 
         {/* Venue details */}
         <div className="text-sm text-pearl-300/70 mb-12">
-          <p className="text-pearl-300/70 text-xs tracking-[0.3em] uppercase font-sans mb-2">Venue</p>
+          {WEDDING.venue.hall ? (
+            <p className="text-olive-200 text-xs tracking-[0.3em] uppercase font-sans mb-2">{WEDDING.venue.hall}</p>
+          ) : (
+            <p className="text-pearl-300/70 text-xs tracking-[0.3em] uppercase font-sans mb-2">Venue</p>
+          )}
           <p className="font-serif text-xl text-pearl-200/70 font-light mb-2">{WEDDING.venue.name}</p>
           <p className="text-xs">{WEDDING.venue.address}</p>
           <div className="flex flex-wrap items-center justify-center gap-4 mt-3 text-xs tracking-widest uppercase">

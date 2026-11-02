@@ -90,7 +90,11 @@ export default function Hero({ eyebrow = 'You are cordially invited to the weddi
         <div className="mt-8 mx-6 md:mx-auto md:max-w-sm border border-pearl-300/20 bg-white/5 backdrop-blur-sm px-6 py-5 relative">
           <DiamondCorners />
 
-          <p className="text-pearl-300/70 text-xs tracking-[0.3em] uppercase font-sans mb-1">Venue</p>
+          {WEDDING.venue.hall ? (
+            <p className="text-olive-200 text-xs tracking-[0.3em] uppercase font-sans mb-1">{WEDDING.venue.hall}</p>
+          ) : (
+            <p className="text-pearl-300/70 text-xs tracking-[0.3em] uppercase font-sans mb-1">Venue</p>
+          )}
           <p className="font-serif text-xl text-pearl-100 font-light">{WEDDING.venue.name}</p>
           <p className="text-pearl-300/70 text-xs mt-1 font-sans">{WEDDING.venue.address}</p>
           {WEDDING.venue.mapsUrl && (
