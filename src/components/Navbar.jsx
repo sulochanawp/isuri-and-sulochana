@@ -5,7 +5,6 @@ const LINKS = [
   { label: 'Home',   href: '#' },
   { label: 'Seating', href: `${import.meta.env.BASE_URL}?view=seating`, newTab: true },
   { label: 'Agenda', href: '#agenda' },
-  { label: 'Menu',   href: '#menu' },
 ]
 
 export default function Navbar() {

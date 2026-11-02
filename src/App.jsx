@@ -4,7 +4,6 @@ import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import SeatingSection, { SeatingPage } from './components/SeatingSection'
 import AgendaSection from './components/AgendaSection'
-import MenuSection from './components/MenuSection'
 import Footer from './components/Footer'
 import { ThankYouPage } from './components/ThankYouSection'
 import { PhotoUploadPage } from './components/PhotoUploadSection'
@@ -39,7 +38,7 @@ function MainSite() {
       <Hero />
       <SeatingSection />
       <AgendaSection />
-      <MenuSection />
+      {/* Menu hidden for now — re-add <MenuSection /> here (and the nav link) to show it again */}
       <Footer />
 
       {/* Floating scroll-to-top button — visible only after hero */}
