@@ -290,7 +290,7 @@ function handleGetUploadUrl(params) {
     'Authorization':         'Bearer ' + token,
     'Content-Type':          'application/json; charset=UTF-8',
     'X-Upload-Content-Type': mimeType,
-    'Origin':                'https://sulochanawp.github.io',
+    'Origin':                'https://isuri-and-sulochana.life',
   };
   if (fileSize) headers['X-Upload-Content-Length'] = fileSize;
 
