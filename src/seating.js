@@ -225,6 +225,6 @@ export const SEATING = {
     { table: '29 / 32', name: 'Mr Thisara Suranga' },
     { table: '29 / 32', name: 'Mr Geeth Dulshan' },
     { table: '29 / 32', name: 'Mrs Wathsala Gomez' },
-    { table: '29 / 32', name: 'Mr Alessandro Dallape' },
+    { table: '29 / 32', name: 'Mr Alessandro Dallapè' },
   ],
 }
