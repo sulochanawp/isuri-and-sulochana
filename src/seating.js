@@ -102,6 +102,7 @@ export const SEATING = {
     { table: '31 / 34', name: 'Mrs Sachini Rasara' },
     { table: '31 / 34', name: 'Ms Shehani Udeshika' },
     { table: '31 / 34', name: 'Mr Malshan Maduranga' },
+    { table: '31 / 34', name: 'Mrs Umeesha Meegoda' },
     { table: '34 / 33', name: 'Mrs Gimhani Sadunika & Husband' },
   ],
 
