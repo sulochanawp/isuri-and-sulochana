@@ -122,7 +122,7 @@ export const SEATING = {
     { table: '03 / 05 / 06', name: 'Mrs Manju Senarathana' },
     { table: '03 / 05 / 06', name: 'Nona Aunty (Pinnawala)' },
     { table: '03 / 05 / 06', name: 'Mr Sunil Edirisinghe and Wife' },
-    { table: '03 / 05 / 06', name: 'Mrs Ashoka Edirisinghe and Wife' },
+    { table: '03 / 05 / 06', name: 'Mrs Ashoka Edirisinghe and Husband' },
     { table: '14 / 15 / 17', name: 'Mrs Wimala Edirisinghe' },
     { table: '14 / 15 / 17', name: 'Mr Anura Jayweera' },
     { table: '14 / 15 / 17', name: 'Mr Jayweera (Parape)' },
