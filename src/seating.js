@@ -191,6 +191,7 @@ export const SEATING = {
     { table: '28 / 31 / 34', name: 'Mr Vijan Bandarathilaka' },
     { table: '28 / 31 / 34', name: 'Mr Suresh Nayanajith' },
     { table: '28 / 31 / 34', name: 'Mr Sajith Rathnayaka' },
+    { table: '28 / 31 / 34', name: 'Mr Tishan Godakumbura' },
     { table: '28 / 31 / 34', name: 'Mr Sahan Amunupura' },
     { table: '28 / 31 / 34', name: 'Mr Ashan Edirisinghe' },
     { table: '28 / 31 / 34', name: 'Mr Srilak Jayathissa' },
