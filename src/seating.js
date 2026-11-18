@@ -20,7 +20,7 @@ export const SEATING = {
     { table: '08', name: 'Mr Mahinda Premarathna & Wife' },
     { table: '08', name: 'Mrs Pavithra Premarathna & Family' },
     { table: '08', name: 'Mr Herath Warnasooriya & Family' },
-    { table: '08', name: 'Mr. Kalpa Warnasooriya & Mrs Dilini Abewardhana' },
+    { table: '08', name: 'Mr Kalpa Warnasooriya & Mrs Dilini Abewardhana' },
     { table: '09 / 11 / 12 / 13', name: 'Mr Dayarathna & Family' },
     { table: '09 / 11 / 12 / 13', name: 'Mrs Tharangi Madhumali & Family' },
     { table: '09 / 11 / 12 / 13', name: 'Mr Nandasena & Family' },
@@ -105,6 +105,7 @@ export const SEATING = {
     { table: '31 / 34', name: 'Ms Shehani Udeshika' },
     { table: '31 / 34', name: 'Mr Malshan Maduranga' },
     { table: '33 / 34', name: 'Mrs Gimhani Sadunika & Husband' },
+    { table: '31 / 34', name: 'Mr Danushka Rathnayake' },
   ],
 
   groom: [
