@@ -18,7 +18,7 @@ export const WEDDING = {
   siteOpenTime: new Date("2026-11-01T09:00:00"),   // ← set your date
 
   // Thank You section reveals at this moment (noon on the wedding day)
-  thankYouRevealTime: new Date("2026-12-20T12:00:00"),
+  thankYouRevealTime: new Date("2026-12-02T12:00:00"),
 
   venue: {
     name: "The Grand Walawwa",
